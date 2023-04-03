@@ -1,0 +1,35 @@
+{
+  "name": "doteditor",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "pro"	: "webpack --mode production",
+    "dev"	: "webpack --mode development",
+    "watch"	: "webpack --mode development --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.6",
+    "@types/createjs": "^0.0.29",
+    "autoprefixer": "^10.4.14",
+    "bootstrap": "^5.2.3",
+    "createjs": "^1.0.1",
+    "css-loader": "^6.7.3",
+    "mini-css-extract-plugin": "^2.7.5",
+    "postcss-loader": "^7.1.0",
+    "sass": "^1.60.0",
+    "sass-loader": "^13.2.2",
+    "terser-webpack-plugin": "^5.3.7",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.3",
+    "webpack": "^5.77.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-fix-style-only-entries": "^0.6.1"
+  },
+  "browserslist": [
+    "last 2 version",
+    "not ie <= 11"
+  ]
+}

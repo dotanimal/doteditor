@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>doteditor</title>
+	<!-- createjs -->
+	<script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+	<!-- Bootstrap Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+	<link rel="stylesheet" href="./css/style.css?p=(new Date()).getTime()">
+	<style>
+	</style>
+</head>
+
+<body>
+	<div id="editor">
+		<div class="editMenu">
+			<div class="btn-group penBtnGrp" role="group" aria-label="">
+				<button id="pencil" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button"><i class="bi bi-pencil"></i></button>
+				<button id="eracer" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button"><i class="bi bi-eraser"></i></button>
+			</div>
+			<div id="colorPalette">
+				<span><input class="editColorPicker" type="color" value="#333333"></span>
+				<span><input class="editColorPicker" type="color" value="#FFFFFF"></span>
+				<span><input class="editColorPicker" type="color" value="#FFFFFF"></span>
+				<span><input class="editColorPicker" type="color" value="#FFFFFF"></span>
+				<span><input class="editColorPicker" type="color" value="#FFFFFF"></span>
+				<span><input class="editColorPicker" type="color" value="#FFFFFF"></span>
+				<span><input class="editColorPicker" type="color" value="#FFFFFF"></span>
+				<span><input class="editColorPicker" type="color" value="#FFFFFF"></span>
+				<span><input class="editColorPicker" type="color" value="#FFFFFF"></span>
+			</div>
+		</div>
+		<div class="workspaceArea">
+			<canvas id="workspace1" width="803" height="483"></canvas>
+		</div>
+	</div>
+
+
+	<script src="js/script.js?p=(new Date()).getTime()"></script>
+</body>
+
+</html>
