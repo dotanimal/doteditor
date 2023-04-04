@@ -16,21 +16,21 @@ $small-modal-height:200px;
 	width: 801px !important;
 	margin:0 auto;
 
-
-	button{
-		padding-top:0;
-		padding-bottom:0;
-		line-height: 1;
-		height: 31px;
-		border-color:$color-gray;
-		color: $color-gray;
-	}
-	button:hover,
-	button.active{
-		color:$color-white;
-	}
-
 	.editMenu{
+
+		button{
+			padding-top:0;
+			padding-bottom:0;
+			line-height: 1;
+			height: 31px;
+			border-color:$color-gray;
+			color: $color-gray;
+		}
+		button:hover,
+		button.active{
+			color:$color-white;
+		}
+
 		//background: #CFC;
 		padding: 10px 0 0 0;
 		display: flex;
@@ -67,11 +67,19 @@ $small-modal-height:200px;
 	}
 	.workspaceArea{
 		padding: 10px 0 0 0;
-
 		canvas{
 			background: #FFF;
 			padding: 0;
 		}
+	}
+	footer{
+		padding:100px 0px 20px 0;
+		text-align: center;
+
+		button{
+			font-size: 12px;
+		}
+
 	}
 }
 //--------------------------

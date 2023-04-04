@@ -30,6 +30,11 @@ export class EditBtns extends createjs.EventDispatcher {
 		eracerBtn.addEventListener('click', this._onEracerBtnClickHandler);
 		
 		this._btnList = [pencilBtn, eracerBtn];
+
+		//鉛筆が選択されている状態にする
+		this._btnInactive(pencilBtn);
+		this._state.current = State.EDIT_PENCIL;
+		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_BTN, true, true));
 	}
 	//=============================================
 	// event handler
