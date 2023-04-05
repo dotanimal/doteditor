@@ -13,6 +13,10 @@ export class Layer extends createjs.Shape {
 	protected _stageWidth: number;
 	protected _stageHeight: number;
 	protected _dotSize: number;
+	protected _areaTopY : number;
+	protected _areaRightX : number;
+	protected _areaBottomY : number;
+	protected _areaLeftX : number;
 	//=============================================
 	// constructor
 	//=============================================
@@ -28,10 +32,19 @@ export class Layer extends createjs.Shape {
 	//=============================================
 	// public
 	//=============================================
-	public changeSize = (stageWidth:number, stageHeight:number, dotSize:number) => {
+	public changeSize = (stageWidth:number, stageHeight:number, dotSize:number, areaTopY:number, areaRightX:number,areaBottomY:number, areaLeftX:number) =>{
+	}
+	//=============================================
+	// protected
+	//=============================================
+	protected _superChangeSize = (stageWidth:number, stageHeight:number, dotSize:number, areaTopY:number, areaRightX:number,areaBottomY:number, areaLeftX:number) => {
 		this._stageWidth = stageWidth;
 		this._stageHeight = stageHeight;
 		this._dotSize = dotSize;
+		this._areaTopY = areaTopY;
+		this._areaRightX = areaRightX;
+		this._areaBottomY = areaBottomY;
+		this._areaLeftX = areaLeftX;
 		
 		this.cache(0, 0, this._stageWidth, this._stageHeight);
 	}
