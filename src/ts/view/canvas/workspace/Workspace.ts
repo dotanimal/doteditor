@@ -1,4 +1,6 @@
 import { State } from "../../../model/State";
+import { DrawLayerData } from "../../../model/data/DrawLayerData";
+import { PixcelArtData } from "../../../model/data/PixcelArtData";
 import { BgLayer } from "./layer/BgLayer";
 import { CursorLayer } from "./layer/CursorLayer";
 import { DrawLayer } from "./layer/DrawLayer";
@@ -62,7 +64,8 @@ export class Workspace extends createjs.Stage {
 		this._bgLayer = new BgLayer();
 		this.addChild(this._bgLayer);
 
-		this._addDrawLayer();
+		//最初に作るレイヤー名は"body"にしておく
+		this._addDrawLayer("body");
 		
 		this._cursroLayer = new CursorLayer();
 		this.addChild(this._cursroLayer);
@@ -105,9 +108,9 @@ export class Workspace extends createjs.Stage {
 		this._areaBottomY = bottom;
 		this._areaLeftX = left;
 	}
-	private _addDrawLayer = () =>{
+	private _addDrawLayer = (layerName:string) =>{
 		//TODO：将来的には引数にLayerDataを持たせて、NULLなら空のレイヤーを作るような作りにする
-		let drawLayer : DrawLayer = new DrawLayer();
+		let drawLayer : DrawLayer = new DrawLayer(layerName);
 		let len : number = this._drawLayerList.push(drawLayer);
 		this._activeDrawLayerId = len - 1;
 		this.addChild(drawLayer);
@@ -184,6 +187,18 @@ export class Workspace extends createjs.Stage {
 	//=============================================
 	public setColor = (color: string) => {
 		this._color = color;
+	}
+	public getPixcelArtData = ():PixcelArtData => {
+		let result: PixcelArtData = new PixcelArtData();
+		let layer: DrawLayer;
+		let layerData: DrawLayerData;
+		for (let i = 0; i < this._drawLayerList.length; i++) {
+			layer = this._drawLayerList [i];
+			layerData = layer.getDrawLayerData();
+			result.setDrawLayerData(layer.name, layerData)
+		}
+		result.layoutInit();
+		return result;
 	}
 	//=============================================
 	// getter/setter

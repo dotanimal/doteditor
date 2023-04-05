@@ -4,7 +4,7 @@ export class DrawLayerData {
 	//=============================================
 	//----------public----------
 	//----------private---------
-	private _name: string;
+	//private _name: string;
 
 	private _x: number;
 	private _y: number;
@@ -61,13 +61,20 @@ export class DrawLayerData {
 	//=============================================
 	// getter/setter
 	//=============================================
+	/*
+	get name(): string {
+		return this._name;
+	}
+	set name(value: string) {
+		this._name = value;
+	}
+	*/
 	get x(): number {
 		return this._x;
 	}
 	set x(value: number) {
 		this._x = value;
 	}
-
 	get y(): number {
 		return this._y;
 	}

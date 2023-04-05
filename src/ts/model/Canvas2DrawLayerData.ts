@@ -14,6 +14,12 @@ export class Canvas2DrawLayerData {
 	private _dotSize: number;
 	private _imgWidth: number;
 	private _imgHeight: number;
+
+	private _areaTopY : number;
+	private _areaRightX : number;
+	private _areaBottomY : number;
+	private _areaLeftX : number;
+	
 	private _xCount: number;
 	private _yCount: number;
 	private _imgDataDotList: Array<ImageData>;
@@ -37,11 +43,18 @@ export class Canvas2DrawLayerData {
 	 * @param {Boolean} isWhiteMarginTrimming 周囲の白色の余白を削除するかどうかのフラグ
 	 * @param {Boolean} isTransparentMarginTrimming 周囲の透過の余白を削除するかどうかのフラグ
 	 */
-	constructor(ctx: CanvasRenderingContext2D, stageWidth: number, stageHeight: number, dotSize: number = 1, isWhiteMarginTrimming: Boolean = false, isTransparentMarginTrimming: Boolean = false) {
+	constructor(ctx: CanvasRenderingContext2D, stageWidth: number, stageHeight: number, dotSize: number = 1, isWhiteMarginTrimming: Boolean = false, isTransparentMarginTrimming: Boolean = false, areaTopY:number = 0, areaRightX:number = 0,areaBottomY:number = 0, areaLeftX:number = 0) {
 
 		this._imgWidth = stageWidth;
 		this._imgHeight = stageHeight;
 		this._dotSize = dotSize;
+		console.log("stage", stageWidth, stageHeight);
+		
+		this._areaTopY = areaTopY;
+		this._areaRightX = areaRightX;
+		this._areaBottomY = areaBottomY;
+		this._areaLeftX = areaLeftX;
+		console.log("area", this._areaTopY,this._areaRightX, this._areaBottomY, this._areaLeftX)
 
 		let colorCheckMethod: Function;
 		if (isWhiteMarginTrimming) {
@@ -61,15 +74,16 @@ export class Canvas2DrawLayerData {
 			leftMargin = this._checkLeftMargin(ctx, colorCheckMethod);
 			rightMargin = this._checkRightMargin(ctx, colorCheckMethod);
 		}
-		console.log(topMargin, bottomMargin, leftMargin, rightMargin);
+		console.log("margin", topMargin, rightMargin, bottomMargin, leftMargin);
 
 		let imgData: ImageData;
 		let hex: string;
 		this._hexDotList = [];
 		this._imgDataDotList = [];
-		this._xCount = Math.floor((this._imgWidth - rightMargin - leftMargin) / dotSize) + 1;
-		this._yCount = Math.floor((this._imgHeight - bottomMargin - topMargin) / dotSize) + 1;
-
+		this._xCount = Math.floor((this._imgWidth - rightMargin - leftMargin) / dotSize);
+		this._yCount = Math.floor((this._imgHeight - bottomMargin - topMargin) / dotSize);
+		console.log("count", this._xCount, this._yCount);
+		
 		for (let yy = topMargin; yy <= this._imgHeight - bottomMargin; yy += dotSize) {
 			//console.log(yy);
 			for (let xx = leftMargin; xx <= this._imgWidth - rightMargin; xx += dotSize) {
@@ -80,8 +94,8 @@ export class Canvas2DrawLayerData {
 				this._hexDotList.push(hex);
 			}
 		}
-		this._leftMargin = leftMargin;
-		this._topMargin = topMargin;
+		this._leftMargin = leftMargin - this._areaLeftX;
+		this._topMargin = topMargin - this._areaTopY;
 		this._xBase = this._leftMargin / this._dotSize;
 		this._yBase = this._topMargin / this._dotSize;
 	}
@@ -112,8 +126,8 @@ export class Canvas2DrawLayerData {
 	private _checkTopMargin = (ctx: CanvasRenderingContext2D, colorCheckMethod: Function): number => {
 		var imgData: ImageData;
 		var isMatch: boolean = false;
-		for (var yy = 0; yy < this._imgHeight; yy += this._dotSize) {
-			for (var xx = 0; xx < this._imgWidth; xx += this._dotSize) {
+		for (var yy = this._areaTopY; yy < this._areaBottomY; yy += this._dotSize) {
+			for (var xx = this._areaLeftX; xx < this._areaRightX; xx += this._dotSize) {
 				imgData = ctx.getImageData(xx, yy, 1, 1);
 				if (!colorCheckMethod(imgData)) {
 					isMatch = true;
@@ -127,8 +141,8 @@ export class Canvas2DrawLayerData {
 	private _checkBottomMargin = (ctx: CanvasRenderingContext2D, colorCheckMethod: Function): number => {
 		var imgData: ImageData;
 		var isMatch: boolean = false;
-		for (var yy = 0; yy < this._imgHeight; yy += this._dotSize) {
-			for (var xx = 0; xx < this._imgWidth; xx += this._dotSize) {
+		for (var yy = this._imgHeight - this._areaBottomY; yy < this._imgHeight - this._areaTopY; yy += this._dotSize) {
+			for (var xx = this._areaLeftX; xx < this._areaRightX; xx += this._dotSize) {
 				imgData = ctx.getImageData(xx, this._imgHeight - 1 - yy, 1, 1);
 				if (!colorCheckMethod(imgData)) {
 					isMatch = true;
@@ -142,8 +156,8 @@ export class Canvas2DrawLayerData {
 	private _checkLeftMargin = (ctx: CanvasRenderingContext2D, colorCheckMethod: Function): number => {
 		var imgData: ImageData;
 		var isMatch: boolean = false;
-		for (var xx = 0; xx < this._imgWidth; xx += this._dotSize) {
-			for (var yy = 0; yy < this._imgHeight; yy += this._dotSize) {
+		for (var xx = this._areaLeftX; xx < this._areaRightX; xx += this._dotSize) {
+			for (var yy = this._areaTopY; yy < this._areaBottomY; yy += this._dotSize) {
 				imgData = ctx.getImageData(xx, yy, 1, 1);
 				if (!colorCheckMethod(imgData)) {
 					isMatch = true;
@@ -157,8 +171,8 @@ export class Canvas2DrawLayerData {
 	private _checkRightMargin = (ctx: CanvasRenderingContext2D, colorCheckMethod: Function): number => {
 		var imgData: ImageData;
 		var isMatch: boolean = false;
-		for (var xx = 0; xx < this._imgWidth; xx += this._dotSize) {
-			for (var yy = 0; yy < this._imgHeight; yy += this._dotSize) {
+		for (var xx = this._imgWidth - this._areaRightX; xx < this._imgWidth - this._areaLeftX; xx += this._dotSize) {
+			for (var yy = this._areaTopY; yy < this._areaBottomY; yy += this._dotSize) {
 				imgData = ctx.getImageData(this._imgWidth - 1 - xx, yy, 1, 1);
 				if (!colorCheckMethod(imgData)) {
 					isMatch = true;

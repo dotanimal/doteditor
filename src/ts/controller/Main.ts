@@ -1,4 +1,5 @@
 import { State } from "../model/State";
+import { PixcelArtData } from "../model/data/PixcelArtData";
 import { Workspace } from "../view/canvas/workspace/Workspace";
 import { ColorPalette } from "../view/ui/ColorPalette";
 import { EditBtns } from "../view/ui/EditBtns";
@@ -73,16 +74,29 @@ export class Main {
 	}
 	//ドロップダウンメニューの中のメニューを選択した
 	private _onMenuSelectFileDropdownMenuHandore = (e: Event) => {
+		let ws: Workspace;
+		let pad: PixcelArtData;
 		if(this._state.current == State.FILE_LOAD_JSON_FROM_LOCAL){
 			console.log("JSONファイルの読み込み");
+			//ws = this._getActiveWS();
 		}else if(this._state.current == State.FILE_SAVE_JSON_TO_LOCAL){
 			console.log("JSONファイルの保存");
+			ws = this._getActiveWS();
+			pad = ws.getPixcelArtData();
+			let json: any = pad.getJson();
+			let dot_json_str: string = JSON.stringify(json.dot_json);
+			//console.log(dot_json_str);
+			this._jsonFileDownload(dot_json_str);
 		}
 	}
 	//----------Workspace----------
 	//ワークスペースの変更
 	private _onWorkspaceChangeHandler = (e: Event) => {
 		let ws: Workspace = <Workspace>e.target;
+		let pad: PixcelArtData = ws.getPixcelArtData();
+		let json: any = pad.getJson();
+		let dot_json_str: string = JSON.stringify(json.dot_json);
+		//console.log(dot_json_str);
 	}
 	//=============================================
 	// private
@@ -106,6 +120,21 @@ export class Main {
 	}
 	private _getActiveWS = () => {
 		return this._wsList[this._activeWsId];
+	}
+	private _jsonFileDownload = (json : string, filename:string = "dot.json") => {
+		console.log(json);
+		const blob :Blob = new Blob([json], { type: 'application/json' });
+		const a:HTMLAnchorElement = <HTMLAnchorElement>document.createElement("a");
+		const url :string = window.URL.createObjectURL(blob);
+		a.download = filename;
+		a.href = url;
+		a.style.display = "none";
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		setTimeout(() => {
+			window.URL.revokeObjectURL(url);
+		}, 1E2); //100ms
 	}
 	//=============================================
 	// public
