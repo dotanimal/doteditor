@@ -56,7 +56,7 @@ export class DrawLayer extends Layer {
 		var cc: HTMLCanvasElement = <HTMLCanvasElement>this.cacheCanvas;
 		var ctx: CanvasRenderingContext2D = cc.getContext("2d");
 
-		let c2ld: Canvas2DrawLayerData = new Canvas2DrawLayerData(ctx, this._stageWidth, this._stageHeight, this._dotSize, true, true, this._areaTopY, this._areaRightX, this._areaBottomY, this._areaLeftX);
+		let c2ld: Canvas2DrawLayerData = new Canvas2DrawLayerData(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._areaTopY, this._areaRightX, this._areaBottomY, this._areaLeftX);
 		return c2ld.getLayerData(1);
 	}
 	//=============================================

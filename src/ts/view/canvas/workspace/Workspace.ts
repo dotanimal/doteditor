@@ -195,7 +195,9 @@ export class Workspace extends createjs.Stage {
 		for (let i = 0; i < this._drawLayerList.length; i++) {
 			layer = this._drawLayerList [i];
 			layerData = layer.getDrawLayerData();
-			result.setDrawLayerData(layer.name, layerData)
+			if(layerData){
+				result.addDrawLayerData(layer.name, layerData);
+			}
 		}
 		result.layoutInit();
 		return result;

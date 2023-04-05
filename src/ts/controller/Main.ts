@@ -67,36 +67,48 @@ export class Main {
 	//----------FileDropdownMenu----------
 	//ドロップダウンメニューが開いた
 	private _onOpenFileDropdownMenuHandore = (e: Event) => {
+		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		//let ws: Workspace = this._getActiveWS();
+		let ws: Workspace = this._getActiveWS();
+		let pad:PixcelArtData = ws.getPixcelArtData();
+		let jsonObj: any = pad.getJsonObj();
+		if(Object.keys(jsonObj.dot_json).length <= 0){
+			console.log("\n[Info]", "\n\t" + "描画データなし");
+			this._fdm.hideSaveMenu();
+		}else{
+			this._fdm.reset();
+		}
 	}
 	//ドロップダウンメニューが閉じた
 	private _onCloseFileDropdownMenuHandore = (e: Event) => {
 	}
 	//ドロップダウンメニューの中のメニューを選択した
 	private _onMenuSelectFileDropdownMenuHandore = (e: Event) => {
+		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace;
 		let pad: PixcelArtData;
 		if(this._state.current == State.FILE_LOAD_JSON_FROM_LOCAL){
-			console.log("JSONファイルの読み込み");
 			//ws = this._getActiveWS();
+			alert("未実装");
+			this._state.current = this._state.prev;
 		}else if(this._state.current == State.FILE_SAVE_JSON_TO_LOCAL){
-			console.log("JSONファイルの保存");
 			ws = this._getActiveWS();
 			pad = ws.getPixcelArtData();
-			let json: any = pad.getJson();
-			let dot_json_str: string = JSON.stringify(json.dot_json);
-			//console.log(dot_json_str);
-			this._jsonFileDownload(dot_json_str);
+			let jsonObj: any = pad.getJsonObj();
+			this._jsonFileDownload(jsonObj.dot_json);
+			this._state.current = this._state.prev;
 		}
 	}
 	//----------Workspace----------
 	//ワークスペースの変更
 	private _onWorkspaceChangeHandler = (e: Event) => {
+		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace = <Workspace>e.target;
-		let pad: PixcelArtData = ws.getPixcelArtData();
-		let json: any = pad.getJson();
-		let dot_json_str: string = JSON.stringify(json.dot_json);
-		//console.log(dot_json_str);
+		let pad:PixcelArtData = ws.getPixcelArtData();
+		let jsonObj: any = pad.getJsonObj();
+		let dot_json_str: string = JSON.stringify(jsonObj.dot_json);
+		
+		console.log('\n[DotJsonStr]', "\n\t", dot_json_str);
 	}
 	//=============================================
 	// private
@@ -121,9 +133,10 @@ export class Main {
 	private _getActiveWS = () => {
 		return this._wsList[this._activeWsId];
 	}
-	private _jsonFileDownload = (json : string, filename:string = "dot.json") => {
-		console.log(json);
-		const blob :Blob = new Blob([json], { type: 'application/json' });
+	private _jsonFileDownload = (jsonObj : any, filename:string = "dot.json") => {
+		const jsonStr :string = JSON.stringify(jsonObj.dot_json);
+		console.log('\n[DotJsonStr]', "\n\t", jsonStr);
+		const blob :Blob = new Blob([jsonStr], { type: 'application/json' });
 		const a:HTMLAnchorElement = <HTMLAnchorElement>document.createElement("a");
 		const url :string = window.URL.createObjectURL(blob);
 		a.download = filename;

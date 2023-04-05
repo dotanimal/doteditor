@@ -27,19 +27,21 @@
 	<!-- End Google Tag Manager (noscript) -->
 	<div id="editor">
 		<div class="menu">
-			<div id="file-dropdown">
+			<div id="fileDropdown">
 				<a class="btn btn-outline-dark btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">ファイル</a>
 				<ul class="dropdown-menu dropdown-menu-dark">
-					<li class="dropend">
+					
+					<li class="dropend" id="fileLoadList">
 						<a class="dropdown-item dropdown-toggle" href="#">読み込み</a>
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<li><a class="dropdown-item" id="loadJsonFileFromLocal" href="#">JSON形式</a></li>
+							<li><a class="dropdown-item" id="loadJsonFileFromLocalLink" href="#">JSON形式</a></li>
 						</ul>
 					</li>
-					<li class="dropend">
-						<a class="dropdown-item dropdown-toggle" href="#">保存</a>
+					
+					<li class="dropend" id="fileSaveMenu">
+						<a class="dropdown-item dropdown-toggle" id="fileSaveLink" href="#">保存</a>
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<li><a class="dropdown-item" id="saveJsonFileToLocal" href="#">JSON形式</a></li>
+							<li><a class="dropdown-item" id="fileSavejsonFileToLocalLink" href="#">JSON形式</a></li>
 						</ul>
 					</li>
 				</ul>

@@ -22,8 +22,12 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	private _ostwpLink: HTMLElement;
 	private _nstwpLink: HTMLElement;
 	*/
+	private _loadMenu:HTMLElement;
 	private _loadJsonFileFlomLocalLink:HTMLElement;
+
+	private _saveMenu:HTMLElement;
 	private _saveJsonFileToLocalLink:HTMLElement;
+	
 	private _state: State;
 	//----------protected-------
 	//=============================================
@@ -35,31 +39,35 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		//----------------------
 		// ドロップダウンメニュー
 		//----------------------
-		let fdd: HTMLElement = <HTMLElement>document.querySelector('#file-dropdown');
+		let fdd: HTMLElement = <HTMLElement>document.querySelector('#fileDropdown');
 		//オープン
 		fdd.addEventListener("show.bs.dropdown", (e: Event) => {
 			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_OPEN, true, true));
 		});
 		//クローズ
 		fdd.addEventListener("hide.bs.dropdown", (e: Event) => {
-			this._reset();
+			this.reset();
 			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_CLOSE, true, true));
 		});
 		//----------------------
 		// 読み込み
 		//----------------------
+
+		this._loadMenu = <HTMLElement>document.querySelector('#fileDropdown #fileLoadMenu');
 		//ローカル環境からJSONファイルを読み込む
-		this._loadJsonFileFlomLocalLink = <HTMLElement>document.querySelector('#file-dropdown #loadJsonFileFromLocal');
+		this._loadJsonFileFlomLocalLink = <HTMLElement>document.querySelector('#fileDropdown #loadJsonFileFromLocalLink');
 		this._loadJsonFileFlomLocalLink.addEventListener("click", (e: Event) => {
 			this._state.current = State.FILE_LOAD_JSON_FROM_LOCAL;
 			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
 			e.preventDefault();
 		});
+
 		//----------------------
 		// 保存
 		//----------------------
+		this._saveMenu = <HTMLElement>document.querySelector('#fileDropdown #fileSaveMenu');
 		//ローカル環境にJSONファイルを保存
-		this._saveJsonFileToLocalLink = <HTMLElement>document.querySelector('#file-dropdown #saveJsonFileToLocal');
+		this._saveJsonFileToLocalLink = <HTMLElement>document.querySelector('#fileDropdown #fileSavejsonFileToLocalLink');
 		this._saveJsonFileToLocalLink.addEventListener("click", (e: Event) => {
 			this._state.current = State.FILE_SAVE_JSON_TO_LOCAL;
 			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
@@ -72,12 +80,16 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	//=============================================
 	// private
 	//=============================================
-	private _reset = () => {
-	}
 	//=============================================
 	// public
 	//=============================================
-
+	public reset = () => {
+		this._saveMenu.style.display = "block";
+	}
+	public hideSaveMenu = () => {
+		this._saveMenu.style.display = "none";
+		//this._saveLink.classList.add("disabled");
+	}
 	//=============================================
 	// getter/setter
 	//=============================================

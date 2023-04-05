@@ -27,21 +27,22 @@ export class PixcelArtData {
 	//=============================================
 	// public
 	//=============================================
-	public getJson = (): any => {
+	public getJsonObj = (): any => {
 		let obj: any = {};
 		for (var key in this._drawLayerDataList) {
 			let layerData: DrawLayerData = this._drawLayerDataList[key];
 			obj[key] = layerData.getJson();
 		}
 		let result: any = { "id": this._id, "title": this._title, "dot_json": obj };
+		console.log('\n[JsonObj]', "\n\t", result);
 		return result;
 	}
-	public setDrawLayerData = (name: string, layerData: DrawLayerData) => {
+	public addDrawLayerData = (name: string, layerData: DrawLayerData) => {
 		//console.log("setLayerData", name, layerData);
 		this._drawLayerDataList[name] = layerData;
 		//this.layoutDataInit();
 	}
-	public getDrawLayerDataList = () =>{
+	public getDrawLayerDataList = () => {
 		return this._drawLayerDataList;
 	}
 	public layoutInit = () => {

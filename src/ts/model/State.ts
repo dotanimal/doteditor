@@ -48,6 +48,9 @@ export class State {
 		this._currentCategory =
 		*/ 
 	}
+	get prev(): string {
+		return this._prev;
+	}
 	/*
 	get currentCategory(): string {
 		//this._current をもとに分類
