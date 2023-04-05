@@ -12125,11 +12125,44 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.dropdown-menu {
+  position: relative;
+  width: 160px;
+  font-size: 12px !important;
+}
+.dropdown-menu > .dropend > .dropdown-menu {
+  position: absolute;
+  top: 0;
+  left: 150px;
+  visibility: hidden;
+  display: block;
+}
+.dropdown-menu > .dropend > .dropdown-toggle {
+  position: relative;
+}
+.dropdown-menu > .dropend > .dropdown-toggle::after {
+  position: absolute;
+  top: 9px;
+  right: 13px;
+  font-size: 14px;
+}
+.dropdown-menu > .dropend:hover > .dropdown-menu {
+  visibility: visible;
+}
+.dropdown-menu .dropdown-menu > a {
+  height: 32px;
+  padding-top: 7px;
+}
+.dropdown-menu .dropdown-menu > a::after {
+  margin-left: 10px;
+  font-size: 14px;
+}
+
 #editor {
   width: 801px !important;
   margin: 0 auto;
 }
-#editor .editMenu {
+#editor > .menu {
   padding: 10px 0 0 0;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -12139,7 +12172,10 @@ textarea.form-control-lg {
       -ms-flex-direction: row;
           flex-direction: row;
 }
-#editor .editMenu button {
+#editor > .menu #file-dropdown {
+  margin-right: 30px;
+}
+#editor > .menu button {
   padding-top: 0;
   padding-bottom: 0;
   line-height: 1;
@@ -12147,24 +12183,24 @@ textarea.form-control-lg {
   border-color: #333;
   color: #333;
 }
-#editor .editMenu button:hover,
-#editor .editMenu button.active {
+#editor > .menu button:hover,
+#editor > .menu button.active {
   color: #FFF;
 }
-#editor .editMenu .penBtnGrp {
+#editor > .menu #drawBtnGrp {
   margin-right: 30px;
 }
-#editor .editMenu #colorPalette {
+#editor > .menu #colorPalette {
   margin-right: 10px;
 }
-#editor .editMenu #colorPalette > span {
+#editor > .menu #colorPalette > span {
   display: inline-block;
   font-size: 1px;
   line-height: 1;
   border: 0;
   border: 1px solid #fff;
 }
-#editor .editMenu #colorPalette > span > input {
+#editor > .menu #colorPalette > span > input {
   margin: 2px;
   padding: 0;
   border: 0px !important;
@@ -12174,7 +12210,7 @@ textarea.form-control-lg {
   height: 26px;
   border-color: #333;
 }
-#editor .editMenu #colorPalette > span.active {
+#editor > .menu #colorPalette > span.active {
   border: 1px solid #333;
 }
 #editor .workspaceArea {

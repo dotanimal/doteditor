@@ -15,7 +15,7 @@ export class Workspace extends createjs.Stage {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public readonly EVENT_CHANGE_WS: string = "change workspace event";
+	public readonly EVENT_CHANGE_WS: string = "event change workspace";
 	//----------private---------
 	private _state: State;
 	private _canvasId: string;
@@ -122,9 +122,9 @@ export class Workspace extends createjs.Stage {
 			this._isMouseDown = true;
 			let layer: DrawLayer = this._getActiveDrawLayer();
 			if (layer) {
-				if (this._state.current == State.EDIT_PENCIL) {
+				if (this._state.current == State.DRAW_PENCIL) {
 					layer.pencil(this.mouseX, this.mouseY, this._color);
-				} else if (this._state.current == State.EDIT_ERACER) {
+				} else if (this._state.current == State.DRAW_ERACER) {
 					layer.eraser(this.mouseX, this.mouseY);
 				}
 				this.update();
@@ -132,7 +132,7 @@ export class Workspace extends createjs.Stage {
 		});
 		this.addEventListener("stagemouseup", (e: MouseEvent) => {
 			if (this._isMouseDown) {
-				if (this._state.current == State.EDIT_PENCIL || this._state.current == State.EDIT_ERACER) {
+				if (this._state.current == State.DRAW_PENCIL || this._state.current == State.DRAW_ERACER) {
 					this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 				}
 			}
@@ -146,9 +146,9 @@ export class Workspace extends createjs.Stage {
 			if (this._isMouseDown) {
 				let layer: DrawLayer = this._getActiveDrawLayer();
 				if (layer) {
-					if (this._state.current == State.EDIT_PENCIL) {
+					if (this._state.current == State.DRAW_PENCIL) {
 						layer.pencil(this.mouseX, this.mouseY, this._color);
-					} else if (this._state.current == State.EDIT_ERACER) {
+					} else if (this._state.current == State.DRAW_ERACER) {
 						layer.eraser(this.mouseX, this.mouseY);
 					}
 					//this.update();

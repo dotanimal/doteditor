@@ -10,7 +10,7 @@ export class EditBtns extends createjs.EventDispatcher {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public readonly EVENT_CHANGE_BTN: string = "change btn event";
+	public readonly EVENT_CHANGE_BTN: string = "event change btn";
 	//----------private---------
 	private _state: State;
 	private _btnList: Array<HTMLElement>;
@@ -23,17 +23,17 @@ export class EditBtns extends createjs.EventDispatcher {
 		
 		this._state = state;
 
-		let pencilBtn: HTMLElement = <HTMLElement>document.querySelector('.editMenu #pencil');
+		let pencilBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #pencil');
 		pencilBtn.addEventListener('click', this._onPenchilBtnClickHandler);
 
-		let eracerBtn: HTMLElement = <HTMLElement>document.querySelector('.editMenu #eracer');
+		let eracerBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #eracer');
 		eracerBtn.addEventListener('click', this._onEracerBtnClickHandler);
 		
 		this._btnList = [pencilBtn, eracerBtn];
 
 		//鉛筆が選択されている状態にする
 		this._btnInactive(pencilBtn);
-		this._state.current = State.EDIT_PENCIL;
+		this._state.current = State.DRAW_PENCIL;
 		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_BTN, true, true));
 	}
 	//=============================================
@@ -42,13 +42,13 @@ export class EditBtns extends createjs.EventDispatcher {
 	private _onPenchilBtnClickHandler = (e: Event) => {
 		let target = <HTMLElement>e.currentTarget;
 		this._btnInactive(target);
-		this._state.current = (this._state.current == State.EDIT_PENCIL) ? null : State.EDIT_PENCIL;
+		this._state.current = (this._state.current == State.DRAW_PENCIL) ? null : State.DRAW_PENCIL;
 		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_BTN, true, true));
 	}
 	private _onEracerBtnClickHandler = (e: Event) => {
 		let target = <HTMLElement>e.currentTarget;
 		this._btnInactive(target);
-		this._state.current = (this._state.current == State.EDIT_ERACER) ? null : State.EDIT_ERACER;
+		this._state.current = (this._state.current == State.DRAW_ERACER) ? null : State.DRAW_ERACER;
 		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_BTN, true, true));
 	}
 	//=============================================

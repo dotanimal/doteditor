@@ -4,6 +4,8 @@
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
+/*! ../../../../model/Canvas2DrawLayerData */
+
 /*! ../../../model/State */
 
 /*! ../../model/State */
@@ -72,6 +74,8 @@
 
 /*! ../view/ui/EditBtns */
 
+/*! ../view/ui/FileDropdownMenu */
+
 /*! ./Layer */
 
 /*! ./applyStyles.js */
@@ -87,6 +91,8 @@
 /*! ./controller/Main */
 
 /*! ./createPopper.js */
+
+/*! ./data/DrawLayerData */
 
 /*! ./detectOverflow.js */
 
@@ -243,6 +249,18 @@
 /*!****************************************!*\
   !*** ./src/ts/view/ui/ColorPalette.ts ***!
   \****************************************/
+
+/*!********************************************!*\
+  !*** ./src/ts/model/data/DrawLayerData.ts ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./src/ts/view/ui/FileDropdownMenu.ts ***!
+  \********************************************/
+
+/*!**********************************************!*\
+  !*** ./src/ts/model/Canvas2DrawLayerData.ts ***!
+  \**********************************************/
 
 /*!**************************************************!*\
   !*** ./node_modules/@popperjs/core/lib/enums.js ***!

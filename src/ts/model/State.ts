@@ -8,11 +8,14 @@ export class State {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public static readonly EDIT_PENCIL: string = 'edit pencil';
-	public static readonly EDIT_ERACER: string = 'edit eracer';
+	public static readonly DRAW_PENCIL: string = 'draw pencil';
+	public static readonly DRAW_ERACER: string = 'draw eracer';
 
-	public static readonly EDIT_UNDO: string = 'edit undo';
-	public static readonly EDIT_REDO: string = 'edit redo';
+	public static readonly HISTORY_UNDO: string = 'history undo';
+	public static readonly HISTORY_REDO: string = 'history redo';
+
+	public static readonly FILE_LOAD_JSON_FROM_LOCAL: string = 'file load json from local';
+	public static readonly FILE_SAVE_JSON_TO_LOCAL: string = 'file save json to local';
 	//----------private---------
 	private _current : string;
 	private _prev : string;

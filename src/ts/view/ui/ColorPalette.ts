@@ -12,7 +12,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public readonly EVENT_CHANGE_COLOR: string = "change color event";
+	public readonly EVENT_CHANGE_COLOR: string = "event change color";
 	//----------private---------
 	private _state: State;
 	private _colorPickerList: NodeListOf<Element>;
@@ -26,7 +26,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 		
 		this._state = state;
 
-		this._colorPickerList = document.querySelectorAll('.editMenu #colorPalette span input');
+		this._colorPickerList = document.querySelectorAll('#editor > .menu #colorPalette span input');
 
 		let colorPicker: HTMLInputElement;
 		for (var i = 0; i < this._colorPickerList.length; i++) {

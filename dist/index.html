@@ -26,8 +26,25 @@
 	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 	<!-- End Google Tag Manager (noscript) -->
 	<div id="editor">
-		<div class="editMenu">
-			<div class="btn-group penBtnGrp" role="group" aria-label="">
+		<div class="menu">
+			<div id="file-dropdown">
+				<a class="btn btn-outline-dark btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">ファイル</a>
+				<ul class="dropdown-menu dropdown-menu-dark">
+					<li class="dropend">
+						<a class="dropdown-item dropdown-toggle" href="#">読み込み</a>
+						<ul class="dropdown-menu dropdown-menu-dark">
+							<li><a class="dropdown-item" id="loadJsonFileFromLocal" href="#">JSON形式</a></li>
+						</ul>
+					</li>
+					<li class="dropend">
+						<a class="dropdown-item dropdown-toggle" href="#">保存</a>
+						<ul class="dropdown-menu dropdown-menu-dark">
+							<li><a class="dropdown-item" id="saveJsonFileToLocal" href="#">JSON形式</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<div id="drawBtnGrp" class="btn-group" role="group" aria-label="">
 				<button id="pencil" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button"><i class="bi bi-pencil"></i></button>
 				<button id="eracer" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button"><i class="bi bi-eraser"></i></button>
 			</div>

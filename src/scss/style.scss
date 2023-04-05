@@ -11,12 +11,57 @@ $small-modal-width:300px;
 $small-modal-height:200px;
 
 //--------------------------
+//Bootstrap の各パーツの調整
+//--------------------------
+
+//ドロップダウンメニュー
+.dropdown-menu {
+	position: relative;
+	width: 160px;
+	font-size:12px !important;
+
+	> .dropend > .dropdown-menu {
+		position: absolute;
+		top: 0;
+		left: 150px;
+		visibility: hidden;
+		display: block;
+	}
+	> .dropend > .dropdown-toggle {
+		position: relative;
+	}
+	> .dropend > .dropdown-toggle::after  {
+		position: absolute;
+		top: 9px;
+		right: 13px;
+		font-size:14px;
+	}
+	> .dropend:hover > .dropdown-menu {
+		visibility: visible;
+	}
+	.dropdown-menu > a{
+		height:32px;
+		padding-top:7px;
+	}
+	.dropdown-menu > a::after{
+		//border:none;
+		margin-left:10px;
+		font-size:14px;
+	}
+}
+
+
+//--------------------------
 //--------------------------
 #editor{
 	width: 801px !important;
 	margin:0 auto;
 
-	.editMenu{
+	> .menu{
+
+		#file-dropdown{
+			margin-right:30px;
+		}
 
 		button{
 			padding-top:0;
@@ -30,13 +75,13 @@ $small-modal-height:200px;
 		button.active{
 			color:$color-white;
 		}
-
 		//background: #CFC;
 		padding: 10px 0 0 0;
 		display: flex;
 		flex-direction: row;
 		//edit
-		.penBtnGrp{
+		
+		#drawBtnGrp{
 			margin-right:30px;
 		}
 		#colorPalette{
