@@ -34,27 +34,19 @@ export class State {
 	//=============================================
 	// public
 	//=============================================
+	public set = (value : string) => {
+		this._prev = this._current;
+		this._current = value;
+		console.log('\n[State:change]', "\t" + this.current);
+	}
+	public prev = () => {
+		this._current = this._prev;
+		console.log('\n[State:change]', "\t" + this.current);
+	}
 	//=============================================
 	// getter/setter
 	//=============================================
 	get current(): string {
 		return this._current;
 	}
-	set current(value){
-		this._prev = this._current;
-		this._current = value;
-
-		/*this._current をもとに分類したものを設定
-		this._currentCategory =
-		*/ 
-	}
-	get prev(): string {
-		return this._prev;
-	}
-	/*
-	get currentCategory(): string {
-		//this._current をもとに分類
-		return this._category;
-	}
-	*/
 }

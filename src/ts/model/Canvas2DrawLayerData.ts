@@ -49,13 +49,13 @@ export class Canvas2DrawLayerData {
 		this._imgWidth = stageWidth;
 		this._imgHeight = stageHeight;
 		this._dotSize = dotSize;
-		console.log("\tstage\t\t\t:", stageWidth, stageHeight);
+		//console.log("\tstage\t\t\t:", stageWidth, stageHeight);
 		
 		this._areaTopY = areaTopY;
 		this._areaRightX = areaRightX;
 		this._areaBottomY = areaBottomY;
 		this._areaLeftX = areaLeftX;
-		console.log("\tarea\t\t\t:", this._areaTopY,this._areaRightX, this._areaBottomY, this._areaLeftX)
+		//console.log("\tarea\t\t\t:", this._areaTopY,this._areaRightX, this._areaBottomY, this._areaLeftX)
 
 		let colorCheckMethod: Function;
 		if (isWhiteMarginTrimming) {
@@ -75,7 +75,7 @@ export class Canvas2DrawLayerData {
 			leftMargin = this._checkLeftMargin(ctx, colorCheckMethod);
 			rightMargin = this._checkRightMargin(ctx, colorCheckMethod);
 		}
-		console.log("\tmargin\t\t\t:", topMargin, rightMargin, bottomMargin, leftMargin);
+		//console.log("\tmargin\t\t\t:", topMargin, rightMargin, bottomMargin, leftMargin);
 
 		let imgData: ImageData;
 		let hex: string;
@@ -255,8 +255,6 @@ export class Canvas2DrawLayerData {
 			colorList.push(hex);
 		}
 		this._dotSize = dotsize;
-		//let xBase: number = Math.floor(this._leftMargin / this._dotSize);
-		//let yBase: number = Math.floor(this._topMargin / this._dotSize);
 
 		let dld: DrawLayerData = new DrawLayerData();
 		dld.setData(xCount, yCount, colorList, dataList, this._xBase, this._yBase);

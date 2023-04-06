@@ -33,7 +33,7 @@ export class EditBtns extends createjs.EventDispatcher {
 
 		//鉛筆が選択されている状態にする
 		this._btnInactive(pencilBtn);
-		this._state.current = State.DRAW_PENCIL;
+		this._state.set(State.DRAW_PENCIL);
 		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_BTN, true, true));
 	}
 	//=============================================
@@ -42,13 +42,13 @@ export class EditBtns extends createjs.EventDispatcher {
 	private _onPenchilBtnClickHandler = (e: Event) => {
 		let target = <HTMLElement>e.currentTarget;
 		this._btnInactive(target);
-		this._state.current = (this._state.current == State.DRAW_PENCIL) ? null : State.DRAW_PENCIL;
+		this._state.set((this._state.current == State.DRAW_PENCIL) ? null : State.DRAW_PENCIL);
 		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_BTN, true, true));
 	}
 	private _onEracerBtnClickHandler = (e: Event) => {
 		let target = <HTMLElement>e.currentTarget;
 		this._btnInactive(target);
-		this._state.current = (this._state.current == State.DRAW_ERACER) ? null : State.DRAW_ERACER;
+		this._state.set((this._state.current == State.DRAW_ERACER) ? null : State.DRAW_ERACER);
 		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_BTN, true, true));
 	}
 	//=============================================

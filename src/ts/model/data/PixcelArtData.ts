@@ -35,6 +35,7 @@ export class PixcelArtData {
 		}
 		let result: any = { "id": this._id, "title": this._title, "dot_json": obj };
 		console.log('\n[JsonObj]', "\n\t", result);
+		console.log('\n[JsonStr]', "\n\t", JSON.stringify(result));
 		return result;
 	}
 	public addDrawLayerData = (name: string, layerData: DrawLayerData) => {

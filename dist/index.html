@@ -22,16 +22,19 @@
 					<li class="dropend" id="fileLoadList">
 						<a class="dropdown-item dropdown-toggle" href="#">読み込み</a>
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<li><a class="dropdown-item" id="loadJsonFileFromLocalLink" href="#">JSON形式</a></li>
+							<li id="loadJsonFromLocal"><a class="dropdown-item" href="#">JSON形式</a></li>
 						</ul>
 					</li>
 					<li class="dropend" id="fileSaveMenu">
 						<a class="dropdown-item dropdown-toggle" id="fileSaveLink" href="#">保存</a>
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<li><a class="dropdown-item" id="fileSavejsonFileToLocalLink" href="#">JSON形式</a></li>
+							<li id="saveJsonToLocal"><a class="dropdown-item" href="#">JSON形式</a></li>
 						</ul>
 					</li>
 				</ul>
+				<div id="fileLoadInputs">
+					<input type="file" accept="application/json,.json" id="loadJsonFromLocalInput">
+				</div>
 			</div>
 			<div id="drawBtnGrp" class="btn-group" role="group" aria-label="">
 				<button id="pencil" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button"><i class="bi bi-pencil"></i></button>

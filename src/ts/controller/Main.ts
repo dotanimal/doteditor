@@ -4,6 +4,7 @@ import { Workspace } from "../view/canvas/workspace/Workspace";
 import { ColorPalette } from "../view/ui/ColorPalette";
 import { EditBtns } from "../view/ui/EditBtns";
 import { FileDropdownMenu } from "../view/ui/FileDropdownMenu";
+import { LocalConnector } from "./file/LocalConnector";
 
 export class Main {
 	//=============================================
@@ -23,6 +24,8 @@ export class Main {
 	private _eb: EditBtns;
 	private _fdm: FileDropdownMenu;
 
+	private _lc: LocalConnector;
+
 	private _wsList: { [key: string]: Workspace };
 	private _activeWsId: string;
 	//=============================================
@@ -35,16 +38,20 @@ export class Main {
 		this._eb = new EditBtns(this._state);
 		this._fdm = new FileDropdownMenu(this._state);
 
+		this._lc = new LocalConnector(this._state);
+
 		this._wsList = {};
 		
 		this._addWorkSpace('workspace1');
 
 		this._eb.addEventListener(this._eb.EVENT_CHANGE_BTN, this._onChangeEditBtnsHandler);
 		this._cp.addEventListener(this._cp.EVENT_CHANGE_COLOR, this._onChangeColorPaletteHandler);
-		this._fdm.addEventListener(this._fdm.EVENT_DROPDOWN_OPEN, this._onOpenFileDropdownMenuHandore);
-		this._fdm.addEventListener(this._fdm.EVENT_DROPDOWN_CLOSE, this._onCloseFileDropdownMenuHandore);
-		this._fdm.addEventListener(this._fdm.EVENT_DROPDOWN_MENU_SELECT, this._onMenuSelectFileDropdownMenuHandore);
+		this._fdm.addEventListener(this._fdm.EVENT_DROPDOWN_OPEN, this._onOpenFileDropdownMenuHandler);
+		this._fdm.addEventListener(this._fdm.EVENT_DROPDOWN_CLOSE, this._onCloseFileDropdownMenuHandler);
+		this._fdm.addEventListener(this._fdm.EVENT_DROPDOWN_MENU_SELECT, this._onMenuSelectFileDropdownMenuHandler);
 
+		this._lc.addEventListener(this._lc.EVENT_LOAD_JSON_COMPLETE, this._onLoadJsonFromLocalCompleteHandler);
+		this._lc.addEventListener(this._lc.EVENT_SAVE_JSON_COMPLETE, this._onSaveJsonToLocalCompleteHandler);
 		//カラーパレットの初期化　イベントリスナーを登録したあとに実行しないと色々うごかないのでここで実行
 		this._cp.init();
 	}
@@ -66,7 +73,7 @@ export class Main {
 	}
 	//----------FileDropdownMenu----------
 	//ドロップダウンメニューが開いた
-	private _onOpenFileDropdownMenuHandore = (e: Event) => {
+	private _onOpenFileDropdownMenuHandler = (e: Event) => {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		//let ws: Workspace = this._getActiveWS();
 		let ws: Workspace = this._getActiveWS();
@@ -80,23 +87,21 @@ export class Main {
 		}
 	}
 	//ドロップダウンメニューが閉じた
-	private _onCloseFileDropdownMenuHandore = (e: Event) => {
+	private _onCloseFileDropdownMenuHandler = (e: Event) => {
 	}
 	//ドロップダウンメニューの中のメニューを選択した
-	private _onMenuSelectFileDropdownMenuHandore = (e: Event) => {
+	private _onMenuSelectFileDropdownMenuHandler = (e: Event) => {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace;
 		let pad: PixcelArtData;
 		if(this._state.current == State.FILE_LOAD_JSON_FROM_LOCAL){
-			//ws = this._getActiveWS();
-			alert("未実装");
-			this._state.current = this._state.prev;
+			ws = this._getActiveWS();
+			pad = ws.getPixcelArtData();
+			this._lc.loadJson();
 		}else if(this._state.current == State.FILE_SAVE_JSON_TO_LOCAL){
 			ws = this._getActiveWS();
 			pad = ws.getPixcelArtData();
-			let jsonObj: any = pad.getJsonObj();
-			this._jsonFileDownload(jsonObj);
-			this._state.current = this._state.prev;
+			this._lc.saveJson(pad);
 		}
 	}
 	//----------Workspace----------
@@ -106,9 +111,19 @@ export class Main {
 		let ws: Workspace = <Workspace>e.target;
 		let pad:PixcelArtData = ws.getPixcelArtData();
 		let jsonObj: any = pad.getJsonObj();
-		let dot_json_str: string = JSON.stringify(jsonObj.dot_json);
-		
-		console.log('\n[DotJsonStr]', "\n\t", dot_json_str);
+	}
+	//----------LocalConnector----------
+	//読み込み完了
+	private _onLoadJsonFromLocalCompleteHandler = (e: Event) => {
+		let jsonStr : string = this._lc.resultLoadJson;
+		if(jsonStr != null){
+			let ws: Workspace = <Workspace>e.target;
+			console.log(jsonStr);
+		}
+	}
+	//保存完了
+	private _onSaveJsonToLocalCompleteHandler = (e: Event) => {
+		console.log(this._state.current);
 	}
 	//=============================================
 	// private
@@ -133,6 +148,7 @@ export class Main {
 	private _getActiveWS = () => {
 		return this._wsList[this._activeWsId];
 	}
+	/*
 	private _jsonFileDownload = (jsonObj : any, filename:string = "dot.json") => {
 		const jsonStr :string = JSON.stringify(jsonObj.dot_json);
 		console.log('\n[DotJsonStr]', "\n\t", jsonStr);
@@ -179,6 +195,7 @@ export class Main {
 			}
 		})();
 	}
+	*/
 	//=============================================
 	// public
 	//=============================================
