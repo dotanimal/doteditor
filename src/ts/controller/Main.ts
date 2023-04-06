@@ -95,7 +95,7 @@ export class Main {
 			ws = this._getActiveWS();
 			pad = ws.getPixcelArtData();
 			let jsonObj: any = pad.getJsonObj();
-			this._jsonFileDownload(jsonObj.dot_json);
+			this._jsonFileDownload(jsonObj);
 			this._state.current = this._state.prev;
 		}
 	}
@@ -136,18 +136,48 @@ export class Main {
 	private _jsonFileDownload = (jsonObj : any, filename:string = "dot.json") => {
 		const jsonStr :string = JSON.stringify(jsonObj.dot_json);
 		console.log('\n[DotJsonStr]', "\n\t", jsonStr);
-		const blob :Blob = new Blob([jsonStr], { type: 'application/json' });
-		const a:HTMLAnchorElement = <HTMLAnchorElement>document.createElement("a");
-		const url :string = window.URL.createObjectURL(blob);
-		a.download = filename;
-		a.href = url;
-		a.style.display = "none";
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
-		setTimeout(() => {
-			window.URL.revokeObjectURL(url);
-		}, 1E2); //100ms
+		(async ()=> {
+			//Firefoxやスマホではwindow.showSaveFilePickerに対応していないので、対応していない場合は別の方法で保存する
+			if(typeof window.showSaveFilePicker == 'function'){
+				try {
+					const textContent = jsonStr;
+					// メイン処理
+					const saveFileOptions = {
+						types: [
+							{
+								description: "Json Files",
+								accept: {
+									"application/json": [".json"]
+								}
+							}
+						]
+					};
+					const handle = await window.showSaveFilePicker(saveFileOptions);
+					// writable作成
+					const writable = await handle.createWritable();
+					// コンテンツを書き込む
+					await writable.write(textContent);
+					// ファイル閉じる
+					await writable.close();
+					console.log('書き込み完了');
+				} catch (error) {
+					console.log('書き込み失敗');
+				}
+			}else{
+				const blob :Blob = new Blob([jsonStr], { type: 'application/json' });
+				const a:HTMLAnchorElement = <HTMLAnchorElement>document.createElement("a");
+				const url :string = window.URL.createObjectURL(blob);
+				a.download = filename;
+				a.href = url;
+				a.style.display = "none";
+				document.body.appendChild(a);
+				a.click();
+				document.body.removeChild(a);
+				setTimeout(() => {
+					window.URL.revokeObjectURL(url);
+				}, 1E2); //100ms
+			}
+		})();
 	}
 	//=============================================
 	// public

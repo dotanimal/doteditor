@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "pro"	: "webpack --mode production",
-    "dev"	: "webpack --mode development",
-    "watch"	: "webpack --mode development --watch"
+    "pro": "webpack --mode production",
+    "dev": "webpack --mode development",
+    "watch": "webpack --mode development --watch"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,7 @@
   "devDependencies": {
     "@types/bootstrap": "^5.2.6",
     "@types/createjs": "^0.0.29",
+    "@types/wicg-file-system-access": "^2020.9.5",
     "autoprefixer": "^10.4.14",
     "bootstrap": "^5.2.3",
     "createjs": "^1.0.1",

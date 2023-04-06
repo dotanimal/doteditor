@@ -33,7 +33,7 @@ export class DrawLayerData {
 		this._x = x;
 		this._y = y;
 	}
-	public setJson = (obj: any) => {
+	public setJsonObj = (obj: any) => {
 		//console.log("setJson", obj);
 		let size: Array<number> = obj.size;
 		this._width = size[0];
@@ -51,7 +51,7 @@ export class DrawLayerData {
 			this._y = 0;
 		}
 	}
-	public getJson = (): any => {
+	public getJsonObj = (): any => {
 		let result: any = { "size": [this._width, this._height], "color": this._colorList, "data": this._dataList };
 		if (this._x != 0 || this._y != 0) {
 			result["pos"] = [this._x, this._y];

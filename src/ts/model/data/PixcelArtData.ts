@@ -31,7 +31,7 @@ export class PixcelArtData {
 		let obj: any = {};
 		for (var key in this._drawLayerDataList) {
 			let layerData: DrawLayerData = this._drawLayerDataList[key];
-			obj[key] = layerData.getJson();
+			obj[key] = layerData.getJsonObj();
 		}
 		let result: any = { "id": this._id, "title": this._title, "dot_json": obj };
 		console.log('\n[JsonObj]', "\n\t", result);
@@ -50,7 +50,7 @@ export class PixcelArtData {
 		for (var key in this._dot_json) {
 			let dot_json: any = this._dot_json[key];
 			let layerData: DrawLayerData = new DrawLayerData();
-			layerData.setJson(dot_json);
+			layerData.setJsonObj(dot_json);
 			this._drawLayerDataList[key] = layerData;
 			//console.log(key);
 		}
