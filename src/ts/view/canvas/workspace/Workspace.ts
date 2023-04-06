@@ -165,6 +165,30 @@ export class Workspace extends createjs.Stage {
 		this.removeAllEventListeners("stagemouseup");
 		this.removeAllEventListeners("stagemousemove");
 	}
+	private _addDrawLayerFromDrawLayerData = (key: string, dld: DrawLayerData) => {
+		let isAdded: boolean = false;
+		let dl: DrawLayer;
+		for (var i = 0; i < this._drawLayerList.length; i++) {
+			dl = this._drawLayerList[i];
+			if (key == dl.name) {
+				isAdded = true;
+				break;
+			}
+		}
+		if (!isAdded) {
+			let len: number;
+			//let layer: Layer = new Layer(key, jsonObj, this.canvas.width, this.canvas.height);
+			//var canvas = <HTMLCanvasElement>this.canvas;
+			dl = new DrawLayer(key);
+			dl.setDrawLayerData(dld);
+			len = this._drawLayerList.push(dl);
+			this._activeDrawLayerId = len - 1;
+			this.addChild(dl);
+		} else {
+			alert("このレイヤーはすでに登録されています");
+		}
+
+	}
 	private _getActiveDrawLayer = (): DrawLayer | null => {
 		if (!this._drawLayerList.length) {
 			return null;
@@ -182,9 +206,50 @@ export class Workspace extends createjs.Stage {
 			return false;
 		}
 	}
+	/*
+	private _drawGraphics = () => {
+		//console.log("WorkspaceStage.drawGraphics");
+	}
+	*/
+	/*
+	private _reset = () => {
+		//console.log("reset");
+		//this._removeMouseEventListener();
+		this.removeAllChildren();
+		this.addChild(this._bgLayer);
+		this.update();
+	}
+	*/
 	//=============================================
 	// public
 	//=============================================
+	public setData = (pad: PixcelArtData) => {
+		console.log("setData");
+		this.removeAllChildren();
+		this.addChild(this._bgLayer);
+		this.update();
+		if (pad.id) {
+			//this._wpId = pad.id;
+		}
+		//this._wpTitle = data.title;
+		let drawLayerDataList: any = pad.drawLayerDataList;
+		this._drawLayerList = [];
+		for (var key in drawLayerDataList) {
+			var ld: DrawLayerData = drawLayerDataList[key];
+			this._addDrawLayerFromDrawLayerData(key, ld);
+		}
+		this.addChild(this._cursroLayer);
+
+		this._changeSize();
+
+		let dl: DrawLayer;
+		for (var i = 0; i < this._drawLayerList.length; i++) {
+			dl = this._drawLayerList[i];
+			dl.drawGraphics();
+		}
+		this.update();
+		//this._addMouseEventListener();
+	}
 	public setColor = (color: string) => {
 		this._color = color;
 	}

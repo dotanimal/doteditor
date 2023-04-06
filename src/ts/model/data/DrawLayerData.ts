@@ -34,7 +34,6 @@ export class DrawLayerData {
 		this._y = y;
 	}
 	public setJsonObj = (obj: any) => {
-		//console.log("setJson", obj);
 		let size: Array<number> = obj.size;
 		this._width = size[0];
 		this._height = size[1];

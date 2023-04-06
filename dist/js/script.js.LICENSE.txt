@@ -12,6 +12,8 @@
 
 /*! ../../model/State */
 
+/*! ../../model/data/PixcelArtData */
+
 /*! ../dom-utils/contains.js */
 
 /*! ../dom-utils/getBoundingClientRect.js */

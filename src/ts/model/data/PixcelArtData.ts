@@ -9,7 +9,7 @@ export class PixcelArtData {
 	private _obj: any;
 	private _id: number;
 	private _title: string;
-	private _dot_json: any;
+	private _dotJsonObj: any;
 	private _drawLayerDataList: any;
 	private _x: number;
 	private _y: number;
@@ -27,6 +27,23 @@ export class PixcelArtData {
 	//=============================================
 	// public
 	//=============================================
+	public setValue = (dotJsonObj: any, id: number = null, title: string = null ) => {//TODO 要調整
+		this._id = id;
+		this._title = title;
+
+		this._drawLayerDataList = {};
+		if (dotJsonObj != null) {
+			this._dotJsonObj = dotJsonObj;
+
+			for (var key in this._dotJsonObj) {
+				let layerJsonObj: any = this._dotJsonObj[key];
+				let dld: DrawLayerData = new DrawLayerData();
+				//console.log(key, layerJson);
+				dld.setJsonObj(layerJsonObj);
+				this._drawLayerDataList[key] = dld;
+			}
+		}
+	}
 	public getJsonObj = (): any => {
 		let obj: any = {};
 		for (var key in this._drawLayerDataList) {
@@ -47,13 +64,12 @@ export class PixcelArtData {
 		return this._drawLayerDataList;
 	}
 	public layoutInit = () => {
-
-		for (var key in this._dot_json) {
-			let dot_json: any = this._dot_json[key];
+		//console.log(this._dotJsonObj);
+		for (var key in this._dotJsonObj) {
+			let dot_json: any = this._dotJsonObj[key];
 			let layerData: DrawLayerData = new DrawLayerData();
 			layerData.setJsonObj(dot_json);
 			this._drawLayerDataList[key] = layerData;
-			//console.log(key);
 		}
 		let minX: number = Number.MAX_SAFE_INTEGER;
 		let minY: number = Number.MAX_SAFE_INTEGER;
@@ -61,10 +77,7 @@ export class PixcelArtData {
 		let maxY: number = 0;
 		//console.log(this._drawLayerDataList);
 		for (var key in this._drawLayerDataList) {
-
-			//console.log(key);
 			let ld: DrawLayerData = this._drawLayerDataList[key];
-			//console.log(key, ld.x, ld.y, ld.width, ld.height);
 			if (ld.x < minX) {
 				minX = ld.x;
 			}
@@ -78,13 +91,10 @@ export class PixcelArtData {
 				maxY = ld.y + ld.height;
 			}
 		}
-		//console.log("result", minX, minY, maxX, maxY);
 		this._x = minX;
 		this._y = minY;
 		this._width = maxX - minX;
 		this._height = maxY - minY;
-		
-		//console.log(this._x, this._y, this._width, this._height);
 	}
 	//=============================================
 	// getter/setter
@@ -95,7 +105,10 @@ export class PixcelArtData {
 	get title(): string {
 		return this._title;
 	}
-
+	get drawLayerDataList(): any {
+		return this._drawLayerDataList;
+	}
+	
 	get x(): number {
 		return this._x;
 	}

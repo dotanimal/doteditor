@@ -66,7 +66,7 @@ export class Main {
 	//----------ColorPalette----------
 	//カラーパレットの変更
 	private _onChangeColorPaletteHandler = (e: Event) => {
-		let ws: Workspace = this._getActiveWS();
+		let ws: Workspace = this._getActiveWorkSpace();
 		let color: string = this._cp.getColor();
 		ws.setColor(color);
 		console.log('\n[Event]', e.type, "\n\t" + "color : " + color);
@@ -76,7 +76,7 @@ export class Main {
 	private _onOpenFileDropdownMenuHandler = (e: Event) => {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		//let ws: Workspace = this._getActiveWS();
-		let ws: Workspace = this._getActiveWS();
+		let ws: Workspace = this._getActiveWorkSpace();
 		let pad:PixcelArtData = ws.getPixcelArtData();
 		let jsonObj: any = pad.getJsonObj();
 		if(Object.keys(jsonObj.dot_json).length <= 0){
@@ -95,11 +95,11 @@ export class Main {
 		let ws: Workspace;
 		let pad: PixcelArtData;
 		if(this._state.current == State.FILE_LOAD_JSON_FROM_LOCAL){
-			ws = this._getActiveWS();
+			ws = this._getActiveWorkSpace();
 			pad = ws.getPixcelArtData();
 			this._lc.loadJson();
 		}else if(this._state.current == State.FILE_SAVE_JSON_TO_LOCAL){
-			ws = this._getActiveWS();
+			ws = this._getActiveWorkSpace();
 			pad = ws.getPixcelArtData();
 			this._lc.saveJson(pad);
 		}
@@ -115,10 +115,9 @@ export class Main {
 	//----------LocalConnector----------
 	//読み込み完了
 	private _onLoadJsonFromLocalCompleteHandler = (e: Event) => {
-		let jsonStr : string = this._lc.resultLoadJson;
-		if(jsonStr != null){
-			let ws: Workspace = <Workspace>e.target;
-			console.log(jsonStr);
+		let pad : PixcelArtData = this._lc.loadResultPad;
+		if(pad != null){
+			this._setPixcelArtData2WorkSpace(pad);
 		}
 	}
 	//保存完了
@@ -145,57 +144,22 @@ export class Main {
 			alert("この名前のワークスペースはすでに登録されています");
 		}
 	}
-	private _getActiveWS = () => {
+	private _getActiveWorkSpace = () => {
 		return this._wsList[this._activeWsId];
 	}
-	/*
-	private _jsonFileDownload = (jsonObj : any, filename:string = "dot.json") => {
-		const jsonStr :string = JSON.stringify(jsonObj.dot_json);
-		console.log('\n[DotJsonStr]', "\n\t", jsonStr);
-		(async ()=> {
-			//Firefoxやスマホではwindow.showSaveFilePickerに対応していないので、対応していない場合は別の方法で保存する
-			if(typeof window.showSaveFilePicker == 'function'){
-				try {
-					const textContent = jsonStr;
-					// メイン処理
-					const saveFileOptions = {
-						types: [
-							{
-								description: "Json Files",
-								accept: {
-									"application/json": [".json"]
-								}
-							}
-						]
-					};
-					const handle = await window.showSaveFilePicker(saveFileOptions);
-					// writable作成
-					const writable = await handle.createWritable();
-					// コンテンツを書き込む
-					await writable.write(textContent);
-					// ファイル閉じる
-					await writable.close();
-					console.log('書き込み完了');
-				} catch (error) {
-					console.log('書き込み失敗');
-				}
-			}else{
-				const blob :Blob = new Blob([jsonStr], { type: 'application/json' });
-				const a:HTMLAnchorElement = <HTMLAnchorElement>document.createElement("a");
-				const url :string = window.URL.createObjectURL(blob);
-				a.download = filename;
-				a.href = url;
-				a.style.display = "none";
-				document.body.appendChild(a);
-				a.click();
-				document.body.removeChild(a);
-				setTimeout(() => {
-					window.URL.revokeObjectURL(url);
-				}, 1E2); //100ms
-			}
-		})();
+	private _setPixcelArtData2WorkSpace = (pad: PixcelArtData) => {
+		//console.log("MainController : _setPixcelArtData2WS");
+		//タイトルの反映
+		//this._titleTxtInput.value = pad.title;
+		//カラーパレットに色を反映
+		//let colorList: Array<string> = pad.getColorList();
+		//this._cp.setColorList(colorList);
+
+		//ワークスペースにデータを反映
+		let ws: Workspace = this._getActiveWorkSpace();
+		ws.setData(pad);
+		//ws.saveLog();
 	}
-	*/
 	//=============================================
 	// public
 	//=============================================

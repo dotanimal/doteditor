@@ -18,7 +18,7 @@ export class LocalConnector extends createjs.EventDispatcher {
 
 	//load json
 	private _loadJsonFromLocalInput:HTMLInputElement;
-	private _resultLoadJson:string;
+	private _loadResultPad:PixcelArtData;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -36,7 +36,9 @@ export class LocalConnector extends createjs.EventDispatcher {
 			reader.readAsText(file);
 			//読込終了後の処理
 			reader.onload = (e) =>{
-				this._resultLoadJson = <string>reader.result;
+				let dotJsonObj:any = JSON.parse(<string>reader.result);
+				this._loadResultPad = new PixcelArtData();
+				this._loadResultPad.setValue(dotJsonObj);
 				this._state.prev();
 				this.dispatchEvent(new createjs.Event(this.EVENT_LOAD_JSON_COMPLETE, true, true));
 			}
@@ -107,13 +109,13 @@ export class LocalConnector extends createjs.EventDispatcher {
 	}
 	
 	public loadJson = () => {
-		this._resultLoadJson = null;
+		this._loadResultPad = null;
 		this._loadJsonFromLocalInput.click();
 	}
 	//=============================================
 	// getter/setter
 	//=============================================
-	get resultLoadJson(): string {
-		return this._resultLoadJson;
+	get loadResultPad(): PixcelArtData {
+		return this._loadResultPad;
 	}
 }
