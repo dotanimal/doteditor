@@ -16,7 +16,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 	//----------private---------
 	private _state: State;
 	private _colorPickerList: NodeListOf<Element>;
-	private _current: HTMLInputElement;
+	private _currentEle: HTMLInputElement;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -42,7 +42,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 	private _onChangeHandler = (e: Event = null) => {
 		if (e != null) {
 			let colorPicker: HTMLInputElement = <HTMLInputElement>e.target;
-			this._current = colorPicker;
+			this._currentEle = colorPicker;
 		}
 		this._changeActive();
 		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_COLOR, true, true));
@@ -56,7 +56,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 		for (var i = 0; i < this._colorPickerList.length; i++) {
 			colorPicker = <HTMLInputElement>this._colorPickerList[i];
 			parent = colorPicker.parentElement;
-			if (colorPicker == this._current) {
+			if (colorPicker == this._currentEle) {
 				parent.classList.add("active");
 			} else {
 				parent.classList.remove("active");
@@ -67,32 +67,30 @@ export class ColorPalette extends createjs.EventDispatcher{
 	// public
 	//=============================================
 	public init = () => {
-		this._current = <HTMLInputElement>this._colorPickerList[0];
+		this._currentEle = <HTMLInputElement>this._colorPickerList[0];
 		this._onChangeHandler();
 	}
-	public getColor = (): string => {
-		return this._current.value;
+	public getHexColorCode = (): string => {
+		return this._currentEle.value;
 	}
-	/*
-	public setColorList = (arr: Array<string>) => {
+	public setHexColorList = (arr: Array<string>) => {
 		let colorLen: number = arr.length;
 		let pickerLen: number = this._colorPickerList.length;
 		//colorLen = (pickerLen < colorLen) ? pickerLen : colorLen;
-		let colorPicker: HTMLInputElement;
+		let colorPickerEle: HTMLInputElement;
 		let color: String;
 		for (var i = 0; i < pickerLen; i++) {
-			colorPicker = <HTMLInputElement>this._colorPickerList[i];
+			colorPickerEle = <HTMLInputElement>this._colorPickerList[i];
 			if (i < colorLen) {
 				color = arr[i];
 			} else {
 				color = "FFFFFF";
 			}
-			colorPicker.value = "#" + color;
+			colorPickerEle.value = "#" + color;
 		}
-		this._current = <HTMLInputElement>this._colorPickerList[0];
+		this._currentEle = <HTMLInputElement>this._colorPickerList[0];
 		this._onChangeHandler();
 	}
-	*/
 	//=============================================
 	// getter/setter
 	//=============================================

@@ -39,7 +39,7 @@ export class Workspace extends createjs.Stage {
 	//private _workspaceDataLogList: Array<WorkspaceData>;
 
 
-	private _color: string;
+	private _hexColorCode: string;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -137,7 +137,7 @@ export class Workspace extends createjs.Stage {
 			let layer: DrawLayer = this._getActiveDrawLayer();
 			if (layer) {
 				if (this._state.current == State.DRAW_PENCIL) {
-					layer.pencil(this.mouseX, this.mouseY, this._color);
+					layer.pencil(this.mouseX, this.mouseY, this._hexColorCode);
 				} else if (this._state.current == State.DRAW_ERACER) {
 					layer.eraser(this.mouseX, this.mouseY);
 				}
@@ -161,7 +161,7 @@ export class Workspace extends createjs.Stage {
 				let layer: DrawLayer = this._getActiveDrawLayer();
 				if (layer) {
 					if (this._state.current == State.DRAW_PENCIL) {
-						layer.pencil(this.mouseX, this.mouseY, this._color);
+						layer.pencil(this.mouseX, this.mouseY, this._hexColorCode);
 					} else if (this._state.current == State.DRAW_ERACER) {
 						layer.eraser(this.mouseX, this.mouseY);
 					}
@@ -236,8 +236,8 @@ export class Workspace extends createjs.Stage {
 		}
 		this.update();
 	}
-	public setColor = (color: string) => {
-		this._color = color;
+	public setHexColorCode = (hexColorCode: string) => {
+		this._hexColorCode = hexColorCode;
 	}
 	public getPixcelArtData = ():PixcelArtData => {
 		let result: PixcelArtData = new PixcelArtData();

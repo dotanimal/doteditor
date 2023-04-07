@@ -59,26 +59,25 @@ export class DrawLayer extends Layer {
 		let yCount :number = dld.height;
 		let baseX :number = dld.x;
 		let baseY :number = dld.y;
-		let colorList :Array<string>= dld.colorList;
+		let hexColorCodeList :Array<string>= dld.hexColorCodeList;
 		let dataList :Array<number>= dld.dataList;
 
 		this.graphics.clear();
 		for (var i = 0; i < dataList.length; i++) {
-			let colorCode :string = '';
+			let hexColorCode :string = '';
 			let colorId :number = dataList[i];
 			if (0 < colorId) {
 				if (Number.isInteger(colorId) == true) {
 					let xx = i % xCount + baseX;
 					let yy = Math.floor(i / xCount) + baseY;
-					colorCode = colorList[colorId];
-					this.graphics.beginFill('#' + colorCode);
+					hexColorCode = hexColorCodeList[colorId];
+					this.graphics.beginFill('#' + hexColorCode);
 					this.graphics.drawRect(xx * this._dotSize + this._areaLeftX, yy * this._dotSize + this._areaTopY, this._dotSize, this._dotSize);
 				}
 			}
 		}
 		this.updateCache("source-over");
 	}
-
 	public getDrawLayerData = (): DrawLayerData => {
 		var cc: HTMLCanvasElement = <HTMLCanvasElement>this.cacheCanvas;
 		var ctx: CanvasRenderingContext2D = cc.getContext("2d");

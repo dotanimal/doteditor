@@ -55,6 +55,20 @@ export class PixcelArtData {
 		console.log('\n[JsonStr]', "\n\t", JSON.stringify(result));
 		return result;
 	}
+	//色配列を返す
+	public getHexColorCodeList = (): Array<string> => {
+		let result: Array<string> = [];
+		for (var key in this._drawLayerDataList) {
+			let dld: DrawLayerData = this._drawLayerDataList[key];
+			let hexColorCodeList: Array<string> = dld.hexColorCodeList;
+			result = result.concat(hexColorCodeList);
+		}
+		//重複削除
+		result = Array.from(new Set(result));
+		//最初の１つを削除
+		result.shift();
+		return result;
+	}
 	public addDrawLayerData = (name: string, layerData: DrawLayerData) => {
 		//console.log("setLayerData", name, layerData);
 		this._drawLayerDataList[name] = layerData;

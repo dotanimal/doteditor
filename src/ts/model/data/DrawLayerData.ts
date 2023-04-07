@@ -10,13 +10,13 @@ export class DrawLayerData {
 	private _y: number;
 	private _width: number;
 	private _height: number;
-	private _colorList: Array<string>;
+	private _hexColorCodeList: Array<string>;
 	private _dataList: Array<number>;
 	//=============================================
 	// constructor
 	//=============================================
 	constructor() {
-		this._colorList = [];
+		this._hexColorCodeList = [];
 		this._dataList = [];
 	}
 	//=============================================
@@ -25,10 +25,10 @@ export class DrawLayerData {
 	//=============================================
 	// public
 	//=============================================
-	public setData = (width: number, height: number, colorList: Array<string>, dataList: Array<number>, x: number = 0, y: number = 0) => {
+	public setData = (width: number, height: number, hexColorCodeList: Array<string>, dataList: Array<number>, x: number = 0, y: number = 0) => {
 		this._width = width;
 		this._height = height;
-		this._colorList = colorList;
+		this._hexColorCodeList = hexColorCodeList;
 		this._dataList = dataList;
 		this._x = x;
 		this._y = y;
@@ -38,7 +38,7 @@ export class DrawLayerData {
 		this._width = size[0];
 		this._height = size[1];
 
-		this._colorList = obj.color;
+		this._hexColorCodeList = obj.color;
 		this._dataList = obj.data;
 
 		if (obj.pos) {
@@ -51,7 +51,7 @@ export class DrawLayerData {
 		}
 	}
 	public getJsonObj = (): any => {
-		let result: any = { "size": [this._width, this._height], "color": this._colorList, "data": this._dataList };
+		let result: any = { "size": [this._width, this._height], "color": this._hexColorCodeList, "data": this._dataList };
 		if (this._x != 0 || this._y != 0) {
 			result["pos"] = [this._x, this._y];
 		}
@@ -87,8 +87,8 @@ export class DrawLayerData {
 	get height(): number {
 		return this._height;
 	}
-	get colorList(): Array<string> {
-		return this._colorList;
+	get hexColorCodeList(): Array<string> {
+		return this._hexColorCodeList;
 	}
 	get dataList(): Array<number> {
 		return this._dataList;

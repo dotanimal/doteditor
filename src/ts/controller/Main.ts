@@ -67,8 +67,8 @@ export class Main {
 	//カラーパレットの変更
 	private _onChangeColorPaletteHandler = (e: Event) => {
 		let ws: Workspace = this._getActiveWorkSpace();
-		let color: string = this._cp.getColor();
-		ws.setColor(color);
+		let color: string = this._cp.getHexColorCode();
+		ws.setHexColorCode(color);
 		console.log('\n[Event]', e.type, "\n\t" + "color : " + color);
 	}
 	//----------FileDropdownMenu----------
@@ -153,8 +153,8 @@ export class Main {
 		//タイトルの反映
 		//this._titleTxtInput.value = pad.title;
 		//カラーパレットに色を反映
-		//let colorList: Array<string> = pad.getColorList();
-		//this._cp.setColorList(colorList);
+		let colorList: Array<string> = pad.getHexColorCodeList();
+		this._cp.setHexColorList(colorList);
 
 		//ワークスペースにデータを反映
 		let ws: Workspace = this._getActiveWorkSpace();
