@@ -82,8 +82,26 @@ $small-modal-height:200px;
 		padding: 10px 0 0 0;
 		display: flex;
 		flex-direction: row;
+
+
+		//history
+		#historyBtnGrp{
+			margin-right:10px;
+			/*
+			#undo{
+				
+			}
+			*/
+			#redo{
+				>i{
+					display: inline-block;
+					transform: scaleX(-1);
+				}
+			}
+		}
+
+
 		//edit
-		
 		#drawBtnGrp{
 			margin-right:30px;
 		}

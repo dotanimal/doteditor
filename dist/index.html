@@ -28,12 +28,17 @@
 						<a class="dropdown-item dropdown-toggle" id="fileSaveLink" href="#">保存</a>
 						<ul class="dropdown-menu dropdown-menu-dark">
 							<li id="saveJsonToLocal"><a class="dropdown-item" href="#">JSON形式</a></li>
+							<li id="saveSvgToLocal"><a class="dropdown-item" href="#">SVG形式</a></li>
 						</ul>
 					</li>
 				</ul>
 			</div>
 			<div id="fileLoadInputs">
 				<input type="file" accept="application/json,.json" id="loadJsonFromLocalInput">
+			</div>
+			<div id="historyBtnGrp" class="btn-group" role="group" aria-label="">
+				<button id="undo" type="button" class="btn btn-outline-dark btn-sm"><i class="bi bi-reply"></i></button>
+				<button id="redo" type="button" class="btn btn-outline-dark btn-sm"><i class="bi bi-reply"></i></button>
 			</div>
 			<div id="drawBtnGrp" class="btn-group" role="group" aria-label="">
 				<button id="pencil" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button"><i class="bi bi-pencil"></i></button>

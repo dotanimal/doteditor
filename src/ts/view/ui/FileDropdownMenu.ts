@@ -7,24 +7,12 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	public readonly EVENT_DROPDOWN_OPEN: string = "event dropdown open";
 	public readonly EVENT_DROPDOWN_CLOSE: string = "event dropdown close";
 	public readonly EVENT_DROPDOWN_MENU_SELECT: string = "event dropdown menu select";
-
-	/*
-	public readonly EVENT_FILE_IMG_LOAD_FROM_PC: string = "event file img load from pc";
-	public readonly EVENT_LIST_LOAD_FROM_WP: string = "event list load from wp";
-	public readonly EVENT_OVERWRITE_SAVE_TO_WP: string = "event overwrite save to wp";
-	public readonly EVENT_NEW_SAVE_WP: string = "event new save wp";
-	*/
 	//----------private---------
 	//private _dropdown: bootstrap.Dropdown;
-	/*
-	private _ilfpcLink: HTMLElement;
-	private _llfwpLink: HTMLElement;
-	private _ostwpLink: HTMLElement;
-	private _nstwpLink: HTMLElement;
-	*/
+
 	private _loadMenu:HTMLElement;
-	private _loadJsonFromLocalLink:HTMLElement;
-	private _loadJsonFromLocalInput:HTMLInputElement;
+	//private _loadJsonFromLocalLink:HTMLElement;
+	//private _loadJsonFromLocalInput:HTMLInputElement;
 
 	private _saveMenu:HTMLElement;
 	//private _saveJsonToLocalLink:HTMLElement;
@@ -53,33 +41,16 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		//----------------------
 		// 読み込み
 		//----------------------
-
 		this._loadMenu = <HTMLElement>document.querySelector('#fileDropdown #fileLoadMenu');
 		//ローカル環境からJSONファイルを読み込む
 		let loadJsonFromLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #loadJsonFromLocal a');
 		//let loadJsonFromLocalInput:HTMLInputElement = <HTMLInputElement>document.querySelector('#fileDropdown #loadJsonFromLocal input');
 		loadJsonFromLocalLink.addEventListener("click", (e: Event) => {
 			//loadJsonFromLocalInput.click();
-			this._state.set(State.FILE_LOAD_JSON_FROM_LOCAL);
+			this._state.setCurrent(State.FILE_LOAD_JSON_FROM_LOCAL);
 			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
 			e.preventDefault();
 		});
-		/*
-		loadJsonFromLocalInput.addEventListener("change", (e: Event) => {
-			console.log("change");
-
-			let file:File = this._loadJsonFromLocalInput.files[0];
-			//FileReaderの作成
-			var reader:FileReader = new FileReader();
-			//テキスト形式で読み込む
-			reader.readAsText(file);
-			//読込終了後の処理
-			reader.onload = function(ev){
-				console.log(reader.result);
-			}
-			e.preventDefault();
-		});
-		*/
 		//----------------------
 		// 保存
 		//----------------------
@@ -87,7 +58,15 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		//ローカル環境にJSONファイルを保存
 		let saveJsonToLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #saveJsonToLocal a');
 		saveJsonToLocalLink.addEventListener("click", (e: Event) => {
-			this._state.set(State.FILE_SAVE_JSON_TO_LOCAL);
+			this._state.setCurrent(State.FILE_SAVE_JSON_TO_LOCAL);
+			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
+			e.preventDefault();
+		});
+		//ローカル環境にSVGファイルを保存
+		let saveSvgToLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #saveSvgToLocal a');
+		saveSvgToLocalLink.addEventListener("click", (e: Event) => {
+			console.log("svg");
+			this._state.setCurrent(State.FILE_SAVE_SVG_TO_LOCAL);
 			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
 			e.preventDefault();
 		});

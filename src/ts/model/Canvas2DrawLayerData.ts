@@ -45,7 +45,7 @@ export class Canvas2DrawLayerData {
 	 */
 	constructor(ctx: CanvasRenderingContext2D, stageWidth: number, stageHeight: number, dotSize: number = 1, isWhiteMarginTrimming: Boolean = false, isTransparentMarginTrimming: Boolean = false, areaTopY:number = 0, areaRightX:number = 0,areaBottomY:number = 0, areaLeftX:number = 0) {
 		
-		console.log('\n[Canvas2DrawLayerData]', "\n");
+		//console.log('\n[Canvas2DrawLayerData]', "\n");
 		this._imgWidth = stageWidth;
 		this._imgHeight = stageHeight;
 		this._dotSize = dotSize;
@@ -83,7 +83,7 @@ export class Canvas2DrawLayerData {
 		this._imgDataDotList = [];
 		this._xCount = Math.floor((this._imgWidth - rightMargin - leftMargin) / dotSize);
 		this._yCount = Math.floor((this._imgHeight - bottomMargin - topMargin) / dotSize);
-		console.log("\tdot count\t\t:", this._xCount, this._yCount);
+		//console.log("\tdot count\t\t:", this._xCount, this._yCount);
 
 		if(0 < this._xCount && 0 < this._yCount){	
 			for (let yy = topMargin; yy <= this._imgHeight - bottomMargin -1 ; yy += dotSize) {
@@ -100,7 +100,7 @@ export class Canvas2DrawLayerData {
 			this._topMargin = topMargin - this._areaTopY;
 			this._xBase = this._leftMargin / this._dotSize;
 			this._yBase = this._topMargin / this._dotSize;
-			console.log("\tdot base pos\t:", this._xBase,this._yBase);
+			//console.log("\tdot base pos\t:", this._xBase,this._yBase);
 		}
 	}
 	//=============================================

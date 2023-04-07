@@ -11,9 +11,11 @@ export class LocalConnector extends createjs.EventDispatcher {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public readonly EVENT_SAVE_JSON_COMPLETE: string = "event save json complete";
 	public readonly EVENT_LOAD_JSON_COMPLETE: string = "event load json complete";
+	public readonly EVENT_SAVE_JSON_COMPLETE: string = "event save json complete";
+	public readonly EVENT_SAVE_SVG_COMPLETE: string = "event save svg complete";
 	//----------private---------
+	private readonly PATH_DOTJSON2IMG : string = "../cmn/php/dotjson2img.php";
 	private _state: State;
 
 	//load json
@@ -52,6 +54,22 @@ export class LocalConnector extends createjs.EventDispatcher {
 	//=============================================
 	// private
 	//=============================================
+	private _bolbSave = (txt:string, filename:string, filetype:string, completeEventType:string) => {
+		const blob :Blob = new Blob([txt], { type: filetype });
+		const a:HTMLAnchorElement = <HTMLAnchorElement>document.createElement("a");
+		const url :string = window.URL.createObjectURL(blob);
+		a.download = filename;
+		a.href = url;
+		a.style.display = "none";
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		setTimeout(() => {
+			window.URL.revokeObjectURL(url);
+		}, 1E2); //100ms
+		this.dispatchEvent(new createjs.Event(completeEventType, true, true));
+	}
+
 	//=============================================
 	// public
 	//=============================================
@@ -90,6 +108,8 @@ export class LocalConnector extends createjs.EventDispatcher {
 					this.dispatchEvent(new createjs.Event(this.EVENT_SAVE_JSON_COMPLETE, true, true));
 				}
 			}else{
+				this._bolbSave(jsonStr, filename,'application/json', this.EVENT_SAVE_JSON_COMPLETE);
+				/*
 				const blob :Blob = new Blob([jsonStr], { type: 'application/json' });
 				const a:HTMLAnchorElement = <HTMLAnchorElement>document.createElement("a");
 				const url :string = window.URL.createObjectURL(blob);
@@ -105,6 +125,7 @@ export class LocalConnector extends createjs.EventDispatcher {
 				
 				//this._state.prev();
 				this.dispatchEvent(new createjs.Event(this.EVENT_SAVE_JSON_COMPLETE, true, true));
+				*/
 			}
 		})();
 	}
@@ -117,6 +138,31 @@ export class LocalConnector extends createjs.EventDispatcher {
 		this._loadJsonFromLocalInput.value = null;
 		//クリックイベントを発生させファイル選択ダイアログを表示
 		this._loadJsonFromLocalInput.click();
+	}
+	public saveSvg = (pad:PixcelArtData, filename:string = "dot.svg") => {
+		const PATH :string = "../cmn/php/dotjson2img.php";
+
+		let jsonObj: any = pad.getJsonObj();
+		let dot_json_str: string = JSON.stringify(jsonObj.dot_json);
+
+		let xhr : XMLHttpRequest = new XMLHttpRequest();
+		xhr.onreadystatechange = (e: Event) => {
+			if (xhr.readyState == 4) {// データ受信完了
+				//console.log(this._xhr.readyState, this._xhr.status, this._xhr.statusText, this._xhr.responseText);
+				var pattern = new RegExp(/2\d\d/);
+				if (pattern.test(String(xhr.status)) == true) { //200番台
+					//var data = e.responseText; // responseXML もあり
+					//console.log('Complete! :', e.status, e.statusText);
+					this._bolbSave(xhr.responseText, filename,'image/svg+xml', this.EVENT_SAVE_SVG_COMPLETE);
+				} else {
+					//console.log('Failed. : ', this._xhr.status, this._xhr.statusText);
+				}
+				//this.dispatchEvent(new createjs.Event(this.EVENT_CONVERT_SVG_COMPLETE, true, true));
+			}
+		}
+		xhr.open('POST', PATH);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.send("type=svg&dot_json=" + dot_json_str);
 	}
 	//=============================================
 	// getter/setter
