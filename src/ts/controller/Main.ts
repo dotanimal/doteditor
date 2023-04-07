@@ -75,7 +75,7 @@ export class Main {
 	//ドロップダウンメニューが開いた
 	private _onOpenFileDropdownMenuHandler = (e: Event) => {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
-		//let ws: Workspace = this._getActiveWS();
+		this._eb.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
 		let pad:PixcelArtData = ws.getPixcelArtData();
 		let jsonObj: any = pad.getJsonObj();
@@ -152,13 +152,15 @@ export class Main {
 		//console.log("MainController : _setPixcelArtData2WS");
 		//タイトルの反映
 		//this._titleTxtInput.value = pad.title;
-		//カラーパレットに色を反映
-		let colorList: Array<string> = pad.getHexColorCodeList();
-		this._cp.setHexColorList(colorList);
 
 		//ワークスペースにデータを反映
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.setData(pad);
+		
+		//カラーパレットに色を反映
+		let colorList: Array<string> = pad.getHexColorCodeList();
+		this._cp.setHexColorList(colorList);
+
 		//ws.saveLog();
 	}
 	//=============================================

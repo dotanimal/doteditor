@@ -66,6 +66,12 @@ export class EditBtns extends createjs.EventDispatcher {
 	//=============================================
 	// public
 	//=============================================
+	public reset = () => {
+		for (let btn of this._btnList) {
+			btn.classList.remove("active");
+		}
+		this._state.set(null);
+	}
 	//=============================================
 	// getter/setter
 	//=============================================

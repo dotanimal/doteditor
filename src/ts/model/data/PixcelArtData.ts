@@ -51,8 +51,8 @@ export class PixcelArtData {
 			obj[key] = layerData.getJsonObj();
 		}
 		let result: any = { "id": this._id, "title": this._title, "dot_json": obj };
-		console.log('\n[JsonObj]', "\n\t", result);
-		console.log('\n[JsonStr]', "\n\t", JSON.stringify(result));
+		//console.log('\n[JsonObj]', "\n\t", result);
+		//console.log('\n[JsonStr]', "\n\t", JSON.stringify(result));
 		return result;
 	}
 	//色配列を返す

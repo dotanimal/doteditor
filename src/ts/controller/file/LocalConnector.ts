@@ -39,7 +39,9 @@ export class LocalConnector extends createjs.EventDispatcher {
 				let dotJsonObj:any = JSON.parse(<string>reader.result);
 				this._loadResultPad = new PixcelArtData();
 				this._loadResultPad.setValue(dotJsonObj);
-				this._state.prev();
+				//this._state.prev();
+				//読み込んだファイルのキャッシュをクリア（キャッシュが残っていると同じファイルを読み込んだときにchangeイベントが発生しない）
+				this._loadJsonFromLocalInput.files = null;
 				this.dispatchEvent(new createjs.Event(this.EVENT_LOAD_JSON_COMPLETE, true, true));
 			}
 			e.preventDefault();
@@ -85,7 +87,7 @@ export class LocalConnector extends createjs.EventDispatcher {
 				} catch (error) {
 					console.log("\tresult","\t:\t","fail");
 				} finally{
-					this._state.prev();
+					//this._state.prev();
 					this.dispatchEvent(new createjs.Event(this.EVENT_SAVE_JSON_COMPLETE, true, true));
 				}
 			}else{
@@ -102,7 +104,7 @@ export class LocalConnector extends createjs.EventDispatcher {
 					window.URL.revokeObjectURL(url);
 				}, 1E2); //100ms
 				
-				this._state.prev();
+				//this._state.prev();
 				this.dispatchEvent(new createjs.Event(this.EVENT_SAVE_JSON_COMPLETE, true, true));
 			}
 		})();

@@ -118,6 +118,7 @@ export class Workspace extends createjs.Stage {
 		}
 		if(isExist){
 			//alert("このレイヤーはすでに登録されています");
+			throw new Error("[ERROR:add DrawLayer]\n\t" + "name\t:\t" + layerName);
 		}else{			
 			console.log("\t", "add draw layer\t:", layerName);
 			dl = new DrawLayer(layerName);
