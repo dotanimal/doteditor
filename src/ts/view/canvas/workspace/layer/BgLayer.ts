@@ -91,8 +91,8 @@ export class BgLayer extends Layer {
 	//=============================================
 	// public
 	//=============================================
-	public override changeSize = (stageWidth:number, stageHeight:number, dotSize:number, areaTopY:number, areaRightX:number,areaBottomY:number, areaLeftX:number) => {
-		this._superChangeSize(stageWidth, stageHeight, dotSize, areaTopY, areaRightX, areaBottomY, areaLeftX);
+	public override setStageSize = (stageWidth:number, stageHeight:number, dotSize:number, areaTopY:number, areaRightX:number,areaBottomY:number, areaLeftX:number) => {
+		this._superSetStageSize(stageWidth, stageHeight, dotSize, areaTopY, areaRightX, areaBottomY, areaLeftX);
 		//console.log("[BgLayer] change size");
 
 		this._drawGraphics();

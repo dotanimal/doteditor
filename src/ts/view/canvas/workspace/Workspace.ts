@@ -70,7 +70,7 @@ export class Workspace extends createjs.Stage {
 		this._cursroLayer = new CursorLayer();
 		this.addChild(this._cursroLayer);
 
-		this._changeSize();
+		this._resetStageSize();
 
 		this._addMouseEventListener();
 	}
@@ -80,7 +80,7 @@ export class Workspace extends createjs.Stage {
 	//=============================================
 	// private
 	//=============================================
-	private _changeSize = () =>{
+	private _resetStageSize = () =>{
 		let canvas :HTMLCanvasElement= <HTMLCanvasElement>this.canvas;
 		let stageW :number = canvas.width;
 		let stageH :number = canvas.height;
@@ -93,27 +93,38 @@ export class Workspace extends createjs.Stage {
 		let top :number = Math.floor(remainderY / 2) + this._stageMargin;
 		let bottom :number = stageH - (remainderY - (top - this._stageMargin)) - this._stageMargin;
 
-		this._bgLayer.changeSize(stageW, stageH, this._dotSize, top, right, bottom, left);
+		this._bgLayer.setStageSize(stageW, stageH, this._dotSize, top, right, bottom, left);
 		for(let drawLayer of this._drawLayerList) {
-			drawLayer.changeSize(stageW, stageH, this._dotSize, top, right, bottom, left);
+			drawLayer.setStageSize(stageW, stageH, this._dotSize, top, right, bottom, left);
 		}
-		this._cursroLayer.changeSize(stageW, stageH, this._dotSize, top, right, bottom, left);
+		this._cursroLayer.setStageSize(stageW, stageH, this._dotSize, top, right, bottom, left);
 
-		this.update();
-
-		//this._stageWidth = canvas.width;
-		//this._stageHeight = canvas.height;
 		this._areaTopY = top;
 		this._areaRightX = right;
 		this._areaBottomY = bottom;
 		this._areaLeftX = left;
+
+		this.update();
 	}
 	private _addDrawLayer = (layerName:string) =>{
-		//TODO：将来的には引数にLayerDataを持たせて、NULLなら空のレイヤーを作るような作りにする
-		let drawLayer : DrawLayer = new DrawLayer(layerName);
-		let len : number = this._drawLayerList.push(drawLayer);
-		this._activeDrawLayerId = len - 1;
-		this.addChild(drawLayer);
+		let dl : DrawLayer;
+		let isExist:boolean = false;
+		for (var i = 0; i < this._drawLayerList.length; i++) {
+			dl = this._drawLayerList[i];
+			if (layerName == dl.name) {
+				isExist = true;
+				break;
+			}
+		}
+		if(isExist){
+			//alert("このレイヤーはすでに登録されています");
+		}else{			
+			console.log("\t", "add draw layer\t:", layerName);
+			dl = new DrawLayer(layerName);
+			let len : number = this._drawLayerList.push(dl);
+			this._activeDrawLayerId = len - 1;
+			this.addChild(dl);
+		}
 	}
 	private _addMouseEventListener = () => {
 		// インタラクティブの設定
@@ -160,35 +171,6 @@ export class Workspace extends createjs.Stage {
 			this.update();
 		});
 	}
-	private _removeMouseEventListener = () => {
-		this.removeAllEventListeners("stagemousedown");
-		this.removeAllEventListeners("stagemouseup");
-		this.removeAllEventListeners("stagemousemove");
-	}
-	private _addDrawLayerFromDrawLayerData = (key: string, dld: DrawLayerData) => {
-		let isAdded: boolean = false;
-		let dl: DrawLayer;
-		for (var i = 0; i < this._drawLayerList.length; i++) {
-			dl = this._drawLayerList[i];
-			if (key == dl.name) {
-				isAdded = true;
-				break;
-			}
-		}
-		if (!isAdded) {
-			let len: number;
-			//let layer: Layer = new Layer(key, jsonObj, this.canvas.width, this.canvas.height);
-			//var canvas = <HTMLCanvasElement>this.canvas;
-			dl = new DrawLayer(key);
-			dl.setDrawLayerData(dld);
-			len = this._drawLayerList.push(dl);
-			this._activeDrawLayerId = len - 1;
-			this.addChild(dl);
-		} else {
-			alert("このレイヤーはすでに登録されています");
-		}
-
-	}
 	private _getActiveDrawLayer = (): DrawLayer | null => {
 		if (!this._drawLayerList.length) {
 			return null;
@@ -207,11 +189,6 @@ export class Workspace extends createjs.Stage {
 		}
 	}
 	/*
-	private _drawGraphics = () => {
-		//console.log("WorkspaceStage.drawGraphics");
-	}
-	*/
-	/*
 	private _reset = () => {
 		//console.log("reset");
 		//this._removeMouseEventListener();
@@ -224,31 +201,40 @@ export class Workspace extends createjs.Stage {
 	// public
 	//=============================================
 	public setData = (pad: PixcelArtData) => {
-		console.log("setData");
+		
+		console.log("\t", "reset workspace");
 		this.removeAllChildren();
+		this._drawLayerList = [];
+		
+		//背景レイヤーをAddChild
 		this.addChild(this._bgLayer);
-		this.update();
+		//this.update();
 		if (pad.id) {
 			//this._wpId = pad.id;
 		}
 		//this._wpTitle = data.title;
+
 		let drawLayerDataList: any = pad.drawLayerDataList;
-		this._drawLayerList = [];
+		//レイヤーの追加
 		for (var key in drawLayerDataList) {
-			var ld: DrawLayerData = drawLayerDataList[key];
-			this._addDrawLayerFromDrawLayerData(key, ld);
+			this._addDrawLayer(key);
 		}
+		
+		//カーソルレイヤーをAddChild
 		this.addChild(this._cursroLayer);
 
-		this._changeSize();
+		//サイズ指定
+		this._resetStageSize();
 
+		//データセット
 		let dl: DrawLayer;
+		let dld: DrawLayerData;
 		for (var i = 0; i < this._drawLayerList.length; i++) {
 			dl = this._drawLayerList[i];
-			dl.drawGraphics();
+			dld = drawLayerDataList[dl.name];
+			dl.setDrawLayerData(dld);
 		}
 		this.update();
-		//this._addMouseEventListener();
 	}
 	public setColor = (color: string) => {
 		this._color = color;

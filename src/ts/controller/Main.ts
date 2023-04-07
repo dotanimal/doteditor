@@ -117,6 +117,7 @@ export class Main {
 	private _onLoadJsonFromLocalCompleteHandler = (e: Event) => {
 		let pad : PixcelArtData = this._lc.loadResultPad;
 		if(pad != null){
+			console.log('\n[Event]', e.type);
 			this._setPixcelArtData2WorkSpace(pad);
 		}
 	}
