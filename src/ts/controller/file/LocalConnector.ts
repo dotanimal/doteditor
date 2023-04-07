@@ -27,8 +27,9 @@ export class LocalConnector extends createjs.EventDispatcher {
 		super();
 		this._state = state;
 		
-		this._loadJsonFromLocalInput = <HTMLInputElement>document.querySelector('#fileDropdown #fileLoadInputs #loadJsonFromLocalInput');
+		this._loadJsonFromLocalInput = <HTMLInputElement>document.querySelector('#fileLoadInputs #loadJsonFromLocalInput');
 		this._loadJsonFromLocalInput.addEventListener("change", (e: Event) => {
+			//console.log("change");
 			let file:File = this._loadJsonFromLocalInput.files[0];
 			//FileReaderの作成
 			var reader:FileReader = new FileReader();
@@ -40,8 +41,6 @@ export class LocalConnector extends createjs.EventDispatcher {
 				this._loadResultPad = new PixcelArtData();
 				this._loadResultPad.setValue(dotJsonObj);
 				//this._state.prev();
-				//読み込んだファイルのキャッシュをクリア（キャッシュが残っていると同じファイルを読み込んだときにchangeイベントが発生しない）
-				this._loadJsonFromLocalInput.files = null;
 				this.dispatchEvent(new createjs.Event(this.EVENT_LOAD_JSON_COMPLETE, true, true));
 			}
 			e.preventDefault();
@@ -111,7 +110,12 @@ export class LocalConnector extends createjs.EventDispatcher {
 	}
 	
 	public loadJson = () => {
+		//console.log("load json");
 		this._loadResultPad = null;
+		//読み込んだファイルのキャッシュをクリア（キャッシュが残っていると同じファイルを読み込んだときにchangeイベントが発生しない）
+		//this._loadJsonFromLocalInput.files = null;
+		this._loadJsonFromLocalInput.value = null;
+		//クリックイベントを発生させファイル選択ダイアログを表示
 		this._loadJsonFromLocalInput.click();
 	}
 	//=============================================
