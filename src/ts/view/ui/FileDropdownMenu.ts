@@ -15,6 +15,9 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	//private _loadJsonFromLocalInput:HTMLInputElement;
 
 	private _saveMenu:HTMLElement;
+
+
+	private _publishMenu:HTMLElement;
 	//private _saveJsonToLocalLink:HTMLElement;
 	
 	private _state: State;
@@ -43,7 +46,7 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		//----------------------
 		this._loadMenu = <HTMLElement>document.querySelector('#fileDropdown #fileLoadMenu');
 		//ローカル環境からJSONファイルを読み込む
-		let loadJsonFromLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #loadJsonFromLocal a');
+		let loadJsonFromLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #fileLoadMenu a');
 		//let loadJsonFromLocalInput:HTMLInputElement = <HTMLInputElement>document.querySelector('#fileDropdown #loadJsonFromLocal input');
 		loadJsonFromLocalLink.addEventListener("click", (e: Event) => {
 			//loadJsonFromLocalInput.click();
@@ -56,15 +59,19 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		//----------------------
 		this._saveMenu = <HTMLElement>document.querySelector('#fileDropdown #fileSaveMenu');
 		//ローカル環境にJSONファイルを保存
-		let saveJsonToLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #saveJsonToLocal a');
+		let saveJsonToLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #fileSaveMenu a');
 		saveJsonToLocalLink.addEventListener("click", (e: Event) => {
 			this._state.setCurrent(State.FILE_SAVE_JSON_TO_LOCAL);
 			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
 			e.preventDefault();
 		});
-		//ローカル環境にSVGファイルを保存
-		let saveSvgToLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #saveSvgToLocal a');
-		saveSvgToLocalLink.addEventListener("click", (e: Event) => {
+		//----------------------
+		// 書き出し
+		//----------------------
+		this._publishMenu = <HTMLElement>document.querySelector('#fileDropdown #filePublishMenu');
+		//ローカル環境にSVGファイルを書き出し
+		let publishSvgToLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #filePublishMenu #publishSvgToLocal a');
+		publishSvgToLocalLink.addEventListener("click", (e: Event) => {
 			console.log("svg");
 			this._state.setCurrent(State.FILE_SAVE_SVG_TO_LOCAL);
 			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
