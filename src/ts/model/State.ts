@@ -14,6 +14,7 @@ export class State {
 	public static readonly HISTORY_UNDO: string = 'history undo';
 	public static readonly HISTORY_REDO: string = 'history redo';
 
+	public static readonly FILE_NEW: string = 'file new';
 	public static readonly FILE_LOAD_JSON_FROM_LOCAL: string = 'file load json from local';
 	public static readonly FILE_SAVE_JSON_TO_LOCAL: string = 'file save json to local';
 	public static readonly FILE_SAVE_SVG_TO_LOCAL: string = 'file save svg to local';

@@ -38,6 +38,8 @@
 
 /*! ../model/State */
 
+/*! ../model/data/PixcelArtData */
+
 /*! ../scss/style.scss */
 
 /*! ../utils/computeAutoPlacement.js */
@@ -123,6 +125,8 @@
 /*! ./expandToHashMap.js */
 
 /*! ./file/LocalConnector */
+
+/*! ./file/LocalStorageConnector */
 
 /*! ./flip.js */
 
@@ -330,6 +334,10 @@
 
 /*!*********************************************************!*\
   !*** ./node_modules/bootstrap/dist/js/bootstrap.esm.js ***!
+  \*********************************************************/
+
+/*!*********************************************************!*\
+  !*** ./src/ts/controller/file/LocalStorageConnector.ts ***!
   \*********************************************************/
 
 /*!*********************************************************!*\

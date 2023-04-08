@@ -15,8 +15,12 @@ export class DrawLayerData {
 	//=============================================
 	// constructor
 	//=============================================
-	constructor() {
-		this._hexColorCodeList = [];
+	constructor(isBlank:boolean = false) {
+		if(isBlank){
+			this._hexColorCodeList = ["","333333"];
+		}else{
+			this._hexColorCodeList = [];
+		}
 		this._dataList = [];
 	}
 	//=============================================

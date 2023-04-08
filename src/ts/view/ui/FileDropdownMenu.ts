@@ -10,6 +10,7 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	//----------private---------
 	//private _dropdown: bootstrap.Dropdown;
 
+	private _newMenu:HTMLElement;
 	private _loadMenu:HTMLElement;
 	//private _loadJsonFromLocalLink:HTMLElement;
 	//private _loadJsonFromLocalInput:HTMLInputElement;
@@ -42,12 +43,23 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_CLOSE, true, true));
 		});
 		//----------------------
+		// 新規作成
+		//----------------------
+		this._newMenu = <HTMLElement>document.querySelector('#fileDropdown #fileNewMenu');
+		//
+		let newLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #fileNewMenu a');
+		newLink.addEventListener("click", (e: Event) => {
+			//loadJsonFromLocalInput.click();
+			this._state.setCurrent(State.FILE_NEW);
+			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
+			e.preventDefault();
+		});
+		//----------------------
 		// 読み込み
 		//----------------------
 		this._loadMenu = <HTMLElement>document.querySelector('#fileDropdown #fileLoadMenu');
 		//ローカル環境からJSONファイルを読み込む
 		let loadJsonFromLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #fileLoadMenu a');
-		//let loadJsonFromLocalInput:HTMLInputElement = <HTMLInputElement>document.querySelector('#fileDropdown #loadJsonFromLocal input');
 		loadJsonFromLocalLink.addEventListener("click", (e: Event) => {
 			//loadJsonFromLocalInput.click();
 			this._state.setCurrent(State.FILE_LOAD_JSON_FROM_LOCAL);

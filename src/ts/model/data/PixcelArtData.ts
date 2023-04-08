@@ -18,8 +18,11 @@ export class PixcelArtData {
 	//=============================================
 	// constructor
 	//=============================================
-	constructor() {
+	constructor(isBlank:boolean = false) {
 		this._drawLayerDataList = {};
+		if(isBlank){
+			this.addDrawLayerData("body", new DrawLayerData(true));
+		}
 	}
 	//=============================================
 	// private

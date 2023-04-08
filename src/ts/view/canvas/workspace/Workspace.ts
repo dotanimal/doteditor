@@ -66,21 +66,21 @@ export class Workspace extends createjs.Stage {
 		this._drawLayerList = [];
 
 		this._bgLayer = new BgLayer();
-		this.addChild(this._bgLayer);
+		//this.addChild(this._bgLayer);
 
 		//最初に作るレイヤー名は"body"にしておく
-		this._addDrawLayer("body");
+		//this._addDrawLayer("body");
 		
 		this._cursroLayer = new CursorLayer();
-		this.addChild(this._cursroLayer);
+		//this.addChild(this._cursroLayer);
 
-		this._resetStageSize();
+		//this._resetStageSize();
 
 		this._addMouseEventListener();
 		
 		this.isAbleDraw = true;
-		this._saveHistory();
-		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
+		//this._saveHistory();
+		//this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 	}
 	//=============================================
 	// event handler

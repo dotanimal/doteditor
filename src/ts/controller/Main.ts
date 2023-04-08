@@ -6,6 +6,7 @@ import { DrawBtns } from "../view/ui/DrawBtns";
 import { FileDropdownMenu } from "../view/ui/FileDropdownMenu";
 import { HistoryBtns } from "../view/ui/HistoryBtns";
 import { LocalConnector } from "./file/LocalConnector";
+import { LocalStorageConnector } from "./file/LocalStorageConnector";
 
 export class Main {
 	//=============================================
@@ -27,6 +28,7 @@ export class Main {
 	private _cp: ColorPalette;
 
 	private _lc: LocalConnector;
+	private _lsc: LocalStorageConnector;
 
 	private _wsList: { [key: string]: Workspace };
 	private _activeWsId: string;
@@ -41,7 +43,8 @@ export class Main {
 		this._hb = new HistoryBtns(this._state);
 		this._cp = new ColorPalette(this._state);
 
-		this._lc = new LocalConnector(this._state);
+		this._lc = new LocalConnector();
+		this._lsc = new LocalStorageConnector();
 
 		this._wsList = {};
 		
@@ -56,9 +59,19 @@ export class Main {
 		this._cp.addEventListener(this._cp.EVENT_CHANGE_COLOR, this._onChangeColorPaletteHandler);
 
 		this._lc.addEventListener(this._lc.EVENT_LOAD_JSON_COMPLETE, this._onLoadJsonFromLocalCompleteHandler);
+
+		//window.addEventListener('beforeunload', this._onBeforeunloadHandler);
+
 		//this._lc.addEventListener(this._lc.EVENT_SAVE_JSON_COMPLETE, this._onSaveJsonToLocalCompleteHandler);
 		//カラーパレットの初期化　イベントリスナーを登録したあとに実行しないと色々うごかないのでここで実行
 		this._cp.init();
+
+		let pad:PixcelArtData = this._lsc.load();
+		if(!pad){
+			//LocalStorageがなければ空のデータを作成する
+			pad = new PixcelArtData(true);
+		}
+		this._setPixcelArtData2WorkSpace(pad);
 	}
 	//=============================================
 	// event handler
@@ -121,7 +134,12 @@ export class Main {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace;
 		let pad: PixcelArtData;
-		if(this._state.current == State.FILE_LOAD_JSON_FROM_LOCAL){
+		if(this._state.current == State.FILE_NEW){
+			//新規作成
+			ws = this._getActiveWorkSpace();
+			pad = new PixcelArtData(true);
+			ws.setPixcelArtData(pad);
+		}else if(this._state.current == State.FILE_LOAD_JSON_FROM_LOCAL){
 			//ローカルからJSONファイルを読み込み
 			ws = this._getActiveWorkSpace();
 			pad = ws.getPixcelArtData();
@@ -153,6 +171,10 @@ export class Main {
 		} else {
 			this._hb.redoBtnDisactive(true);
 		}
+		
+		let pad : PixcelArtData = ws.getPixcelArtData();
+		this._lsc.save(pad);
+
 	}
 	//----------LocalConnector----------
 	//JSONファイルの読み込み完了
@@ -169,6 +191,12 @@ export class Main {
 		console.log(this._state.current);
 	}
 	*/
+	
+	//----------Window----------
+	private _onBeforeunloadHandler = (e:BeforeUnloadEvent) =>{
+		e.preventDefault();
+		e.returnValue = "";
+	}
 	//=============================================
 	// private
 	//=============================================

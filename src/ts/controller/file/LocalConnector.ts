@@ -1,4 +1,3 @@
-import { State } from "../../model/State";
 import { PixcelArtData } from "../../model/data/PixcelArtData";
 
 export class LocalConnector extends createjs.EventDispatcher {
@@ -16,7 +15,6 @@ export class LocalConnector extends createjs.EventDispatcher {
 	public readonly EVENT_SAVE_SVG_COMPLETE: string = "event save svg complete";
 	//----------private---------
 	private readonly PATH_DOTJSON2IMG : string = "../cmn/php/dotjson2img.php";
-	private _state: State;
 
 	//load json
 	private _loadJsonFromLocalInput:HTMLInputElement;
@@ -25,9 +23,8 @@ export class LocalConnector extends createjs.EventDispatcher {
 	//=============================================
 	// constructor
 	//=============================================
-	constructor(state:State) {
+	constructor() {
 		super();
-		this._state = state;
 		
 		this._loadJsonFromLocalInput = <HTMLInputElement>document.querySelector('#fileLoadInputs #loadJsonFromLocalInput');
 		this._loadJsonFromLocalInput.addEventListener("change", (e: Event) => {
