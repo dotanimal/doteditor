@@ -79,7 +79,8 @@ export class Workspace extends createjs.Stage {
 		this._addMouseEventListener();
 		
 		this.isAbleDraw = true;
-		this.saveLog();
+		this._saveHistory();
+		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 	}
 	//=============================================
 	// event handler
@@ -142,17 +143,6 @@ export class Workspace extends createjs.Stage {
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 			//お絵かきモードでないなら処理しない
 			if(!this.isAbleDraw){return false;}
-			//if(this._state.currentCategory != State.CATEGORY_DRAW){return false;}
-
-
-			//ログ用の配列を調整
-			if (this._state.prevCategory == State.CATEGORY_HISTORY && this._state.prevCategory == State.CATEGORY_DRAW) {
-				console.log("log -> edit");
-				//後ろのログを削除
-				this._pixcelArtDataHistoryList.splice(this._histroyId + 1, this._pixcelArtDataHistoryList.length - 1);
-				//this._prevMode = this._currentMode;
-			}
-
 
 			this._isMouseDown = true;
 			let layer: DrawLayer = this._getActiveDrawLayer();
@@ -174,7 +164,7 @@ export class Workspace extends createjs.Stage {
 			
 			if (this._isMouseDown) {
 				if (this._state.current == State.DRAW_PENCIL || this._state.current == State.DRAW_ERACER) {
-					this.saveLog();
+					this._saveHistory();
 					this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 				}
 			}
@@ -202,10 +192,7 @@ export class Workspace extends createjs.Stage {
 			this.update();
 		});
 	}
-	private _getActiveDrawLayer = (): DrawLayer | null => {
-		if (!this._drawLayerList.length) {
-			return null;
-		}
+	private _getActiveDrawLayer = (): DrawLayer => {
 		if (this._drawLayerList.length < 1) {
 			return null;
 		}
@@ -219,20 +206,26 @@ export class Workspace extends createjs.Stage {
 			return false;
 		}
 	}
-	/*
-	private _reset = () => {
-		//console.log("reset");
-		//this._removeMouseEventListener();
-		this.removeAllChildren();
-		this.addChild(this._bgLayer);
-		this.update();
+	private _saveHistory = () => {
+		//ログを１０件までに処理
+		if (10 <= this._pixcelArtDataHistoryList.length) {
+			this._pixcelArtDataHistoryList.shift();
+		}
+		//ヒストリーの途中で、ドローやファイル読み込みを行った場合に以降のログを削除する
+		if(this._histroyId <  this._pixcelArtDataHistoryList.length - 1){
+			this._pixcelArtDataHistoryList.splice(this._histroyId + 1, this._pixcelArtDataHistoryList.length - 1);
+		}
+		var pad: PixcelArtData = this.getPixcelArtData();
+		this._pixcelArtDataHistoryList.push(pad);
+		this._histroyId = this._pixcelArtDataHistoryList.length - 1;
+		console.log("history", "save", this._histroyId);
+		//TODO　ログリストとログIDの値からUNDO/REDOボタンの有効・無効を切り替えられるようにしたい
 	}
-	*/
 	//=============================================
 	// public
 	//=============================================
-	public setPixcelArtData = (pad: PixcelArtData) => {
-		console.log("\t", "reset workspace");
+	public setPixcelArtData = (pad: PixcelArtData, isSaveLog:boolean=true) => {
+		//console.log("reset", "workspace");
 		this.removeAllChildren();
 		this._drawLayerList = [];
 		
@@ -265,7 +258,8 @@ export class Workspace extends createjs.Stage {
 			dl.setDrawLayerData(dld);
 		}
 		this.update();
-		//this.saveLog();
+		if(isSaveLog){this._saveHistory();}
+		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 	}
 	public setHexColorCode = (hexColorCode: string) => {
 		this._hexColorCode = hexColorCode;
@@ -277,25 +271,24 @@ export class Workspace extends createjs.Stage {
 		for (let i = 0; i < this._drawLayerList.length; i++) {
 			layer = this._drawLayerList [i];
 			layerData = layer.getDrawLayerData();
-			if(layerData){
-				result.addDrawLayerData(layer.name, layerData);
-			}
+			//if(layerData){
+			result.addDrawLayerData(layer.name, layerData);
+			//}
 		}
 		result.layoutInit();
 		return result;
 	}
 
 	public undo = () => {
-		console.log("undo");
 		if (0 < this._histroyId) {
 			this._histroyId--;
 			console.log("history", "undo", this._histroyId);
 			let pad: PixcelArtData = this._pixcelArtDataHistoryList[this._histroyId];//TODO リストにはPixcelArtDataをいれるようにする
 			//let data: PixcelArtData = new PixcelArtData()
 			//data.setJson(jsonObj);
-			this.setPixcelArtData(pad);
+			this.setPixcelArtData(pad,false);
 
-			this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
+			//this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 		} else {
 			console.log("これ以上古いログはありません");
 		}
@@ -305,32 +298,18 @@ export class Workspace extends createjs.Stage {
 		//this.update();
 	}
 	public redo = () => {
-		console.log("redo");
 		if (this._histroyId < this._pixcelArtDataHistoryList.length - 1) {
 			this._histroyId++;
 			//this._reset();
 			console.log("history", "redo", this._histroyId);
 			let pad: PixcelArtData = this._pixcelArtDataHistoryList[this._histroyId];
-			//let data: PixcelArtData = new PixcelArtData()
-			//data.setJson(jsonObj);
-			this.setPixcelArtData(pad);
+			this.setPixcelArtData(pad,false);
+			
 
-			this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
+			//this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 		} else {
 			console.log("これ以上新しいログはありません");
 		}
-	}
-	public saveLog = () => {
-		if (10 <= this._pixcelArtDataHistoryList.length) {
-			this._pixcelArtDataHistoryList.shift();
-		}
-		var pad: PixcelArtData = this.getPixcelArtData();
-		//console.log(jsonObj);
-		this._pixcelArtDataHistoryList.push(pad);
-		this._histroyId = this._pixcelArtDataHistoryList.length - 1;
-		console.log("history", "save", this._histroyId);
-		//TODO　ログリストとログIDの値からUNDO/REDOボタンの有効・無効を切り替えられるようにしたい
-
 	}
 	//=============================================
 	// getter/setter
@@ -345,7 +324,7 @@ export class Workspace extends createjs.Stage {
 		return this._isAbleDraw;
 	}
 	set isAbleDraw(value: boolean) {
-		console.log("[Workspace]isAbleDraw\t", value)
+		//console.log("[Workspace]isAbleDraw\t", value)
 		this._cursroLayer.visible = value;
 		this._isAbleDraw = value;
 	}

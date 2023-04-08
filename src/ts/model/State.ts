@@ -57,16 +57,19 @@ export class State {
 	// public
 	//=============================================
 	public setCurrent = (value : string) => {
+		if(this._current == value){return false};
 		this._prev = this._current;
 		this._current = value;
 		this._setCategory();
-		console.log('\n[State:change]', "\t" + this.current);
+		//console.log('\n[State:change]', "\t" + this.current);
 	}
+	/*
 	public setPrev = (value : string) => {
 		this._prev = value;
 		this._current = value;
 		this._setCategory();
 	}
+	*/
 	
 	/*
 	public prev = () => {

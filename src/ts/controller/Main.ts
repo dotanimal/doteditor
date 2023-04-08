@@ -65,14 +65,14 @@ export class Main {
 	//=============================================
 	//----------HistoryBtns----------
 	private _onUndoHistoryHandler = (e: Event) => {
-		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
+		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this._db.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.isAbleDraw = false;
 		ws.undo();
 	}
 	private _onRedoHistoryHandler = (e: Event) => {
-		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
+		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this._db.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.isAbleDraw = false;
@@ -195,7 +195,6 @@ export class Main {
 		//ワークスペースにデータを反映
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.setPixcelArtData(pad);
-		ws.saveLog();
 		
 		//カラーパレットに色を反映
 		let colorList: Array<string> = pad.getHexColorCodeList();

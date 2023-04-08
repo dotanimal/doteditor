@@ -70,7 +70,6 @@ export class DrawBtns extends createjs.EventDispatcher {
 		for (let btn of this._btnList) {
 			btn.classList.remove("active");
 		}
-		this._state.setCurrent(null);
 	}
 	//=============================================
 	// getter/setter

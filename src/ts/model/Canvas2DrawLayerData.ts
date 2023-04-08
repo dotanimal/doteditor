@@ -213,51 +213,54 @@ export class Canvas2DrawLayerData {
 		return this._hexDotList;
 	}
 	getLayerData = (dotsize: number): DrawLayerData => {
-		if(this._imgDataDotList.length <= 0){
-			return null;
-		}
-		let xCount: number = Math.floor(this._xCount / dotsize);
-		let yCount: number = Math.floor(this._yCount / dotsize);
-		var colorData1: any;
-		var colorData2: any;
-
-		var colorDataList: Array<any> = [{ "data": [0, 0, 0, 0] }];
-		let dataList: Array<number> = [];
-		var colorList: Array<string> = [""];
-
-		for (let yy = 0; yy < yCount; yy++) {
-			for (let xx = 0; xx < xCount; xx++) {
-				let id: number = xx * dotsize + yy * dotsize * this._xCount;
-				colorData1 = this._imgDataDotList[id];
-				if (colorData1.data[3] == 0) {
-					dataList.push(0);
-				} else {
-					var isMatch: boolean = false;
-					for (var i = 1; i < colorDataList.length; i++) {
-						colorData2 = colorDataList[i];
-						if (this._checkColorData(colorData1, colorData2) == true) {
-							dataList.push(i);
-							isMatch = true;
-							break;
-						}
-					}
-					if (!isMatch) {
-						var colorId: number = colorDataList.push(colorData1) - 1;
-						dataList.push(colorId);
-					}
-				}
-
-			}
-		}
-		for (var i = 1; i < colorDataList.length; i++) {
-			colorData1 = colorDataList[i];
-			var hex = this._rgb2hex([colorData1.data[0], colorData1.data[1], colorData1.data[2]]);
-			colorList.push(hex);
-		}
-		this._dotSize = dotsize;
 
 		let dld: DrawLayerData = new DrawLayerData();
-		dld.setData(xCount, yCount, colorList, dataList, this._xBase, this._yBase);
+		
+		if(this._imgDataDotList.length <= 0){
+			dld.setData(0, 0, [], [], 0, 0);
+		}else{
+			let xCount: number = Math.floor(this._xCount / dotsize);
+			let yCount: number = Math.floor(this._yCount / dotsize);
+			var colorData1: any;
+			var colorData2: any;
+	
+			var colorDataList: Array<any> = [{ "data": [0, 0, 0, 0] }];
+			let dataList: Array<number> = [];
+			var colorList: Array<string> = [""];
+	
+			for (let yy = 0; yy < yCount; yy++) {
+				for (let xx = 0; xx < xCount; xx++) {
+					let id: number = xx * dotsize + yy * dotsize * this._xCount;
+					colorData1 = this._imgDataDotList[id];
+					if (colorData1.data[3] == 0) {
+						dataList.push(0);
+					} else {
+						var isMatch: boolean = false;
+						for (var i = 1; i < colorDataList.length; i++) {
+							colorData2 = colorDataList[i];
+							if (this._checkColorData(colorData1, colorData2) == true) {
+								dataList.push(i);
+								isMatch = true;
+								break;
+							}
+						}
+						if (!isMatch) {
+							var colorId: number = colorDataList.push(colorData1) - 1;
+							dataList.push(colorId);
+						}
+					}
+	
+				}
+			}
+			for (var i = 1; i < colorDataList.length; i++) {
+				colorData1 = colorDataList[i];
+				var hex = this._rgb2hex([colorData1.data[0], colorData1.data[1], colorData1.data[2]]);
+				colorList.push(hex);
+			}
+			this._dotSize = dotsize;
+			dld.setData(xCount, yCount, colorList, dataList, this._xBase, this._yBase);
+		}
+		
 		return dld;
 	}
 	//=============================================
