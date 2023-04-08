@@ -99,14 +99,19 @@ export class Main {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this._db.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
-		let pad:PixcelArtData = ws.getPixcelArtData();
-		let jsonObj: any = pad.getJsonObj();
+		ws.isAbleDraw = false;
+		//let pad:PixcelArtData = ws.getPixcelArtData();
+		//let jsonObj: any = pad.getJsonObj();
+		/*
 		if(Object.keys(jsonObj.dot_json).length <= 0){
 			console.log("\n[Info]", "\n\t" + "描画データなし");
 			this._fdm.hideSaveMenu();
 		}else{
+		*/
 			this._fdm.reset();
+		/*
 		}
+		*/
 	}
 	//ドロップダウンメニューが閉じた
 	private _onCloseFileDropdownMenuHandler = (e: Event) => {

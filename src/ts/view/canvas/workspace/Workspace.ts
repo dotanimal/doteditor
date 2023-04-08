@@ -324,8 +324,9 @@ export class Workspace extends createjs.Stage {
 		return this._isAbleDraw;
 	}
 	set isAbleDraw(value: boolean) {
-		//console.log("[Workspace]isAbleDraw\t", value)
+		console.log("[Workspace]isAbleDraw\t", value)
 		this._cursroLayer.visible = value;
 		this._isAbleDraw = value;
+		this.update();
 	}
 }
