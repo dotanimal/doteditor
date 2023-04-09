@@ -18,19 +18,21 @@
 			<div id="fileDropdown">
 				<a class="btn btn-outline-dark btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">ファイル</a>
 				<ul class="dropdown-menu dropdown-menu-dark">
-					<li class="dropend" id="fileNewMenu">
-						<a class="dropdown-item" href="#">新規作成</a>
+					<li class="dropend">
+						<a id="fileNewMenu" class="dropdown-item" href="#">新規作成</a>
 					</li>
-					<li class="dropend" id="fileLoadMenu">
-						<a class="dropdown-item" href="#">読み込み</a>
+					<li class="dropend">
+						<a id="fileLoadMenu" class="dropdown-item" href="#">読み込み</a>
 					</li>
-					<li class="dropend" id="fileSaveMenu">
-						<a class="dropdown-item" href="#">保存</a>
+					<li class="dropend">
+						<a id="fileSaveMenu" class="dropdown-item" href="#">保存</a>
 					</li>
 					<li class="dropend" id="filePublishMenu">
 						<a class="dropdown-item dropdown-toggle" href="#">書き出し</a>
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<li id="publishSvgToLocal"><a class="dropdown-item" href="#">SVG形式</a></li>
+							<li>
+								<a id="publishSvgToLocal" class="dropdown-item" href="#">SVG形式</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -43,11 +45,24 @@
 				<button id="redo" type="button" class="btn btn-outline-dark btn-sm"><i class="bi bi-reply"></i></button>
 			</div>
 			<div id="drawBtnGrp" class="btn-group" role="group" aria-label="">
-				<button id="pencil" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button"><i class="bi bi-pencil"></i></button>
-				<button id="eracer" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button"><i class="bi bi-eraser"></i></button>
+				<button id="pencil" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
+					<i class="bi bi-pencil"></i>
+				</button>
+				<button id="eracer" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
+					<i class="bi bi-eraser"></i>
+				</button>
+				<!--
+					
+				<button id="dropper" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
+					<i class="bi bi-eyedropper"></i>
+				</button>
+				<button id="droplet" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
+					<i class="bi bi-droplet-fill"></i>
+				</button>
 				<button id="selectRange" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
 					<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 96 960 960" width="20"><path d="M219.231 885.537q-19.784 0-33.872-14.088-14.088-14.088-14.088-33.872h47.96v47.96Zm-47.96-125.152v-71.193h47.96v71.193h-47.96Zm0-148.385v-71.192h47.96V612h-47.96Zm0-148.385v-71.192h47.96v71.192h-47.96Zm0-148.384q0-19.784 14.088-33.872 14.088-14.088 33.872-14.088v47.96h-47.96Zm125.152 570.306v-47.96h71.192v47.96h-71.192Zm0-570.306v-47.96h71.192v47.96h-71.192Zm148.385 570.306v-47.96H516v47.96h-71.192Zm0-570.306v-47.96H516v47.96h-71.192Zm148.384 570.306v-47.96h71.193v47.96h-71.193Zm0-570.306v-47.96h71.193v47.96h-71.193Zm148.385 570.306v-47.96h47.96q0 20.307-14.088 34.134-14.088 13.826-33.872 13.826Zm0-121.306v-71.192h47.96v71.192h-47.96Zm0-152.231v-71.192h47.96V612h-47.96Zm0-152.231v-71.192h47.96v71.192h-47.96Zm0-144.538v-47.96q19.784 0 33.872 14.088 14.088 14.088 14.088 33.872h-47.96Z"/></svg>
 				</button>
+				-->
 			</div>
 			<div id="colorPalette">
 				<span><input class="editColorPicker" type="color" value="#333333"></span>

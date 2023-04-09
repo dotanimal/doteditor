@@ -10,8 +10,8 @@ export class HistoryBtns extends createjs.EventDispatcher {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public readonly EVENT_HIDSTORY_UNDO: string = "event history undo";
-	public readonly EVENT_HIDSTORY_REDO: string = "event history redo";
+	public readonly EVENT_UNDO_HIDSTORY: string = "event history undo";
+	public readonly EVENT_REDO_HIDSTORY: string = "event history redo";
 	//----------private---------
 	private _state: State;
 	private _btnList: Array<HTMLElement>;
@@ -45,13 +45,13 @@ export class HistoryBtns extends createjs.EventDispatcher {
 		let target = <HTMLElement>e.currentTarget;
 		this._btnInactive(target);
 		this._state.setCurrent(State.HISTORY_UNDO);
-		this.dispatchEvent(new createjs.Event(this.EVENT_HIDSTORY_UNDO, true, true));
+		this.dispatchEvent(new createjs.Event(this.EVENT_UNDO_HIDSTORY, true, true));
 	}
 	private _onRedoBtnClickHandler = (e: Event) => {
 		let target = <HTMLElement>e.currentTarget;
 		this._btnInactive(target);
 		this._state.setCurrent(State.HISTORY_REDO);
-		this.dispatchEvent(new createjs.Event(this.EVENT_HIDSTORY_REDO, true, true));
+		this.dispatchEvent(new createjs.Event(this.EVENT_REDO_HIDSTORY, true, true));
 	}
 	//=============================================
 	// private

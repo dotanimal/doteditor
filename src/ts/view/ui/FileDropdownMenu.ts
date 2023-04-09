@@ -4,9 +4,9 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public readonly EVENT_DROPDOWN_OPEN: string = "event dropdown open";
-	public readonly EVENT_DROPDOWN_CLOSE: string = "event dropdown close";
-	public readonly EVENT_DROPDOWN_MENU_SELECT: string = "event dropdown menu select";
+	public readonly EVENT_OPEN_FILE_DROPDOWN: string = "event open file dropdown";
+	public readonly EVENT_CLOSE_FILE_DROPDOWN: string = "event close file dropdown";
+	public readonly EVENT_SELECT_MENU_FILE_DROPDOWN: string = "event select menu file dropdown";
 	//----------private---------
 	//private _dropdown: bootstrap.Dropdown;
 
@@ -22,6 +22,7 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	//private _saveJsonToLocalLink:HTMLElement;
 	
 	private _state: State;
+	private _anchorList: Array<HTMLAnchorElement>;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -35,35 +36,59 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		let fdd: HTMLElement = <HTMLElement>document.querySelector('#fileDropdown');
 		//オープン
 		fdd.addEventListener("show.bs.dropdown", (e: Event) => {
-			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_OPEN, true, true));
+			this.dispatchEvent(new createjs.Event(this.EVENT_OPEN_FILE_DROPDOWN, true, true));
 		});
 		//クローズ
 		fdd.addEventListener("hide.bs.dropdown", (e: Event) => {
-			this.reset();
-			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_CLOSE, true, true));
+			//this.reset();
+			this.dispatchEvent(new createjs.Event(this.EVENT_CLOSE_FILE_DROPDOWN, true, true));
 		});
 		//----------------------
 		// 新規作成
 		//----------------------
-		this._newMenu = <HTMLElement>document.querySelector('#fileDropdown #fileNewMenu');
+		//this._newMenu = <HTMLElement>document.querySelector('#fileDropdown #fileNewMenu');
 		//
-		let newLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #fileNewMenu a');
+		//----------------------
+		// リンク
+		//----------------------
+		//新規作成
+		let newLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileNewMenu');
+		//ローカル環境からJSONファイルを読み込む
+		let loadJsonFromLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileLoadMenu');
+
+		//ローカル環境にJSONファイルを保存
+		let saveJsonToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileSaveMenu');
+
+		//ローカル環境にSVGファイルを書き出し
+		let publishSvgToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown #filePublishMenu a#publishSvgToLocal');
+
+
+		this._anchorList = [
+								newLink,
+								loadJsonFromLocalLink,
+								saveJsonToLocalLink,
+								publishSvgToLocalLink
+							];
+		for (let anchor of this._anchorList) {
+			anchor.addEventListener('click', this._onClickHandler);
+		}
+
 		newLink.addEventListener("click", (e: Event) => {
 			//loadJsonFromLocalInput.click();
 			this._state.setCurrent(State.FILE_NEW);
-			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
+			this.dispatchEvent(new createjs.Event(this.EVENT_SELECT_MENU_FILE_DROPDOWN, true, true));
 			e.preventDefault();
 		});
+		/*
 		//----------------------
 		// 読み込み
 		//----------------------
 		this._loadMenu = <HTMLElement>document.querySelector('#fileDropdown #fileLoadMenu');
 		//ローカル環境からJSONファイルを読み込む
-		let loadJsonFromLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #fileLoadMenu a');
 		loadJsonFromLocalLink.addEventListener("click", (e: Event) => {
 			//loadJsonFromLocalInput.click();
 			this._state.setCurrent(State.FILE_LOAD_JSON_FROM_LOCAL);
-			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
+			this.dispatchEvent(new createjs.Event(this.EVENT_SELECT_MENU_FILE_DROPDOWN, true, true));
 			e.preventDefault();
 		});
 		//----------------------
@@ -71,34 +96,55 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		//----------------------
 		this._saveMenu = <HTMLElement>document.querySelector('#fileDropdown #fileSaveMenu');
 		//ローカル環境にJSONファイルを保存
-		let saveJsonToLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #fileSaveMenu a');
+		//let saveJsonToLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #fileSaveMenu a');
 		saveJsonToLocalLink.addEventListener("click", (e: Event) => {
 			this._state.setCurrent(State.FILE_SAVE_JSON_TO_LOCAL);
-			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
+			this.dispatchEvent(new createjs.Event(this.EVENT_SELECT_MENU_FILE_DROPDOWN, true, true));
 			e.preventDefault();
 		});
 		//----------------------
 		// 書き出し
 		//----------------------
-		this._publishMenu = <HTMLElement>document.querySelector('#fileDropdown #filePublishMenu');
+		//this._publishMenu = <HTMLElement>document.querySelector('#fileDropdown #filePublishMenu');
 		//ローカル環境にSVGファイルを書き出し
-		let publishSvgToLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #filePublishMenu #publishSvgToLocal a');
+		//let publishSvgToLocalLink:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown #filePublishMenu #publishSvgToLocal a');
 		publishSvgToLocalLink.addEventListener("click", (e: Event) => {
 			console.log("svg");
 			this._state.setCurrent(State.FILE_SAVE_SVG_TO_LOCAL);
-			this.dispatchEvent(new createjs.Event(this.EVENT_DROPDOWN_MENU_SELECT, true, true));
+			this.dispatchEvent(new createjs.Event(this.EVENT_SELECT_MENU_FILE_DROPDOWN, true, true));
 			e.preventDefault();
 		});
+		*/
 	}
 	//=============================================
 	// event handler
 	//=============================================
+
+	private _onClickHandler = (e:MouseEvent) => {
+		let target:HTMLAnchorElement = <HTMLAnchorElement>e.currentTarget;
+	
+		let mode :string;
+		if(target.id == "fileNewMenu"){
+			mode = State.FILE_NEW;
+		}else if(target.id == "fileLoadMenu"){
+			mode = State.FILE_LOAD_JSON_FROM_LOCAL;
+		}else if(target.id == "fileSaveMenu"){
+			mode = State.FILE_SAVE_JSON_TO_LOCAL;
+		}else if(target.id == "publishSvgToLocal"){
+			mode = State.FILE_SAVE_SVG_TO_LOCAL;
+		}
+
+		this._state.setCurrent(mode);
+		this.dispatchEvent(new createjs.Event(this.EVENT_SELECT_MENU_FILE_DROPDOWN, true, true));
+		e.preventDefault();
+	}
 	//=============================================
 	// private
 	//=============================================
 	//=============================================
 	// public
 	//=============================================
+	/*
 	public reset = () => {
 		this._saveMenu.style.display = "block";
 	}
@@ -106,6 +152,7 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		this._saveMenu.style.display = "none";
 		//this._saveLink.classList.add("disabled");
 	}
+	*/
 	//=============================================
 	// getter/setter
 	//=============================================

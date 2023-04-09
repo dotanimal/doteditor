@@ -50,12 +50,12 @@ export class Main {
 		
 		this._addWorkSpace('workspace1');
 
-		this._fdm.addEventListener(this._fdm.EVENT_DROPDOWN_OPEN, this._onOpenFileDropdownMenuHandler);
-		this._fdm.addEventListener(this._fdm.EVENT_DROPDOWN_CLOSE, this._onCloseFileDropdownMenuHandler);
-		this._fdm.addEventListener(this._fdm.EVENT_DROPDOWN_MENU_SELECT, this._onMenuSelectFileDropdownMenuHandler);
-		this._hb.addEventListener(this._hb.EVENT_HIDSTORY_UNDO, this._onUndoHistoryHandler);
-		this._hb.addEventListener(this._hb.EVENT_HIDSTORY_REDO, this._onRedoHistoryHandler);
-		this._eb.addEventListener(this._eb.EVENT_CHANGE_BTN, this._onChangeEditBtnsHandler);
+		this._fdm.addEventListener(this._fdm.EVENT_OPEN_FILE_DROPDOWN, this._onOpenFileDropdownMenuHandler);
+		this._fdm.addEventListener(this._fdm.EVENT_CLOSE_FILE_DROPDOWN, this._onCloseFileDropdownMenuHandler);
+		this._fdm.addEventListener(this._fdm.EVENT_SELECT_MENU_FILE_DROPDOWN, this._onSelectMenuFileDropdownMenuHandler);
+		this._hb.addEventListener(this._hb.EVENT_UNDO_HIDSTORY, this._onUndoHistoryHandler);
+		this._hb.addEventListener(this._hb.EVENT_REDO_HIDSTORY, this._onRedoHistoryHandler);
+		this._eb.addEventListener(this._eb.EVENT_CLICK_EDIT_BTN, this._onClickEditBtnHandler);
 		this._cp.addEventListener(this._cp.EVENT_CHANGE_COLOR, this._onChangeColorPaletteHandler);
 
 		this._lc.addEventListener(this._lc.EVENT_LOAD_JSON_COMPLETE, this._onLoadJsonFromLocalCompleteHandler);
@@ -91,9 +91,9 @@ export class Main {
 		ws.isAbleDraw = false;
 		ws.redo();
 	}
-	//----------DrawBtns----------
+	//----------EditBtns----------
 	//ボタンの変更
-	private _onChangeEditBtnsHandler = (e: Event) => {
+	private _onClickEditBtnHandler = (e: Event) => {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.isAbleDraw = true;
@@ -113,24 +113,13 @@ export class Main {
 		this._eb.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.isAbleDraw = false;
-		//let pad:PixcelArtData = ws.getPixcelArtData();
-		//let jsonObj: any = pad.getJsonObj();
-		/*
-		if(Object.keys(jsonObj.dot_json).length <= 0){
-			console.log("\n[Info]", "\n\t" + "描画データなし");
-			this._fdm.hideSaveMenu();
-		}else{
-		*/
-			this._fdm.reset();
-		/*
-		}
-		*/
+		//this._fdm.reset();
 	}
 	//ドロップダウンメニューが閉じた
 	private _onCloseFileDropdownMenuHandler = (e: Event) => {
 	}
 	//ドロップダウンメニューの中のメニューを選択した
-	private _onMenuSelectFileDropdownMenuHandler = (e: Event) => {
+	private _onSelectMenuFileDropdownMenuHandler = (e: Event) => {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace;
 		let pad: PixcelArtData;
@@ -173,6 +162,7 @@ export class Main {
 		}
 		
 		let pad : PixcelArtData = ws.getPixcelArtData();
+		//ローカルストレージにデータを保存
 		this._lsc.save(pad);
 
 	}
@@ -232,8 +222,6 @@ export class Main {
 		//カラーパレットに色を反映
 		let colorList: Array<string> = pad.getHexColorCodeList();
 		this._cp.setHexColorList(colorList);
-
-		//ws.saveLog();
 	}
 	//=============================================
 	// public
