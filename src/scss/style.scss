@@ -104,6 +104,22 @@ $small-modal-height:200px;
 		//edit
 		#drawBtnGrp{
 			margin-right:30px;
+
+			#selectRange{
+				padding-left:4px;
+				padding-right:4px;
+				svg{
+					fill: #000;
+					width:22px;
+					height:22px;
+				}
+			}
+			#selectRange:hover,
+			#selectRange.active{
+				svg{
+					fill: #FFF;
+				}
+			}
 		}
 		#colorPalette{
 			margin-right:10px;

@@ -1,6 +1,6 @@
 import { State } from "../../model/State";
 
-export class DrawBtns extends createjs.EventDispatcher {
+export class EditBtns extends createjs.EventDispatcher {
 	//=============================================
 	// TODO
 	//=============================================
@@ -28,8 +28,11 @@ export class DrawBtns extends createjs.EventDispatcher {
 
 		let eracerBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #eracer');
 		eracerBtn.addEventListener('click', this._onEracerBtnClickHandler);
+
+		let rangeSelectBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #selectRange');
+		rangeSelectBtn.addEventListener('click', this._onRangeSelectBtnClickHandler);
 		
-		this._btnList = [pencilBtn, eracerBtn];
+		this._btnList = [pencilBtn, eracerBtn, rangeSelectBtn];
 
 		//鉛筆が選択されている状態にする
 		this._btnInactive(pencilBtn);
@@ -49,6 +52,12 @@ export class DrawBtns extends createjs.EventDispatcher {
 		let target = <HTMLElement>e.currentTarget;
 		this._btnInactive(target);
 		this._state.setCurrent((this._state.current == State.DRAW_ERACER) ? null : State.DRAW_ERACER);
+		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_BTN, true, true));
+	}
+	private _onRangeSelectBtnClickHandler = (e: Event) => {
+		let target = <HTMLElement>e.currentTarget;
+		this._btnInactive(target);
+		this._state.setCurrent((this._state.current == State.SELECT_RANGE) ? null : State.SELECT_RANGE);
 		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_BTN, true, true));
 	}
 	//=============================================

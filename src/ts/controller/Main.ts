@@ -2,7 +2,7 @@ import { State } from "../model/State";
 import { PixcelArtData } from "../model/data/PixcelArtData";
 import { Workspace } from "../view/canvas/workspace/Workspace";
 import { ColorPalette } from "../view/ui/ColorPalette";
-import { DrawBtns } from "../view/ui/DrawBtns";
+import { EditBtns } from "../view/ui/EditBtns";
 import { FileDropdownMenu } from "../view/ui/FileDropdownMenu";
 import { HistoryBtns } from "../view/ui/HistoryBtns";
 import { LocalConnector } from "./file/LocalConnector";
@@ -24,7 +24,7 @@ export class Main {
 
 	private _fdm: FileDropdownMenu;
 	private _hb: HistoryBtns;
-	private _db: DrawBtns;
+	private _eb: EditBtns;
 	private _cp: ColorPalette;
 
 	private _lc: LocalConnector;
@@ -39,7 +39,7 @@ export class Main {
 		this._state = new State();
 		
 		this._fdm = new FileDropdownMenu(this._state);
-		this._db = new DrawBtns(this._state);
+		this._eb = new EditBtns(this._state);
 		this._hb = new HistoryBtns(this._state);
 		this._cp = new ColorPalette(this._state);
 
@@ -55,7 +55,7 @@ export class Main {
 		this._fdm.addEventListener(this._fdm.EVENT_DROPDOWN_MENU_SELECT, this._onMenuSelectFileDropdownMenuHandler);
 		this._hb.addEventListener(this._hb.EVENT_HIDSTORY_UNDO, this._onUndoHistoryHandler);
 		this._hb.addEventListener(this._hb.EVENT_HIDSTORY_REDO, this._onRedoHistoryHandler);
-		this._db.addEventListener(this._db.EVENT_CHANGE_BTN, this._onChangeDrawBtnsHandler);
+		this._eb.addEventListener(this._eb.EVENT_CHANGE_BTN, this._onChangeEditBtnsHandler);
 		this._cp.addEventListener(this._cp.EVENT_CHANGE_COLOR, this._onChangeColorPaletteHandler);
 
 		this._lc.addEventListener(this._lc.EVENT_LOAD_JSON_COMPLETE, this._onLoadJsonFromLocalCompleteHandler);
@@ -79,21 +79,21 @@ export class Main {
 	//----------HistoryBtns----------
 	private _onUndoHistoryHandler = (e: Event) => {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
-		this._db.reset();
+		this._eb.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.isAbleDraw = false;
 		ws.undo();
 	}
 	private _onRedoHistoryHandler = (e: Event) => {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
-		this._db.reset();
+		this._eb.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.isAbleDraw = false;
 		ws.redo();
 	}
 	//----------DrawBtns----------
 	//ボタンの変更
-	private _onChangeDrawBtnsHandler = (e: Event) => {
+	private _onChangeEditBtnsHandler = (e: Event) => {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.isAbleDraw = true;
@@ -110,7 +110,7 @@ export class Main {
 	//ドロップダウンメニューが開いた
 	private _onOpenFileDropdownMenuHandler = (e: Event) => {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
-		this._db.reset();
+		this._eb.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.isAbleDraw = false;
 		//let pad:PixcelArtData = ws.getPixcelArtData();
