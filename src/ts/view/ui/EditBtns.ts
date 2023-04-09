@@ -24,16 +24,9 @@ export class EditBtns extends createjs.EventDispatcher {
 		this._state = state;
 
 		let pencilBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #pencil');
-		//pencilBtn.addEventListener('click', this._onPenchilBtnClickHandler);
-
 		let eracerBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #eracer');
-		//eracerBtn.addEventListener('click', this._onEracerBtnClickHandler);
-
 		//let dropperBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #dropper');
-		//dropperBtn.addEventListener('click', this._onDropperBtnClickHandler);
-
 		//let rangeSelectBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #selectRange');
-		//rangeSelectBtn.addEventListener('click', this._onRangeSelectBtnClickHandler);
 		
 		this._btnList = [pencilBtn, eracerBtn/*, dropperBtn, rangeSelectBtn*/];
 		for (let btn of this._btnList) {

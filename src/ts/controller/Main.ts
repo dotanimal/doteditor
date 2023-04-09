@@ -53,8 +53,8 @@ export class Main {
 		this._fdm.addEventListener(this._fdm.EVENT_OPEN_FILE_DROPDOWN, this._onOpenFileDropdownMenuHandler);
 		this._fdm.addEventListener(this._fdm.EVENT_CLOSE_FILE_DROPDOWN, this._onCloseFileDropdownMenuHandler);
 		this._fdm.addEventListener(this._fdm.EVENT_SELECT_MENU_FILE_DROPDOWN, this._onSelectMenuFileDropdownMenuHandler);
-		this._hb.addEventListener(this._hb.EVENT_UNDO_HIDSTORY, this._onUndoHistoryHandler);
-		this._hb.addEventListener(this._hb.EVENT_REDO_HIDSTORY, this._onRedoHistoryHandler);
+		this._hb.addEventListener(this._hb.EVENT_CLICK_HISTORY_BTN, this._onClickHistoryBtnHandler);
+		//this._hb.addEventListener(this._hb.EVENT_REDO_HIDSTORY, this._onRedoHistoryHandler);
 		this._eb.addEventListener(this._eb.EVENT_CLICK_EDIT_BTN, this._onClickEditBtnHandler);
 		this._cp.addEventListener(this._cp.EVENT_CHANGE_COLOR, this._onChangeColorPaletteHandler);
 
@@ -77,29 +77,26 @@ export class Main {
 	// event handler
 	//=============================================
 	//----------HistoryBtns----------
-	private _onUndoHistoryHandler = (e: Event) => {
+	private _onClickHistoryBtnHandler = (e: Event) => {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this._eb.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
+		
 		ws.isAbleDraw = false;
-		ws.undo();
-	}
-	private _onRedoHistoryHandler = (e: Event) => {
-		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
-		this._eb.reset();
-		let ws: Workspace = this._getActiveWorkSpace();
-		ws.isAbleDraw = false;
-		ws.redo();
+		if(this._state.current == State.HISTORY_UNDO){
+			ws.undo();
+		}else if(this._state.current == State.HISTORY_REDO){
+			ws.redo();
+		}
 	}
 	//----------EditBtns----------
-	//ボタンの変更
 	private _onClickEditBtnHandler = (e: Event) => {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.isAbleDraw = true;
 	}
 	//----------ColorPalette----------
-	//カラーパレットの変更
+
 	private _onChangeColorPaletteHandler = (e: Event) => {
 		let ws: Workspace = this._getActiveWorkSpace();
 		let color: string = this._cp.getHexColorCode();

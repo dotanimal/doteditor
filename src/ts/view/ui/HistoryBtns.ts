@@ -10,11 +10,9 @@ export class HistoryBtns extends createjs.EventDispatcher {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public readonly EVENT_UNDO_HIDSTORY: string = "event history undo";
-	public readonly EVENT_REDO_HIDSTORY: string = "event history redo";
+	public readonly EVENT_CLICK_HISTORY_BTN: string = "event click history btn";
 	//----------private---------
 	private _state: State;
-	private _btnList: Array<HTMLElement>;
 
 	private _undoBtn: HTMLElement;
 	private _redoBtn: HTMLElement;
@@ -28,12 +26,10 @@ export class HistoryBtns extends createjs.EventDispatcher {
 		this._state = state;
 
 		this._undoBtn = <HTMLElement>document.querySelector('#historyBtnGrp > #undo');
-		this._undoBtn.addEventListener('click', this._onUndoBtnClickHandler);
+		this._undoBtn.addEventListener('click', this._onClickHandler);
 
 		this._redoBtn = <HTMLElement>document.querySelector('#historyBtnGrp > #redo');
-		this._redoBtn.addEventListener('click', this._onRedoBtnClickHandler);
-		
-		this._btnList = [this._undoBtn, this._redoBtn];
+		this._redoBtn.addEventListener('click', this._onClickHandler);
 
 		this.redoBtnDisactive(true);
 		this.undoBtnDisactive(true);
@@ -41,32 +37,21 @@ export class HistoryBtns extends createjs.EventDispatcher {
 	//=============================================
 	// event handler
 	//=============================================
-	private _onUndoBtnClickHandler = (e: Event) => {
+	private _onClickHandler = (e: Event) => {
 		let target = <HTMLElement>e.currentTarget;
-		this._btnInactive(target);
-		this._state.setCurrent(State.HISTORY_UNDO);
-		this.dispatchEvent(new createjs.Event(this.EVENT_UNDO_HIDSTORY, true, true));
-	}
-	private _onRedoBtnClickHandler = (e: Event) => {
-		let target = <HTMLElement>e.currentTarget;
-		this._btnInactive(target);
-		this._state.setCurrent(State.HISTORY_REDO);
-		this.dispatchEvent(new createjs.Event(this.EVENT_REDO_HIDSTORY, true, true));
+		
+		let mode :string;
+		if(target.id == "undo"){
+			mode = State.HISTORY_UNDO;
+		}else if(target.id == "redo"){
+			mode = State.HISTORY_REDO;
+		}
+		this._state.setCurrent(mode);
+		this.dispatchEvent(new createjs.Event(this.EVENT_CLICK_HISTORY_BTN, true, true));
 	}
 	//=============================================
 	// private
 	//=============================================
-	private _btnInactive = (target: HTMLElement = null) => {
-		/*
-		for (let btn of this._btnList) {
-			if (btn != target) {
-				btn.classList.remove("active");
-			} else {
-				btn.classList.add("active");
-			}
-		}
-		*/
-	}
 	//=============================================
 	// public
 	//=============================================
