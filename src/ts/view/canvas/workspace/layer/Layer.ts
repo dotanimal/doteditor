@@ -1,3 +1,5 @@
+import { State } from "../../../../model/State";
+
 export class Layer extends createjs.Shape {
 	//=============================================
 	// TODO
@@ -10,6 +12,7 @@ export class Layer extends createjs.Shape {
 	//----------public----------
 	//----------private---------
 	//----------protected---------
+	protected _state: State;
 	protected _stageWidth: number;
 	protected _stageHeight: number;
 	protected _dotSize: number;
@@ -20,8 +23,9 @@ export class Layer extends createjs.Shape {
 	//=============================================
 	// constructor
 	//=============================================
-	constructor() {
+	constructor(state:State) {
 		super();
+		this._state = state;
 	}
 	//=============================================
 	// event handler

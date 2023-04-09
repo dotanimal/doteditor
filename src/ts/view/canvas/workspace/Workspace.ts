@@ -20,7 +20,6 @@ export class Workspace extends createjs.Stage {
 	public readonly EVENT_CHANGE_WS: string = "event change workspace";
 	//----------private---------
 	private _state: State;
-	private _canvasId: string;
 
 	private _areaTopY : number;
 	private _areaRightX : number;
@@ -41,7 +40,7 @@ export class Workspace extends createjs.Stage {
 	private _pixcelArtDataHistoryList: Array<PixcelArtData>;
 	private _histroyId: number;
 
-	private _hexColorCode: string;
+	//private _hexColorCode: string;
 
 	private _isAbleDraw :boolean;
 	//----------protected-------
@@ -56,31 +55,19 @@ export class Workspace extends createjs.Stage {
 
 		this._state = state;
 
-		this._canvasId = canvasId;
-
 		// タッチ操作をサポートしているブラウザーなら、タッチ操作を有効にする
 		if (createjs.Touch.isSupported() == true) {
 			createjs.Touch.enable(this);
 		}
+
 		this._pixcelArtDataHistoryList = [];
 		this._drawLayerList = [];
 
-		this._bgLayer = new BgLayer();
-		//this.addChild(this._bgLayer);
-
-		//最初に作るレイヤー名は"body"にしておく
-		//this._addDrawLayer("body");
-		
-		this._cursroLayer = new CursorLayer();
-		//this.addChild(this._cursroLayer);
-
-		//this._resetStageSize();
-
+		this._bgLayer = new BgLayer(state);
+		this._cursroLayer = new CursorLayer(state);
 		this._addMouseEventListener();
 		
 		this.isAbleDraw = true;
-		//this._saveHistory();
-		//this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 	}
 	//=============================================
 	// event handler
@@ -129,7 +116,7 @@ export class Workspace extends createjs.Stage {
 			throw new Error("[ERROR:add DrawLayer]\n\t" + "name\t:\t" + layerName);
 		}else{			
 			//console.log("\t", "add draw layer\t:", layerName);
-			dl = new DrawLayer(layerName);
+			dl = new DrawLayer(this._state, layerName);
 			let len : number = this._drawLayerList.push(dl);
 			this._activeDrawLayerId = len - 1;
 			this.addChild(dl);
@@ -147,11 +134,14 @@ export class Workspace extends createjs.Stage {
 			this._isMouseDown = true;
 			let layer: DrawLayer = this._getActiveDrawLayer();
 			if (layer) {
+				layer.drawDot(this.mouseX,this.mouseY);
+				/*
 				if (this._state.current == State.DRAW_PENCIL) {
 					layer.pencil(this.mouseX, this.mouseY, this._hexColorCode);
 				} else if (this._state.current == State.DRAW_ERACER) {
 					layer.eraser(this.mouseX, this.mouseY);
 				}
+				*/
 				this.update();
 			}
 		});
@@ -181,11 +171,14 @@ export class Workspace extends createjs.Stage {
 			if (this._isMouseDown) {
 				let layer: DrawLayer = this._getActiveDrawLayer();
 				if (layer) {
+					layer.drawDot(this.mouseX,this.mouseY);
+					/*
 					if (this._state.current == State.DRAW_PENCIL) {
 						layer.pencil(this.mouseX, this.mouseY, this._hexColorCode);
 					} else if (this._state.current == State.DRAW_ERACER) {
 						layer.eraser(this.mouseX, this.mouseY);
 					}
+					*/
 					//this.update();
 				}
 			}
@@ -261,9 +254,11 @@ export class Workspace extends createjs.Stage {
 		if(isSaveLog){this._saveHistory();}
 		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 	}
+	/*
 	public setHexColorCode = (hexColorCode: string) => {
 		this._hexColorCode = hexColorCode;
 	}
+	*/
 	public getPixcelArtData = ():PixcelArtData => {
 		let result: PixcelArtData = new PixcelArtData();
 		let layer: DrawLayer;

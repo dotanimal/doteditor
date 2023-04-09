@@ -6,6 +6,8 @@
 
 /*! ../../../../model/Canvas2DrawLayerData */
 
+/*! ../../../../model/State */
+
 /*! ../../../model/State */
 
 /*! ../../../model/data/PixcelArtData */

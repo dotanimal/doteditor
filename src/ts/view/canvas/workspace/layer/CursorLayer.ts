@@ -1,3 +1,4 @@
+import { State } from "../../../../model/State";
 import { Layer } from "./Layer";
 
 export class CursorLayer extends Layer {
@@ -15,8 +16,8 @@ export class CursorLayer extends Layer {
 	//=============================================
 	// constructor
 	//=============================================
-	constructor() {
-		super();
+	constructor(state:State) {
+		super(state);
 	}
 	//=============================================
 	// event handler

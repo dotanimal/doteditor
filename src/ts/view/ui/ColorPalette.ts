@@ -42,6 +42,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 	private _onChangeHandler = (e: Event = null) => {
 		if (e != null) {
 			let colorPicker: HTMLInputElement = <HTMLInputElement>e.target;
+			this._state.setHexColorCode(colorPicker.value);
 			this._currentEle = colorPicker;
 		}
 		this._changeActive();
@@ -68,11 +69,14 @@ export class ColorPalette extends createjs.EventDispatcher{
 	//=============================================
 	public init = () => {
 		this._currentEle = <HTMLInputElement>this._colorPickerList[0];
+		this._state.setHexColorCode(this._currentEle.value);
 		this._onChangeHandler();
 	}
+	/*
 	public getHexColorCode = (): string => {
 		return this._currentEle.value;
 	}
+	*/
 	public setHexColorList = (arr: Array<string>) => {
 		let colorLen: number = arr.length;
 		let pickerLen: number = this._colorPickerList.length;
@@ -89,6 +93,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 			colorPickerEle.value = "#" + color;
 		}
 		this._currentEle = <HTMLInputElement>this._colorPickerList[0];
+		this._state.setHexColorCode(this._currentEle.value);
 		this._onChangeHandler();
 	}
 	//=============================================

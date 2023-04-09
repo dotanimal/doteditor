@@ -31,6 +31,8 @@ export class State {
 	private _prevCategory : string;
 	private _current : string;
 	private _prev : string;
+	
+	private _hexColorCode : string;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -69,6 +71,9 @@ export class State {
 		this._setCategory();
 		//console.log('\n[State:change]', "\t" + this.current);
 	}
+	public setHexColorCode = (value : string) => {
+		this._hexColorCode = value;
+	}
 	/*
 	public setPrev = (value : string) => {
 		this._prev = value;
@@ -98,5 +103,8 @@ export class State {
 	}
 	get prevCategory(): string {
 		return this._prevCategory;
+	}
+	get hexColorCode(): string {
+		return this._hexColorCode;
 	}
 }

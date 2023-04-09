@@ -1,4 +1,5 @@
 import { Canvas2DrawLayerData } from "../../../../model/Canvas2DrawLayerData";
+import { State } from "../../../../model/State";
 import { DrawLayerData } from "../../../../model/data/DrawLayerData";
 import { Layer } from "./Layer";
 
@@ -14,13 +15,14 @@ export class DrawLayer extends Layer {
 	//----------public----------
 	//----------private---------
 	private _dotsize: number;
+	private _hexColorCode : string;
 
 	//----------protected-------
 	//=============================================
 	// constructor
 	//=============================================
-	constructor(name:string) {
-		super();
+	constructor(state:State, name:string) {
+		super(state);
 		this.name = name;
 	}
 	//=============================================
@@ -29,14 +31,7 @@ export class DrawLayer extends Layer {
 	//=============================================
 	// private
 	//=============================================
-	//=============================================
-	// public
-	//=============================================
-	public override setStageSize = (stageWidth:number, stageHeight:number, dotSize:number, areaTopY:number, areaRightX:number, areaBottomY:number, areaLeftX:number) => {
-		this._superSetStageSize(stageWidth, stageHeight, dotSize, areaTopY, areaRightX, areaBottomY, areaLeftX);
-		//console.log("[DrawLayer] change size");
-	}
-	public pencil = (mx: number, my: number, color: string) => {
+	private _pencil = (mx: number, my: number, color: string) => {
 		this.graphics.clear();
 		let xx = Math.floor((mx - this._areaLeftX) / this._dotSize) * this._dotSize + this._areaLeftX;
 		let yy = Math.floor((my - this._areaTopY) / this._dotSize) * this._dotSize + this._areaTopY;
@@ -45,7 +40,7 @@ export class DrawLayer extends Layer {
 		//描画した順に上書き（追記）
 		this.updateCache("source-over");
 	}
-	public eraser = (mx: number, my: number) => {
+	private _eraser = (mx: number, my: number) => {
 		this.graphics.clear();
 		let xx :number = Math.floor((mx - this._areaLeftX) / this._dotSize) * this._dotSize + this._areaLeftX;
 		let yy :number = Math.floor((my - this._areaTopY) / this._dotSize) * this._dotSize + this._areaTopY;
@@ -53,6 +48,23 @@ export class DrawLayer extends Layer {
 		this.graphics.drawRect(xx, yy, this._dotSize, this._dotSize);
 		//元からある図形に対して重なっていない部分のみ描画（消しゴム）
 		this.updateCache("destination-out");
+	}
+	//=============================================
+	// public
+	//=============================================
+	public override setStageSize = (stageWidth:number, stageHeight:number, dotSize:number, areaTopY:number, areaRightX:number, areaBottomY:number, areaLeftX:number) => {
+		this._superSetStageSize(stageWidth, stageHeight, dotSize, areaTopY, areaRightX, areaBottomY, areaLeftX);
+		//console.log("[DrawLayer] change size");
+	}
+	public drawDot = (mx: number, my: number) => {
+		if(this._state.current == State.DRAW_PENCIL){
+			this._pencil(mx, my, this._state.hexColorCode);
+		}else if(this._state.current == State.DRAW_ERACER){
+			this._eraser(mx, my);
+		}
+	}
+	public setHexColorCode = (value : string) => {
+		this._hexColorCode =  value;
 	}
 	public setDrawLayerData = (dld:DrawLayerData) => {
 		let xCount :number = dld.width;

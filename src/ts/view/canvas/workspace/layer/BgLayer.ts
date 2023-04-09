@@ -1,3 +1,4 @@
+import { State } from "../../../../model/State";
 import { Layer } from "./Layer";
 
 export class BgLayer extends Layer {
@@ -16,8 +17,8 @@ export class BgLayer extends Layer {
 	//=============================================
 	// constructor
 	//=============================================
-	constructor() {
-		super();
+	constructor(state:State) {
+		super(state);
 	}
 	//=============================================
 	// event handler

@@ -54,7 +54,6 @@ export class Main {
 		this._fdm.addEventListener(this._fdm.EVENT_CLOSE_FILE_DROPDOWN, this._onCloseFileDropdownMenuHandler);
 		this._fdm.addEventListener(this._fdm.EVENT_SELECT_MENU_FILE_DROPDOWN, this._onSelectMenuFileDropdownMenuHandler);
 		this._hb.addEventListener(this._hb.EVENT_CLICK_HISTORY_BTN, this._onClickHistoryBtnHandler);
-		//this._hb.addEventListener(this._hb.EVENT_REDO_HIDSTORY, this._onRedoHistoryHandler);
 		this._eb.addEventListener(this._eb.EVENT_CLICK_EDIT_BTN, this._onClickEditBtnHandler);
 		this._cp.addEventListener(this._cp.EVENT_CHANGE_COLOR, this._onChangeColorPaletteHandler);
 
@@ -62,9 +61,6 @@ export class Main {
 
 		//window.addEventListener('beforeunload', this._onBeforeunloadHandler);
 
-		//this._lc.addEventListener(this._lc.EVENT_SAVE_JSON_COMPLETE, this._onSaveJsonToLocalCompleteHandler);
-		//カラーパレットの初期化　イベントリスナーを登録したあとに実行しないと色々うごかないのでここで実行
-		this._cp.init();
 
 		let pad:PixcelArtData = this._lsc.load();
 		if(!pad){
@@ -72,6 +68,10 @@ export class Main {
 			pad = new PixcelArtData(true);
 		}
 		this._setPixcelArtData2WorkSpace(pad);
+
+		//this._lc.addEventListener(this._lc.EVENT_SAVE_JSON_COMPLETE, this._onSaveJsonToLocalCompleteHandler);
+		//カラーパレットの初期化　イベントリスナーを登録したあとに実行しないと色々うごかないのでここで実行
+		this._cp.init();
 	}
 	//=============================================
 	// event handler
@@ -98,10 +98,12 @@ export class Main {
 	//----------ColorPalette----------
 
 	private _onChangeColorPaletteHandler = (e: Event) => {
+		/*
 		let ws: Workspace = this._getActiveWorkSpace();
 		let color: string = this._cp.getHexColorCode();
 		//console.log('\n[Event]', e.type, "\n\t" + "color : " + color);
 		ws.setHexColorCode(color);
+		*/
 	}
 	//----------FileDropdownMenu----------
 	//ドロップダウンメニューが開いた
