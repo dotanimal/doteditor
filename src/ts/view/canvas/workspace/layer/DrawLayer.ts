@@ -64,10 +64,10 @@ export class DrawLayer extends Layer {
 		let yy = Math.floor((my - this._areaTopY) / this._dotSize) * this._dotSize + this._areaTopY;
 		this.graphics.beginFill(this._state.hexColorCode);
 		this.graphics.drawRect(xx, yy, this._dotSize, this._dotSize);
-		if(this._state.current == State.DRAW_PENCIL){
+		if(this._state.currentMode== State.MODE_DRAW_PENCIL){
 			//描画した順に上書き（追記）
 			this.updateCache("source-over");
-		}else if(this._state.current == State.DRAW_ERACER){
+		}else if(this._state.currentMode== State.MODE_DRAW_ERACER){
 			//元からある図形に対して重なっていない部分のみ描画（消しゴム）
 			this.updateCache("destination-out");
 		}

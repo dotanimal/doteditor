@@ -143,10 +143,10 @@ export class Workspace extends createjs.Stage {
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 			//お絵かきモードでないなら処理しない
 			if(!this.isAbleDraw){return false;}
-			//if(this._state.currentCategory != State.CATEGORY_DRAW){return false;}
+			//if(this._state.currentModeCategory != State.MODE_CATEGORY_DRAW){return false;}
 			
 			if (this._isMouseDown) {
-				if (this._state.current == State.DRAW_PENCIL || this._state.current == State.DRAW_ERACER) {
+				if (this._state.currentMode== State.MODE_DRAW_PENCIL || this._state.currentMode== State.MODE_DRAW_ERACER) {
 					this._saveHistory();
 					this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 				}
@@ -158,7 +158,7 @@ export class Workspace extends createjs.Stage {
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 			//お絵かきモードでないなら処理しない
 			if(!this.isAbleDraw){return false;}
-			//if(this._state.currentCategory != State.CATEGORY_DRAW){return false;}
+			//if(this._state.currentModeCategory != State.MODE_CATEGORY_DRAW){return false;}
 
 			this._cursroLayer.move(this.mouseX, this.mouseY);
 			if (this._isMouseDown) {

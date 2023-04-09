@@ -8,29 +8,31 @@ export class State {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public static readonly DRAW_PENCIL: string = 'draw pencil';
-	public static readonly DRAW_ERACER: string = 'draw eracer';
+	public static readonly MODE_DRAW_PENCIL: string = 'draw pencil';
+	public static readonly MODE_DRAW_ERACER: string = 'draw eracer';
 
-	public static readonly SELECT_RANGE: string = 'select range';
+	public static readonly MODE_EDIT_DROPPER: string = 'edit dropper';
 
-	public static readonly HISTORY_UNDO: string = 'history undo';
-	public static readonly HISTORY_REDO: string = 'history redo';
+	public static readonly MODE_SELECT_RANGE: string = 'select range';
 
-	public static readonly FILE_NEW: string = 'file new';
-	public static readonly FILE_LOAD_JSON_FROM_LOCAL: string = 'file load json from local';
-	public static readonly FILE_SAVE_JSON_TO_LOCAL: string = 'file save json to local';
-	public static readonly FILE_SAVE_SVG_TO_LOCAL: string = 'file save svg to local';
+	public static readonly MODE_HISTORY_UNDO: string = 'history undo';
+	public static readonly MODE_HISTORY_REDO: string = 'history redo';
 
-	public static readonly CATEGORY_DRAW:string = 'category edit';
-	public static readonly CATEGORY_SELECT:string = 'category select';
-	public static readonly CATEGORY_HISTORY:string = 'category histroy';
-	public static readonly CATEGORY_FILE:string = 'category file';
+	public static readonly MODE_FILE_NEW: string = 'file new';
+	public static readonly MODE_FILE_LOAD_JSON_FROM_LOCAL: string = 'file load json from local';
+	public static readonly MODE_FILE_SAVE_JSON_TO_LOCAL: string = 'file save json to local';
+	public static readonly MODE_FILE_SAVE_SVG_TO_LOCAL: string = 'file save svg to local';
+
+	public static readonly MODE_CATEGORY_DRAW:string = 'category edit';
+	public static readonly MODE_CATEGORY_SELECT:string = 'category select';
+	public static readonly MODE_CATEGORY_HISTORY:string = 'category histroy';
+	public static readonly MODE_CATEGORY_FILE:string = 'category file';
 
 	//----------private---------
-	private _currentCategory : string;
-	private _prevCategory : string;
-	private _current : string;
-	private _prev : string;
+	private _currentModeCategory : string;
+	private _prevModeCategory : string;
+	private _currentMode : string;
+	private _prevMode : string;
 
 	private _hexColorCode : string;
 	//----------protected-------
@@ -45,30 +47,30 @@ export class State {
 	//=============================================
 	// private
 	//=============================================
-	private _setCategory = () => {
+	private _setModeCategory = () => {
 		let result : string;
-		if(/^draw/.test(this._current)){
-			result = State.CATEGORY_DRAW;
-		}else if(/^select/.test(this._current)){
-			result = State.CATEGORY_SELECT;
-		}else if(/^history/.test(this._current)){
-			result = State.CATEGORY_HISTORY;
-		}else if(/^file/.test(this._current)){
-			result = State.CATEGORY_FILE;
+		if(/^draw/.test(this._currentMode)){
+			result = State.MODE_CATEGORY_DRAW;
+		}else if(/^select/.test(this._currentMode)){
+			result = State.MODE_CATEGORY_SELECT;
+		}else if(/^history/.test(this._currentMode)){
+			result = State.MODE_CATEGORY_HISTORY;
+		}else if(/^file/.test(this._currentMode)){
+			result = State.MODE_CATEGORY_FILE;
 		}else{
 			result = null;
 		}
-		this._prevCategory = this._currentCategory;
-		this._currentCategory = result;
+		this._prevModeCategory = this._currentModeCategory;
+		this._currentModeCategory = result;
 	}
 	//=============================================
 	// public
 	//=============================================
-	public setCurrent = (value : string) => {
-		if(this._current == value){return false};
-		this._prev = this._current;
-		this._current = value;
-		this._setCategory();
+	public setMode = (value : string) => {
+		if(this._currentMode == value){return false};
+		this._prevMode = this._currentMode;
+		this._currentMode = value;
+		this._setModeCategory();
 		//console.log('\n[State:change]', "\t" + this.current);
 	}
 	public setHexColorCode = (value : string) => {
@@ -92,16 +94,16 @@ export class State {
 	//=============================================
 	// getter/setter
 	//=============================================
-	get current(): string {
-		return this._current;
+	get currentMode(): string {
+		return this._currentMode;
 	}
 	/*
 	get prev(): string {
 		return this._prev;
 	}
 	*/
-	get currentCategory(): string {
-		return this._currentCategory;
+	get currentModeCategory(): string {
+		return this._currentModeCategory;
 	}
 	/*
 	get prevCategory(): string {

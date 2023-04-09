@@ -77,16 +77,16 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	
 		let mode :string;
 		if(target.id == "fileNewMenu"){
-			mode = State.FILE_NEW;
+			mode = State.MODE_FILE_NEW;
 		}else if(target.id == "fileLoadMenu"){
-			mode = State.FILE_LOAD_JSON_FROM_LOCAL;
+			mode = State.MODE_FILE_LOAD_JSON_FROM_LOCAL;
 		}else if(target.id == "fileSaveMenu"){
-			mode = State.FILE_SAVE_JSON_TO_LOCAL;
+			mode = State.MODE_FILE_SAVE_JSON_TO_LOCAL;
 		}else if(target.id == "publishSvgToLocal"){
-			mode = State.FILE_SAVE_SVG_TO_LOCAL;
+			mode = State.MODE_FILE_SAVE_SVG_TO_LOCAL;
 		}
 
-		this._state.setCurrent(mode);
+		this._state.setMode(mode);
 		this.dispatchEvent(new createjs.Event(this.EVENT_SELECT_MENU_FILE_DROPDOWN, true, true));
 		e.preventDefault();
 	}
