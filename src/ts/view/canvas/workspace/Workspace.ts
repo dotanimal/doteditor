@@ -135,13 +135,6 @@ export class Workspace extends createjs.Stage {
 			let layer: DrawLayer = this._getActiveDrawLayer();
 			if (layer) {
 				layer.drawDot(this.mouseX,this.mouseY);
-				/*
-				if (this._state.current == State.DRAW_PENCIL) {
-					layer.pencil(this.mouseX, this.mouseY, this._hexColorCode);
-				} else if (this._state.current == State.DRAW_ERACER) {
-					layer.eraser(this.mouseX, this.mouseY);
-				}
-				*/
 				this.update();
 			}
 		});
@@ -172,14 +165,6 @@ export class Workspace extends createjs.Stage {
 				let layer: DrawLayer = this._getActiveDrawLayer();
 				if (layer) {
 					layer.drawDot(this.mouseX,this.mouseY);
-					/*
-					if (this._state.current == State.DRAW_PENCIL) {
-						layer.pencil(this.mouseX, this.mouseY, this._hexColorCode);
-					} else if (this._state.current == State.DRAW_ERACER) {
-						layer.eraser(this.mouseX, this.mouseY);
-					}
-					*/
-					//this.update();
 				}
 			}
 			this.update();

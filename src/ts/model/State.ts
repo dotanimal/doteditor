@@ -31,7 +31,7 @@ export class State {
 	private _prevCategory : string;
 	private _current : string;
 	private _prev : string;
-	
+
 	private _hexColorCode : string;
 	//----------protected-------
 	//=============================================
@@ -95,15 +95,19 @@ export class State {
 	get current(): string {
 		return this._current;
 	}
+	/*
 	get prev(): string {
 		return this._prev;
 	}
+	*/
 	get currentCategory(): string {
 		return this._currentCategory;
 	}
+	/*
 	get prevCategory(): string {
 		return this._prevCategory;
 	}
+	*/
 	get hexColorCode(): string {
 		return this._hexColorCode;
 	}

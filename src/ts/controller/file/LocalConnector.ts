@@ -39,7 +39,6 @@ export class LocalConnector extends createjs.EventDispatcher {
 				let dotJsonObj:any = JSON.parse(<string>reader.result);
 				this._loadResultPad = new PixcelArtData();
 				this._loadResultPad.setValue(dotJsonObj);
-				//this._state.prev();
 				this.dispatchEvent(new createjs.Event(this.EVENT_LOAD_JSON_COMPLETE, true, true));
 			}
 			e.preventDefault();
@@ -66,7 +65,33 @@ export class LocalConnector extends createjs.EventDispatcher {
 		}, 1E2); //100ms
 		this.dispatchEvent(new createjs.Event(completeEventType, true, true));
 	}
-
+	//File System Access API
+	private _filePickerSave = async (txt:string, accept:any, description:string,  completeEventType:string) => {
+		try {
+			const textContent = txt;
+			// メイン処理
+			const saveFileOptions = {
+				types: [
+					{
+						description: description,
+						accept: accept
+					}
+				]
+			};
+			const handle = await window.showSaveFilePicker(saveFileOptions);
+			// writable作成
+			const writable = await handle.createWritable();
+			// コンテンツを書き込む
+			await writable.write(textContent);
+			// ファイル閉じる
+			await writable.close();
+			console.log("\tresult","\t:\t","success");
+		} catch (error) {
+			console.log("\tresult","\t:\t","fail");
+		} finally{
+			this.dispatchEvent(new createjs.Event(completeEventType, true, true));
+		}
+	}
 	//=============================================
 	// public
 	//=============================================
@@ -77,52 +102,11 @@ export class LocalConnector extends createjs.EventDispatcher {
 		(async ()=> {
 			//Firefoxやスマホではwindow.showSaveFilePickerに対応していないので、対応していない場合は別の方法で保存する
 			if(typeof window.showSaveFilePicker == 'function'){
-				try {
-					const textContent = jsonStr;
-					// メイン処理
-					const saveFileOptions = {
-						types: [
-							{
-								description: "Json Files",
-								accept: {
-									"application/json": [".json"]
-								}
-							}
-						]
-					};
-					const handle = await window.showSaveFilePicker(saveFileOptions);
-					// writable作成
-					const writable = await handle.createWritable();
-					// コンテンツを書き込む
-					await writable.write(textContent);
-					// ファイル閉じる
-					await writable.close();
-					console.log("\tresult","\t:\t","success");
-				} catch (error) {
-					console.log("\tresult","\t:\t","fail");
-				} finally{
-					//this._state.prev();
-					this.dispatchEvent(new createjs.Event(this.EVENT_SAVE_JSON_COMPLETE, true, true));
-				}
+				console.log("window.showSaveFilePicker");
+				let accept:any = {"application/json": [".json"]};
+				this._filePickerSave(jsonStr, accept, "JSON Files",this.EVENT_SAVE_JSON_COMPLETE  )
 			}else{
 				this._bolbSave(jsonStr, filename,'application/json', this.EVENT_SAVE_JSON_COMPLETE);
-				/*
-				const blob :Blob = new Blob([jsonStr], { type: 'application/json' });
-				const a:HTMLAnchorElement = <HTMLAnchorElement>document.createElement("a");
-				const url :string = window.URL.createObjectURL(blob);
-				a.download = filename;
-				a.href = url;
-				a.style.display = "none";
-				document.body.appendChild(a);
-				a.click();
-				document.body.removeChild(a);
-				setTimeout(() => {
-					window.URL.revokeObjectURL(url);
-				}, 1E2); //100ms
-				
-				//this._state.prev();
-				this.dispatchEvent(new createjs.Event(this.EVENT_SAVE_JSON_COMPLETE, true, true));
-				*/
 			}
 		})();
 	}
@@ -150,7 +134,17 @@ export class LocalConnector extends createjs.EventDispatcher {
 				if (pattern.test(String(xhr.status)) == true) { //200番台
 					//var data = e.responseText; // responseXML もあり
 					//console.log('Complete! :', e.status, e.statusText);
-					this._bolbSave(xhr.responseText, filename,'image/svg+xml', this.EVENT_SAVE_SVG_COMPLETE);
+					let xhrResTxt :string = xhr.responseText;
+					(async ()=> {
+						//Firefoxやスマホではwindow.showSaveFilePickerに対応していないので、対応していない場合は別の方法で保存する
+						if(typeof window.showSaveFilePicker == 'function'){
+							console.log("window.showSaveFilePicker");
+							let accept:any = {"image/svg+xml": [".svg"]};
+							this._filePickerSave(xhrResTxt, accept, "SVG Files",this.EVENT_SAVE_SVG_COMPLETE);
+						}else{
+							this._bolbSave(xhrResTxt, filename ,'image/svg+xml', this.EVENT_SAVE_SVG_COMPLETE);
+						}
+					})();
 				} else {
 					//console.log('Failed. : ', this._xhr.status, this._xhr.statusText);
 				}
