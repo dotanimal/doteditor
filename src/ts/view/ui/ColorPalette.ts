@@ -42,7 +42,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 	private _onChangeHandler = (e: Event = null) => {
 		if (e != null) {
 			let colorPicker: HTMLInputElement = <HTMLInputElement>e.target;
-			this._state.setHexColorCode(colorPicker.value);
+			//this._state.setHexColorCode(colorPicker.value);
 			this._currentEle = colorPicker;
 		}
 		this._changeActive();
@@ -73,7 +73,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 		this._onChangeHandler();
 	}
 	/*
-	public getHexColorCode = (): string => {
+	public getHexColor = (): string => {
 		return this._currentEle.value;
 	}
 	*/
@@ -93,15 +93,22 @@ export class ColorPalette extends createjs.EventDispatcher{
 			colorPickerEle.value = "#" + color;
 		}
 		this._currentEle = <HTMLInputElement>this._colorPickerList[0];
-		this._state.setHexColorCode(this._currentEle.value);
+		//this._state.setHexColorCode(this._currentEle.value);
 		this._onChangeHandler();
 	}
-	public setHexColor = (value:string ) =>{
+	/*
+	public setHexColor = (value:string ) => {
 		this._currentEle.value = "#" + value;
-		this._state.setHexColorCode(this._currentEle.value);
-		this._onChangeHandler();
 	}
+	*/
 	//=============================================
 	// getter/setter
 	//=============================================
+	get hexColor(): string{
+		let hex :string = this._currentEle.value;
+		return hex.replace('#', '');
+	}
+	set hexColor(value: string) {
+		this._currentEle.value = "#" + value;
+	}
 }

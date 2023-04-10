@@ -96,14 +96,10 @@ export class Main {
 		//ws.isAbleDraw = true;
 	}
 	//----------ColorPalette----------
-
 	private _onChangeColorPaletteHandler = (e: Event) => {
-		/*
+		let hexColor : string = this._cp.hexColor;
 		let ws: Workspace = this._getActiveWorkSpace();
-		let color: string = this._cp.getHexColorCode();
-		//console.log('\n[Event]', e.type, "\n\t" + "color : " + color);
-		ws.setHexColorCode(color);
-		*/
+		ws.hexColor = hexColor;
 	}
 	//----------FileDropdownMenu----------
 	//ドロップダウンメニューが開いた
@@ -167,7 +163,7 @@ export class Main {
 	}
 	private _onGetHexColorCodeHander = (e: Event) => {
 		let ws: Workspace = <Workspace>e.target;
-		this._cp.setHexColor(ws.extractHexColor);
+		this._cp.hexColor =  ws.hexColor;
 	}
 	//----------LocalConnector----------
 	//JSONファイルの読み込み完了

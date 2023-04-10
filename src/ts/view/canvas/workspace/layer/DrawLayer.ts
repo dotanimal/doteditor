@@ -58,11 +58,11 @@ export class DrawLayer extends Layer {
 		this._superSetStageSize(stageWidth, stageHeight, dotSize, areaTopY, areaRightX, areaBottomY, areaLeftX);
 		//console.log("[DrawLayer] change size");
 	}
-	public drawDot = (mx: number, my: number) => {
+	public drawDot = (mx: number, my: number, hexColor:string) => {
 		this.graphics.clear();
 		let xx = Math.floor((mx - this._areaLeftX) / this._dotSize) * this._dotSize + this._areaLeftX;
 		let yy = Math.floor((my - this._areaTopY) / this._dotSize) * this._dotSize + this._areaTopY;
-		this.graphics.beginFill(this._state.hexColorCode);
+		this.graphics.beginFill('#' + hexColor);
 		this.graphics.drawRect(xx, yy, this._dotSize, this._dotSize);
 		if(this._state.current== State.DRAW_PENCIL){
 			//描画した順に上書き（追記）

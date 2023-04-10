@@ -41,10 +41,10 @@ export class Workspace extends createjs.Stage {
 	private _pixcelArtDataHistoryList: Array<PixcelArtData>;
 	private _histroyId: number;
 
-	private _pad:PixcelArtData;
-	//private _hexColorCode: string;
+	//private _pad:PixcelArtData;
+	private _hexColor: string;
 	
-	private _extractHexColor:string;
+	//private _extractHexColor:string;
 
 	private _isAbleDraw :boolean;
 	//----------protected-------
@@ -139,7 +139,7 @@ export class Workspace extends createjs.Stage {
 			this._isMouseDown = true;
 			let layer: DrawLayer = this._getActiveDrawLayer();
 			if (layer) {
-				layer.drawDot(this.mouseX,this.mouseY);
+				layer.drawDot(this.mouseX,this.mouseY, this._hexColor);
 				this.update();
 			}
 		});
@@ -148,7 +148,7 @@ export class Workspace extends createjs.Stage {
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 
 			if(this._state.current == State.EDIT_DROPPER){
-				this._getHexColorCode(this.mouseX,this.mouseY);
+				//this._getHexColorCode(this.mouseX,this.mouseY);
 			}
 
 			//お絵かきモードでないなら処理しない
@@ -175,7 +175,7 @@ export class Workspace extends createjs.Stage {
 				if (this._isMouseDown) {
 					let layer: DrawLayer = this._getActiveDrawLayer();
 					if (layer) {
-						layer.drawDot(this.mouseX,this.mouseY);
+						layer.drawDot(this.mouseX,this.mouseY, this._hexColor);
 					}
 				}
 			}
@@ -211,6 +211,7 @@ export class Workspace extends createjs.Stage {
 		console.log("history", "save", this._histroyId);
 		//TODO　ログリストとログIDの値からUNDO/REDOボタンの有効・無効を切り替えられるようにしたい
 	}
+	/*
 	private _getHexColorCode = (mx:number, my:number) =>{
 		let result:string;
 		let xx:number = Math.floor((mx - this._areaLeftX) / this._dotSize);
@@ -241,12 +242,13 @@ export class Workspace extends createjs.Stage {
 			}
 		}
 	}
+	*/
 	//=============================================
 	// public
 	//=============================================
 	public setPixcelArtData = (pad: PixcelArtData, isSaveLog:boolean=true) => {
 		//console.log("reset", "workspace");
-		this._pad = pad;
+		//this._pad = pad;
 		this.removeAllChildren();
 		this._drawLayerList = [];
 		
@@ -282,11 +284,6 @@ export class Workspace extends createjs.Stage {
 		if(isSaveLog){this._saveHistory();}
 		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 	}
-	/*
-	public setHexColorCode = (hexColorCode: string) => {
-		this._hexColorCode = hexColorCode;
-	}
-	*/
 	public getPixcelArtData = ():PixcelArtData => {
 		let result: PixcelArtData = new PixcelArtData();
 		let layer: DrawLayer;
@@ -299,7 +296,7 @@ export class Workspace extends createjs.Stage {
 			//}
 		}
 		result.layoutInit();
-		this._pad = result;
+		//this._pad = result;
 		return result;
 	}
 	public undo = () => {
@@ -344,15 +341,10 @@ export class Workspace extends createjs.Stage {
 		return (this._histroyId < this._pixcelArtDataHistoryList.length - 1);
 	}
 	
-	get extractHexColor(): string{
-		return this._extractHexColor;
+	get hexColor(): string{
+		return this._hexColor;
 	}
-	/*
-	set isAbleDraw(value: boolean) {
-		console.log("[Workspace]isAbleDraw\t", value)
-		this._cursroLayer.visible = value;
-		this._isAbleDraw = value;
-		this.update();
+	set hexColor(value: string) {
+		 this._hexColor = value;
 	}
-	*/
 }
