@@ -26,9 +26,9 @@ export class EditBtns extends createjs.EventDispatcher {
 		let pencilBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #pencil');
 		let eracerBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #eracer');
 		let dropperBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #dropper');
-		//let rangeSelectBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #selectRange');
+		let rangeSelectBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #selectRange');
 		
-		this._btnList = [pencilBtn, eracerBtn, dropperBtn, /*rangeSelectBtn*/];
+		this._btnList = [pencilBtn, eracerBtn, dropperBtn, rangeSelectBtn/**/];
 		for (let btn of this._btnList) {
 			btn.addEventListener('click', this._onClickHandler);
 		}
@@ -45,17 +45,17 @@ export class EditBtns extends createjs.EventDispatcher {
 		let target:HTMLElement = <HTMLElement>e.currentTarget;
 		this._btnInactive(target);
 
-		let mode :string;
+		let state :string;
 		if(target.id == "pencil"){
-			mode = State.DRAW_PENCIL;
+			state = State.DRAW_PENCIL;
 		}else if(target.id == "eracer"){
-			mode = State.DRAW_ERACER;
+			state = State.DRAW_ERACER;
 		}else if(target.id == "dropper"){
-			mode = State.EDIT_DROPPER;
+			state = State.EDIT_DROPPER;
 		}else if(target.id == "selectRange"){
-			mode = State.SELECT_RANGE;
+			state = State.SELECT_RANGE;
 		}
-		this._state.setCurrent((this._state.current== mode) ? null : mode);
+		this._state.setCurrent((this._state.current== state) ? null : state);
 		this.dispatchEvent(new createjs.Event(this.EVENT_CLICK_EDIT_BTN, true, true));
 	}
 	//=============================================

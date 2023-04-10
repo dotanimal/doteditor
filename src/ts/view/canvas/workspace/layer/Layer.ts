@@ -52,6 +52,13 @@ export class Layer extends createjs.Shape {
 		
 		this.cache(0, 0, this._stageWidth, this._stageHeight);
 	}
+	//ドット用の座標に変換
+	protected _adustX = (value:number) :number => {
+		return Math.floor((value - this._drawAreaLeft) / this._dotSize) * this._dotSize + this._drawAreaLeft;
+	}
+	protected _adustY = (value:number) :number => {
+		return Math.floor((value - this._drawAreaTop) / this._dotSize) * this._dotSize + this._drawAreaTop;
+	}
 	//=============================================
 	// getter/setter
 	//=============================================

@@ -12,6 +12,16 @@ export class CursorLayer extends Layer {
 	//=============================================
 	//----------public----------
 	//----------private---------
+	private readonly _LINE_HEX_COLOR:string = "#333";
+	
+	private _selectBeginX:number;
+	private _selectBeginY:number;
+	private _selectEndX:number;
+	private _selectEndY:number;
+
+	private _isLockSelect:boolean;
+	private _isShowSelectArea:boolean;
+
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -31,18 +41,25 @@ export class CursorLayer extends Layer {
 	public override setStageSize = (stageWidth:number, stageHeight:number, dotSize:number, drawAreaLeft:number, drawAreaTop:number, drawAreaRight:number, drawAreaBottom:number) => {
 		this._superSetStageSize(stageWidth, stageHeight, dotSize, drawAreaLeft, drawAreaTop, drawAreaRight, drawAreaBottom);
 		//console.log("[DrawLayer] change size");
+		this._isLockSelect = false;
 	}
 	public move = (mx: number, my: number) => {
-		let color : string = "#000";
+		
+		this.graphics.clear();
+
+		//カテゴリがDraw Edit Selectのときは処理を行う
+		if(this._state.currentCategory != State.CATEGORY_DRAW && this._state.currentCategory != State.CATEGORY_EDIT && this._state.currentCategory != State.CATEGORY_SELECT){
+			return false;
+		}
+
+		//カーソル
 		let length : number = this._dotSize * 0.3;
 		let offset : number = 1;
 
-		let xx = Math.floor((mx - this._drawAreaLeft) / this._dotSize) * this._dotSize + this._drawAreaLeft;
-		let yy = Math.floor((my - this._drawAreaTop) / this._dotSize) * this._dotSize + this._drawAreaTop;
+		let xx = this._adustX(mx);
+		let yy = this._adustY(my);
 
-		this.graphics.clear();
-
-		this.graphics.beginStroke(color);
+		this.graphics.beginStroke(this._LINE_HEX_COLOR);
 		this.graphics.setStrokeStyle(2);
 		//左上
 		this.graphics.moveTo(xx,							yy + length);
@@ -62,6 +79,7 @@ export class CursorLayer extends Layer {
 		this.graphics.lineTo(xx + offset + this._dotSize - length,	yy + offset + this._dotSize);
 
 		this.graphics.endStroke();
+
 
 		this.updateCache();
 	}

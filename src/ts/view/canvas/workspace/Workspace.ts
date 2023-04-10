@@ -4,6 +4,7 @@ import { PixcelArtData } from "../../../model/data/PixcelArtData";
 import { BgLayer } from "./layer/BgLayer";
 import { CursorLayer } from "./layer/CursorLayer";
 import { DrawLayer } from "./layer/DrawLayer";
+import { SelectRangeLayer } from "./layer/SelectRangeLayer";
 
 export class Workspace extends createjs.Stage {
 	//=============================================
@@ -34,7 +35,9 @@ export class Workspace extends createjs.Stage {
 	
 	private _bgLayer: BgLayer;
 	private _cursroLayer: CursorLayer;
+	private _selectRangeLayer:SelectRangeLayer;
 	private _drawLayerList: Array<DrawLayer>;
+
 	private _activeDrawLayerId: number;
 	//private _workspaceDataLogList: Array<WorkspaceData>;
 
@@ -69,6 +72,7 @@ export class Workspace extends createjs.Stage {
 
 		this._bgLayer = new BgLayer(state);
 		this._cursroLayer = new CursorLayer(state);
+		this._selectRangeLayer = new SelectRangeLayer(state);
 		this._addMouseEventListener();
 		
 		//this.isAbleDraw = true;
@@ -97,6 +101,7 @@ export class Workspace extends createjs.Stage {
 			drawLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
 		}
 		this._cursroLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
+		this._selectRangeLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
 
 		this._drawAreaTop = top;
 		this._drawAreaRight = right;
@@ -134,19 +139,32 @@ export class Workspace extends createjs.Stage {
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 			//お絵かきモードでないなら処理しない
 			//if(!this.isAbleDraw){return false;}
-			if(this._state.currentCategory != State.CATEGORY_DRAW){return false;}
 
-			this._isMouseDown = true;
-			let layer: DrawLayer = this._getActiveDrawLayer();
-			if (layer) {
-				layer.drawDot(this.mouseX,this.mouseY, this._hexColor);
-				this.update();
+
+			//範囲選択
+			this._selectRangeLayer.beginSelect(this.mouseX,this.mouseY);
+
+			//お絵かきツール
+			if(this._state.currentCategory == State.CATEGORY_DRAW){
+				let layer: DrawLayer = this._getActiveDrawLayer();
+				if (layer) {
+					layer.drawDot(this.mouseX,this.mouseY, this._hexColor);
+				}
 			}
+			
+			this._isMouseDown = true;
+
+			//描画の更新
+			this.update();
 		});
 		this.addEventListener("stagemouseup", (e: MouseEvent) => {
 			//エリア外なら処理をしない
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 
+			//範囲選択
+			this._selectRangeLayer.endSelect(this.mouseX, this.mouseY, true);
+
+			//スポイトツール
 			if(this._state.current == State.EDIT_DROPPER){
 				let layer: DrawLayer = this._getActiveDrawLayer();
 				if (layer) {
@@ -159,26 +177,29 @@ export class Workspace extends createjs.Stage {
 				}
 			}
 
-			//お絵かきモードでないなら処理しない
-			//if(!this.isAbleDraw){return false;}
-			if(this._state.currentCategory != State.CATEGORY_DRAW){return false;}
-			
-			if (this._isMouseDown) {
-				if (this._state.current== State.DRAW_PENCIL || this._state.current== State.DRAW_ERACER) {
-					this._saveHistory();
-					this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
+			//お絵かきツール
+			if(this._state.currentCategory == State.CATEGORY_DRAW){
+				if (this._isMouseDown) {
+					if (this._state.current== State.DRAW_PENCIL || this._state.current== State.DRAW_ERACER) {
+						this._saveHistory();
+						this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
+					}
 				}
 			}
+
 			this._isMouseDown = false;
 		});
 		this.addEventListener("stagemousemove", (e: MouseEvent) => {
 			//エリア外なら処理をしない
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 
+			//カーソル
 			this._cursroLayer.move(this.mouseX, this.mouseY);
+			
+			//範囲選択
+			this._selectRangeLayer.endSelect(this.mouseX,this.mouseY);
 
-			//お絵かきモードでないなら処理しない
-			//if(!this.isAbleDraw){return false;}
+			//お絵かきツール
 			if(this._state.currentCategory == State.CATEGORY_DRAW){
 				if (this._isMouseDown) {
 					let layer: DrawLayer = this._getActiveDrawLayer();
@@ -187,6 +208,7 @@ export class Workspace extends createjs.Stage {
 					}
 				}
 			}
+			//描画の更新
 			this.update();
 		});
 	}
@@ -219,38 +241,6 @@ export class Workspace extends createjs.Stage {
 		console.log("history", "save", this._histroyId);
 		//TODO　ログリストとログIDの値からUNDO/REDOボタンの有効・無効を切り替えられるようにしたい
 	}
-	/*
-	private _getHexColorCode = (mx:number, my:number) =>{
-		let result:string;
-		let xx:number = Math.floor((mx - this._drawAreaLeft) / this._dotSize);
-		let yy:number = Math.floor((my - this._drawAreaTop) / this._dotSize);
-		let padJsonObj :any = this._pad.getJsonObj();
-		let dl:DrawLayer = this._getActiveDrawLayer();
-		let dlName:string = dl.name;
-		let layerJsonObj :any = padJsonObj.dot_json[dlName];
-		let minX:number = 0;
-		let minY:number = 0;
-		if(layerJsonObj.pos){
-			minX = layerJsonObj.pos[0];
-			minY = layerJsonObj.pos[1];
-		}
-		let w:number = layerJsonObj.size[0];
-		let h:number = layerJsonObj.size[1];
-		let maxX:number = minX + w - 1;
-		let maxY:number = minY + h - 1;
-		if(minX <= xx && xx <= maxX && minY <= yy && yy <= maxY){		
-			let dx :number = xx-minX;
-			let dy :number = yy-minY;
-			let count :number = dx + dy * h;
-			let hexIndex = layerJsonObj.data[count];
-			result = layerJsonObj.color[hexIndex];
-			if(result){
-				this._extractHexColor = result;
-				this.dispatchEvent(new createjs.Event(this.EVENT_GET_HEX_COLOR_CODE, true, true));
-			}
-		}
-	}
-	*/
 	//=============================================
 	// public
 	//=============================================
@@ -273,7 +263,8 @@ export class Workspace extends createjs.Stage {
 		for (var key in drawLayerDataList) {
 			this._addDrawLayer(key);
 		}
-		
+		//選択範囲表示用のレイヤーをAddChild
+		this.addChild(this._selectRangeLayer);
 		//カーソルレイヤーをAddChild
 		this.addChild(this._cursroLayer);
 
@@ -339,6 +330,16 @@ export class Workspace extends createjs.Stage {
 			console.log("これ以上新しいログはありません");
 		}
 	}
+	public changedState = () =>{
+		if(this._state.currentCategory == State.CATEGORY_SELECT){
+
+			this._selectRangeLayer.visible = true;
+		}else{
+			this._selectRangeLayer.visible = false;
+			this._selectRangeLayer.resetSelect();
+		}
+		this.update();
+	} 
 	//=============================================
 	// getter/setter
 	//=============================================

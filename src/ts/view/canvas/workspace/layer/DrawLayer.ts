@@ -31,26 +31,7 @@ export class DrawLayer extends Layer {
 	//=============================================
 	// private
 	//=============================================
-	/*
-	private _pencil = (mx: number, my: number, color: string) => {
-		this.graphics.clear();
-		let xx = Math.floor((mx - this._drawAreaLeft) / this._dotSize) * this._dotSize + this._drawAreaLeft;
-		let yy = Math.floor((my - this._drawAreaTop) / this._dotSize) * this._dotSize + this._drawAreaTop;
-		this.graphics.beginFill(color);
-		this.graphics.drawRect(xx, yy, this._dotSize, this._dotSize);
-		//描画した順に上書き（追記）
-		this.updateCache("source-over");
-	}
-	private _eraser = (mx: number, my: number) => {
-		this.graphics.clear();
-		let xx :number = Math.floor((mx - this._drawAreaLeft) / this._dotSize) * this._dotSize + this._drawAreaLeft;
-		let yy :number = Math.floor((my - this._drawAreaTop) / this._dotSize) * this._dotSize + this._drawAreaTop;
-		this.graphics.beginFill('#' + "000000");
-		this.graphics.drawRect(xx, yy, this._dotSize, this._dotSize);
-		//元からある図形に対して重なっていない部分のみ描画（消しゴム）
-		this.updateCache("destination-out");
-	}
-	*/
+
 	//=============================================
 	// public
 	//=============================================
@@ -60,8 +41,8 @@ export class DrawLayer extends Layer {
 	}
 	public drawDot = (mx: number, my: number, hexColor:string) => {
 		this.graphics.clear();
-		let xx = Math.floor((mx - this._drawAreaLeft) / this._dotSize) * this._dotSize + this._drawAreaLeft;
-		let yy = Math.floor((my - this._drawAreaTop) / this._dotSize) * this._dotSize + this._drawAreaTop;
+		let xx = this._adustX(mx);
+		let yy = this._adustY(my);
 		this.graphics.beginFill('#' + hexColor);
 		this.graphics.drawRect(xx, yy, this._dotSize, this._dotSize);
 		if(this._state.current== State.DRAW_PENCIL){

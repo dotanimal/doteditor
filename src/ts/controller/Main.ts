@@ -84,6 +84,7 @@ export class Main {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this._eb.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
+		ws.changedState();
 		
 		//ws.isAbleDraw = false;
 		if(this._state.current== State.HISTORY_UNDO){
@@ -96,6 +97,7 @@ export class Main {
 	private _onClickEditBtnHandler = (e: Event) => {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace = this._getActiveWorkSpace();
+		ws.changedState();
 		//ws.isAbleDraw = true;
 	}
 	//----------ColorPalette----------
@@ -110,6 +112,7 @@ export class Main {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this._eb.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
+		ws.changedState();
 		//ws.isAbleDraw = false;
 		//this._fdm.reset();
 	}
@@ -238,8 +241,8 @@ export class Main {
 		ws.setPixcelArtData(pad);
 		
 		//カラーパレットに色を反映
-		//let colorList: Array<string> = pad.getHexColorCodeList();
-		//this._cp.setHexColorList(colorList);
+		let colorList: Array<string> = pad.getHexColorCodeList();
+		this._cp.setHexColorList(colorList);
 	}
 	//=============================================
 	// public

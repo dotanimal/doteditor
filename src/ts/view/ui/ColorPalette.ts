@@ -69,7 +69,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 	//=============================================
 	public init = () => {
 		this._currentEle = <HTMLInputElement>this._colorPickerList[0];
-		this._state.setHexColorCode(this._currentEle.value);
+		//this._state.setHexColorCode(this._currentEle.value);
 		this._onChangeHandler();
 	}
 	/*
