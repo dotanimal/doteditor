@@ -42,11 +42,11 @@ export class HistoryBtns extends createjs.EventDispatcher {
 		
 		let mode :string;
 		if(target.id == "undo"){
-			mode = State.MODE_HISTORY_UNDO;
+			mode = State.HISTORY_UNDO;
 		}else if(target.id == "redo"){
-			mode = State.MODE_HISTORY_REDO;
+			mode = State.HISTORY_REDO;
 		}
-		this._state.setMode(mode);
+		this._state.setCurrent(mode);
 		this.dispatchEvent(new createjs.Event(this.EVENT_CLICK_HISTORY_BTN, true, true));
 	}
 	//=============================================

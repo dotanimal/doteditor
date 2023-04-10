@@ -96,6 +96,11 @@ export class ColorPalette extends createjs.EventDispatcher{
 		this._state.setHexColorCode(this._currentEle.value);
 		this._onChangeHandler();
 	}
+	public setHexColor = (value:string ) =>{
+		this._currentEle.value = "#" + value;
+		this._state.setHexColorCode(this._currentEle.value);
+		this._onChangeHandler();
+	}
 	//=============================================
 	// getter/setter
 	//=============================================

@@ -28,14 +28,14 @@ export class EditBtns extends createjs.EventDispatcher {
 		let dropperBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #dropper');
 		//let rangeSelectBtn: HTMLElement = <HTMLElement>document.querySelector('#drawBtnGrp > #selectRange');
 		
-		this._btnList = [pencilBtn, eracerBtn/*, dropperBtn, rangeSelectBtn*/];
+		this._btnList = [pencilBtn, eracerBtn, dropperBtn, /*rangeSelectBtn*/];
 		for (let btn of this._btnList) {
 			btn.addEventListener('click', this._onClickHandler);
 		}
 
 		//鉛筆が選択されている状態にする
 		this._btnInactive(pencilBtn);
-		this._state.setMode(State.MODE_DRAW_PENCIL);
+		this._state.setCurrent(State.DRAW_PENCIL);
 		this.dispatchEvent(new createjs.Event(this.EVENT_CLICK_EDIT_BTN, true, true));
 	}
 	//=============================================
@@ -47,13 +47,15 @@ export class EditBtns extends createjs.EventDispatcher {
 
 		let mode :string;
 		if(target.id == "pencil"){
-			mode = State.MODE_DRAW_PENCIL;
+			mode = State.DRAW_PENCIL;
 		}else if(target.id == "eracer"){
-			mode = State.MODE_DRAW_ERACER;
+			mode = State.DRAW_ERACER;
 		}else if(target.id == "dropper"){
-			mode = State.MODE_EDIT_DROPPER;
+			mode = State.EDIT_DROPPER;
+		}else if(target.id == "selectRange"){
+			mode = State.SELECT_RANGE;
 		}
-		this._state.setMode((this._state.currentMode== mode) ? null : mode);
+		this._state.setCurrent((this._state.current== mode) ? null : mode);
 		this.dispatchEvent(new createjs.Event(this.EVENT_CLICK_EDIT_BTN, true, true));
 	}
 	//=============================================

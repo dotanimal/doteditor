@@ -18,6 +18,7 @@ export class Workspace extends createjs.Stage {
 	//=============================================
 	//----------public----------
 	public readonly EVENT_CHANGE_WS: string = "event change workspace";
+	public readonly EVENT_GET_HEX_COLOR_CODE: string = "event get hex color code";
 	//----------private---------
 	private _state: State;
 
@@ -40,7 +41,10 @@ export class Workspace extends createjs.Stage {
 	private _pixcelArtDataHistoryList: Array<PixcelArtData>;
 	private _histroyId: number;
 
+	private _pad:PixcelArtData;
 	//private _hexColorCode: string;
+	
+	private _extractHexColor:string;
 
 	private _isAbleDraw :boolean;
 	//----------protected-------
@@ -67,7 +71,7 @@ export class Workspace extends createjs.Stage {
 		this._cursroLayer = new CursorLayer(state);
 		this._addMouseEventListener();
 		
-		this.isAbleDraw = true;
+		//this.isAbleDraw = true;
 	}
 	//=============================================
 	// event handler
@@ -129,7 +133,8 @@ export class Workspace extends createjs.Stage {
 			//エリア外なら処理をしない
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 			//お絵かきモードでないなら処理しない
-			if(!this.isAbleDraw){return false;}
+			//if(!this.isAbleDraw){return false;}
+			if(this._state.currentCategory != State.CATEGORY_DRAW){return false;}
 
 			this._isMouseDown = true;
 			let layer: DrawLayer = this._getActiveDrawLayer();
@@ -141,12 +146,17 @@ export class Workspace extends createjs.Stage {
 		this.addEventListener("stagemouseup", (e: MouseEvent) => {
 			//エリア外なら処理をしない
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
+
+			if(this._state.current == State.EDIT_DROPPER){
+				this._getHexColorCode(this.mouseX,this.mouseY);
+			}
+
 			//お絵かきモードでないなら処理しない
-			if(!this.isAbleDraw){return false;}
-			//if(this._state.currentModeCategory != State.MODE_CATEGORY_DRAW){return false;}
+			//if(!this.isAbleDraw){return false;}
+			if(this._state.currentCategory != State.CATEGORY_DRAW){return false;}
 			
 			if (this._isMouseDown) {
-				if (this._state.currentMode== State.MODE_DRAW_PENCIL || this._state.currentMode== State.MODE_DRAW_ERACER) {
+				if (this._state.current== State.DRAW_PENCIL || this._state.current== State.DRAW_ERACER) {
 					this._saveHistory();
 					this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
 				}
@@ -156,15 +166,17 @@ export class Workspace extends createjs.Stage {
 		this.addEventListener("stagemousemove", (e: MouseEvent) => {
 			//エリア外なら処理をしない
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
-			//お絵かきモードでないなら処理しない
-			if(!this.isAbleDraw){return false;}
-			//if(this._state.currentModeCategory != State.MODE_CATEGORY_DRAW){return false;}
 
 			this._cursroLayer.move(this.mouseX, this.mouseY);
-			if (this._isMouseDown) {
-				let layer: DrawLayer = this._getActiveDrawLayer();
-				if (layer) {
-					layer.drawDot(this.mouseX,this.mouseY);
+
+			//お絵かきモードでないなら処理しない
+			//if(!this.isAbleDraw){return false;}
+			if(this._state.currentCategory == State.CATEGORY_DRAW){
+				if (this._isMouseDown) {
+					let layer: DrawLayer = this._getActiveDrawLayer();
+					if (layer) {
+						layer.drawDot(this.mouseX,this.mouseY);
+					}
 				}
 			}
 			this.update();
@@ -199,11 +211,42 @@ export class Workspace extends createjs.Stage {
 		console.log("history", "save", this._histroyId);
 		//TODO　ログリストとログIDの値からUNDO/REDOボタンの有効・無効を切り替えられるようにしたい
 	}
+	private _getHexColorCode = (mx:number, my:number) =>{
+		let result:string;
+		let xx:number = Math.floor((mx - this._areaLeftX) / this._dotSize);
+		let yy:number = Math.floor((my - this._areaTopY) / this._dotSize);
+		let padJsonObj :any = this._pad.getJsonObj();
+		let dl:DrawLayer = this._getActiveDrawLayer();
+		let dlName:string = dl.name;
+		let layerJsonObj :any = padJsonObj.dot_json[dlName];
+		let minX:number = 0;
+		let minY:number = 0;
+		if(layerJsonObj.pos){
+			minX = layerJsonObj.pos[0];
+			minY = layerJsonObj.pos[1];
+		}
+		let w:number = layerJsonObj.size[0];
+		let h:number = layerJsonObj.size[1];
+		let maxX:number = minX + w - 1;
+		let maxY:number = minY + h - 1;
+		if(minX <= xx && xx <= maxX && minY <= yy && yy <= maxY){		
+			let dx :number = xx-minX;
+			let dy :number = yy-minY;
+			let count :number = dx + dy * h;
+			let hexIndex = layerJsonObj.data[count];
+			result = layerJsonObj.color[hexIndex];
+			if(result){
+				this._extractHexColor = result;
+				this.dispatchEvent(new createjs.Event(this.EVENT_GET_HEX_COLOR_CODE, true, true));
+			}
+		}
+	}
 	//=============================================
 	// public
 	//=============================================
 	public setPixcelArtData = (pad: PixcelArtData, isSaveLog:boolean=true) => {
 		//console.log("reset", "workspace");
+		this._pad = pad;
 		this.removeAllChildren();
 		this._drawLayerList = [];
 		
@@ -256,9 +299,9 @@ export class Workspace extends createjs.Stage {
 			//}
 		}
 		result.layoutInit();
+		this._pad = result;
 		return result;
 	}
-
 	public undo = () => {
 		if (0 < this._histroyId) {
 			this._histroyId--;
@@ -300,13 +343,16 @@ export class Workspace extends createjs.Stage {
 	get hasNextLog(): boolean {
 		return (this._histroyId < this._pixcelArtDataHistoryList.length - 1);
 	}
-	get isAbleDraw(): boolean{
-		return this._isAbleDraw;
+	
+	get extractHexColor(): string{
+		return this._extractHexColor;
 	}
+	/*
 	set isAbleDraw(value: boolean) {
 		console.log("[Workspace]isAbleDraw\t", value)
 		this._cursroLayer.visible = value;
 		this._isAbleDraw = value;
 		this.update();
 	}
+	*/
 }

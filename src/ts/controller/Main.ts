@@ -82,10 +82,10 @@ export class Main {
 		this._eb.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
 		
-		ws.isAbleDraw = false;
-		if(this._state.currentMode== State.MODE_HISTORY_UNDO){
+		//ws.isAbleDraw = false;
+		if(this._state.current== State.HISTORY_UNDO){
 			ws.undo();
-		}else if(this._state.currentMode== State.MODE_HISTORY_REDO){
+		}else if(this._state.current== State.HISTORY_REDO){
 			ws.redo();
 		}
 	}
@@ -93,7 +93,7 @@ export class Main {
 	private _onClickEditBtnHandler = (e: Event) => {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace = this._getActiveWorkSpace();
-		ws.isAbleDraw = true;
+		//ws.isAbleDraw = true;
 	}
 	//----------ColorPalette----------
 
@@ -108,10 +108,10 @@ export class Main {
 	//----------FileDropdownMenu----------
 	//ドロップダウンメニューが開いた
 	private _onOpenFileDropdownMenuHandler = (e: Event) => {
-		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.currentMode);
+		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this._eb.reset();
 		let ws: Workspace = this._getActiveWorkSpace();
-		ws.isAbleDraw = false;
+		//ws.isAbleDraw = false;
 		//this._fdm.reset();
 	}
 	//ドロップダウンメニューが閉じた
@@ -119,25 +119,25 @@ export class Main {
 	}
 	//ドロップダウンメニューの中のメニューを選択した
 	private _onSelectMenuFileDropdownMenuHandler = (e: Event) => {
-		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.currentMode);
+		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace;
 		let pad: PixcelArtData;
-		if(this._state.currentMode== State.MODE_FILE_NEW){
+		if(this._state.current== State.FILE_NEW){
 			//新規作成
 			ws = this._getActiveWorkSpace();
 			pad = new PixcelArtData(true);
 			ws.setPixcelArtData(pad);
-		}else if(this._state.currentMode== State.MODE_FILE_LOAD_JSON_FROM_LOCAL){
+		}else if(this._state.current== State.FILE_LOAD_JSON_FROM_LOCAL){
 			//ローカルからJSONファイルを読み込み
 			ws = this._getActiveWorkSpace();
 			pad = ws.getPixcelArtData();
 			this._lc.loadJson();
-		}else if(this._state.currentMode== State.MODE_FILE_SAVE_JSON_TO_LOCAL){
+		}else if(this._state.current== State.FILE_SAVE_JSON_TO_LOCAL){
 			//ローカルにJSONファイルを保存
 			ws = this._getActiveWorkSpace();
 			pad = ws.getPixcelArtData();
 			this._lc.saveJson(pad);
-		}else if(this._state.currentMode== State.MODE_FILE_SAVE_SVG_TO_LOCAL){
+		}else if(this._state.current== State.FILE_SAVE_SVG_TO_LOCAL){
 			//ローカルにSVGファイルを保存
 			ws = this._getActiveWorkSpace();
 			pad = ws.getPixcelArtData();
@@ -147,7 +147,7 @@ export class Main {
 	//----------Workspace----------
 	//ワークスペースの変更
 	private _onWorkspaceChangeHandler = (e: Event) => {
-		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.currentMode);
+		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace = <Workspace>e.target;
 		if (ws.hasPrevLog) {
 			this._hb.undoBtnDisactive(false);
@@ -164,6 +164,10 @@ export class Main {
 		//ローカルストレージにデータを保存
 		this._lsc.save(pad);
 
+	}
+	private _onGetHexColorCodeHander = (e: Event) => {
+		let ws: Workspace = <Workspace>e.target;
+		this._cp.setHexColor(ws.extractHexColor);
 	}
 	//----------LocalConnector----------
 	//JSONファイルの読み込み完了
@@ -201,7 +205,8 @@ export class Main {
 			let ws: Workspace = new Workspace(this._state, canvasId);
 			this._wsList[canvasId] = ws;
 			this._activeWsId = canvasId;
-			ws.addEventListener(ws.EVENT_CHANGE_WS, this._onWorkspaceChangeHandler)
+			ws.addEventListener(ws.EVENT_CHANGE_WS, this._onWorkspaceChangeHandler);
+			ws.addEventListener(ws.EVENT_GET_HEX_COLOR_CODE, this._onGetHexColorCodeHander);
 		} else {
 			alert("この名前のワークスペースはすでに登録されています");
 		}
