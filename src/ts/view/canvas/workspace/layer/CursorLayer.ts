@@ -28,8 +28,8 @@ export class CursorLayer extends Layer {
 	//=============================================
 	// public
 	//=============================================
-	public override setStageSize = (stageWidth:number, stageHeight:number, dotSize:number, areaTopY:number, areaRightX:number,areaBottomY:number, areaLeftX:number) => {
-		this._superSetStageSize(stageWidth, stageHeight, dotSize, areaTopY, areaRightX, areaBottomY, areaLeftX);
+	public override setStageSize = (stageWidth:number, stageHeight:number, dotSize:number, drawAreaLeft:number, drawAreaTop:number, drawAreaRight:number, drawAreaBottom:number) => {
+		this._superSetStageSize(stageWidth, stageHeight, dotSize, drawAreaLeft, drawAreaTop, drawAreaRight, drawAreaBottom);
 		//console.log("[DrawLayer] change size");
 	}
 	public move = (mx: number, my: number) => {
@@ -37,8 +37,8 @@ export class CursorLayer extends Layer {
 		let length : number = this._dotSize * 0.3;
 		let offset : number = 1;
 
-		let xx = Math.floor((mx - this._areaLeftX) / this._dotSize) * this._dotSize + this._areaLeftX;
-		let yy = Math.floor((my - this._areaTopY) / this._dotSize) * this._dotSize + this._areaTopY;
+		let xx = Math.floor((mx - this._drawAreaLeft) / this._dotSize) * this._dotSize + this._drawAreaLeft;
+		let yy = Math.floor((my - this._drawAreaTop) / this._dotSize) * this._dotSize + this._drawAreaTop;
 
 		this.graphics.clear();
 

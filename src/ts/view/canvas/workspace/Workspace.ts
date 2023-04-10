@@ -18,14 +18,14 @@ export class Workspace extends createjs.Stage {
 	//=============================================
 	//----------public----------
 	public readonly EVENT_CHANGE_WS: string = "event change workspace";
-	public readonly EVENT_GET_HEX_COLOR_CODE: string = "event get hex color code";
+	public readonly EVENT_EXTRACT_HEX_COLOR: string = "event extract hex color";
 	//----------private---------
 	private _state: State;
 
-	private _areaTopY : number;
-	private _areaRightX : number;
-	private _areaBottomY : number;
-	private _areaLeftX : number;
+	private _drawAreaTop : number;
+	private _drawAreaRight : number;
+	private _drawAreaBottom : number;
+	private _drawAreaLeft : number;
 	
 	private _dotSize: number;
 	private _stageMargin:number;
@@ -92,16 +92,16 @@ export class Workspace extends createjs.Stage {
 		let top :number = Math.floor(remainderY / 2) + this._stageMargin;
 		let bottom :number = stageH - (remainderY - (top - this._stageMargin)) - this._stageMargin;
 
-		this._bgLayer.setStageSize(stageW, stageH, this._dotSize, top, right, bottom, left);
+		this._bgLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
 		for(let drawLayer of this._drawLayerList) {
-			drawLayer.setStageSize(stageW, stageH, this._dotSize, top, right, bottom, left);
+			drawLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
 		}
-		this._cursroLayer.setStageSize(stageW, stageH, this._dotSize, top, right, bottom, left);
+		this._cursroLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
 
-		this._areaTopY = top;
-		this._areaRightX = right;
-		this._areaBottomY = bottom;
-		this._areaLeftX = left;
+		this._drawAreaTop = top;
+		this._drawAreaRight = right;
+		this._drawAreaBottom = bottom;
+		this._drawAreaLeft = left;
 
 		this.update();
 	}
@@ -148,7 +148,15 @@ export class Workspace extends createjs.Stage {
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 
 			if(this._state.current == State.EDIT_DROPPER){
-				//this._getHexColorCode(this.mouseX,this.mouseY);
+				let layer: DrawLayer = this._getActiveDrawLayer();
+				if (layer) {
+					let hexColor:string = layer.getDotHexColor(this.mouseX,this.mouseY);
+					//console.log(hexColor);
+					if(hexColor && this._hexColor != hexColor){
+						this._hexColor = hexColor;
+						this.dispatchEvent(new createjs.Event(this.EVENT_EXTRACT_HEX_COLOR, true, true));
+					}
+				}
 			}
 
 			//お絵かきモードでないなら処理しない
@@ -190,7 +198,7 @@ export class Workspace extends createjs.Stage {
 
 	}
 	private _areaHitTest = (mx:number, my:number) : boolean => {
-		if(this._areaLeftX < mx && mx < this._areaRightX && this._areaTopY < my && my < this._areaBottomY){
+		if(this._drawAreaLeft < mx && mx < this._drawAreaRight && this._drawAreaTop < my && my < this._drawAreaBottom){
 			return true;
 		}else{
 			return false;
@@ -214,8 +222,8 @@ export class Workspace extends createjs.Stage {
 	/*
 	private _getHexColorCode = (mx:number, my:number) =>{
 		let result:string;
-		let xx:number = Math.floor((mx - this._areaLeftX) / this._dotSize);
-		let yy:number = Math.floor((my - this._areaTopY) / this._dotSize);
+		let xx:number = Math.floor((mx - this._drawAreaLeft) / this._dotSize);
+		let yy:number = Math.floor((my - this._drawAreaTop) / this._dotSize);
 		let padJsonObj :any = this._pad.getJsonObj();
 		let dl:DrawLayer = this._getActiveDrawLayer();
 		let dlName:string = dl.name;

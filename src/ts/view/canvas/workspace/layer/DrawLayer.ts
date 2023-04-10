@@ -34,8 +34,8 @@ export class DrawLayer extends Layer {
 	/*
 	private _pencil = (mx: number, my: number, color: string) => {
 		this.graphics.clear();
-		let xx = Math.floor((mx - this._areaLeftX) / this._dotSize) * this._dotSize + this._areaLeftX;
-		let yy = Math.floor((my - this._areaTopY) / this._dotSize) * this._dotSize + this._areaTopY;
+		let xx = Math.floor((mx - this._drawAreaLeft) / this._dotSize) * this._dotSize + this._drawAreaLeft;
+		let yy = Math.floor((my - this._drawAreaTop) / this._dotSize) * this._dotSize + this._drawAreaTop;
 		this.graphics.beginFill(color);
 		this.graphics.drawRect(xx, yy, this._dotSize, this._dotSize);
 		//描画した順に上書き（追記）
@@ -43,8 +43,8 @@ export class DrawLayer extends Layer {
 	}
 	private _eraser = (mx: number, my: number) => {
 		this.graphics.clear();
-		let xx :number = Math.floor((mx - this._areaLeftX) / this._dotSize) * this._dotSize + this._areaLeftX;
-		let yy :number = Math.floor((my - this._areaTopY) / this._dotSize) * this._dotSize + this._areaTopY;
+		let xx :number = Math.floor((mx - this._drawAreaLeft) / this._dotSize) * this._dotSize + this._drawAreaLeft;
+		let yy :number = Math.floor((my - this._drawAreaTop) / this._dotSize) * this._dotSize + this._drawAreaTop;
 		this.graphics.beginFill('#' + "000000");
 		this.graphics.drawRect(xx, yy, this._dotSize, this._dotSize);
 		//元からある図形に対して重なっていない部分のみ描画（消しゴム）
@@ -54,14 +54,14 @@ export class DrawLayer extends Layer {
 	//=============================================
 	// public
 	//=============================================
-	public override setStageSize = (stageWidth:number, stageHeight:number, dotSize:number, areaTopY:number, areaRightX:number, areaBottomY:number, areaLeftX:number) => {
-		this._superSetStageSize(stageWidth, stageHeight, dotSize, areaTopY, areaRightX, areaBottomY, areaLeftX);
+	public override setStageSize = (stageWidth:number, stageHeight:number, dotSize:number, drawAreaLeft:number, drawAreaTop:number, drawAreaRight:number, drawAreaBottom:number) => {
+		this._superSetStageSize(stageWidth, stageHeight, dotSize, drawAreaLeft, drawAreaTop, drawAreaRight, drawAreaBottom);
 		//console.log("[DrawLayer] change size");
 	}
 	public drawDot = (mx: number, my: number, hexColor:string) => {
 		this.graphics.clear();
-		let xx = Math.floor((mx - this._areaLeftX) / this._dotSize) * this._dotSize + this._areaLeftX;
-		let yy = Math.floor((my - this._areaTopY) / this._dotSize) * this._dotSize + this._areaTopY;
+		let xx = Math.floor((mx - this._drawAreaLeft) / this._dotSize) * this._dotSize + this._drawAreaLeft;
+		let yy = Math.floor((my - this._drawAreaTop) / this._dotSize) * this._dotSize + this._drawAreaTop;
 		this.graphics.beginFill('#' + hexColor);
 		this.graphics.drawRect(xx, yy, this._dotSize, this._dotSize);
 		if(this._state.current== State.DRAW_PENCIL){
@@ -72,10 +72,32 @@ export class DrawLayer extends Layer {
 			this.updateCache("destination-out");
 		}
 	}
-	
+	public getDotHexColor = (mx: number, my: number) : string => {
+		let dld :DrawLayerData = this.getRangeDrawLayerData(mx, my, mx+this._dotSize, my+this._dotSize);
+		let jsonObj:any = dld.getJsonObj();
+		if(jsonObj.color){
+			if(1<jsonObj.color.length){
+				return jsonObj.color[1];
+			}
+		}
+	}
+	private getRangeDrawLayerData = (targetAreaLeft:number, targetAreaTop:number, targetAreaRight:number, targetAreaBottom:number):DrawLayerData =>{
+		let cc: HTMLCanvasElement = <HTMLCanvasElement>this.cacheCanvas;
+		let ctx: CanvasRenderingContext2D = cc.getContext("2d");
+		let left:number = targetAreaLeft - (targetAreaLeft-this._drawAreaLeft) % this._dotSize;
+		let top:number = targetAreaTop - (targetAreaTop-this._drawAreaTop) % this._dotSize;
+		let right:number =  targetAreaRight - (targetAreaRight-this._drawAreaRight) % this._dotSize;
+		let bottom:number = targetAreaBottom - (targetAreaBottom-this._drawAreaBottom) % this._dotSize;
+		let c2ld: Canvas2DrawLayerData = new Canvas2DrawLayerData(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, false, left,top,right,bottom);
+		let dld :DrawLayerData = c2ld.getDrawLayerData(1);
+		//let jsonObj:any = dld.getJsonObj();
+		return dld;
+	}
+	/*
 	public setHexColorCode = (value : string) => {
 		this._hexColorCode =  value;
 	}
+	*/
 	public setDrawLayerData = (dld:DrawLayerData) => {
 		let xCount :number = dld.width;
 		let yCount :number = dld.height;
@@ -94,18 +116,18 @@ export class DrawLayer extends Layer {
 					let yy = Math.floor(i / xCount) + baseY;
 					hexColorCode = hexColorCodeList[colorId];
 					this.graphics.beginFill('#' + hexColorCode);
-					this.graphics.drawRect(xx * this._dotSize + this._areaLeftX, yy * this._dotSize + this._areaTopY, this._dotSize, this._dotSize);
+					this.graphics.drawRect(xx * this._dotSize + this._drawAreaLeft, yy * this._dotSize + this._drawAreaTop, this._dotSize, this._dotSize);
 				}
 			}
 		}
 		this.updateCache("source-over");
 	}
 	public getDrawLayerData = (): DrawLayerData => {
-		var cc: HTMLCanvasElement = <HTMLCanvasElement>this.cacheCanvas;
-		var ctx: CanvasRenderingContext2D = cc.getContext("2d");
+		let cc: HTMLCanvasElement = <HTMLCanvasElement>this.cacheCanvas;
+		let ctx: CanvasRenderingContext2D = cc.getContext("2d");
 
-		let c2ld: Canvas2DrawLayerData = new Canvas2DrawLayerData(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._areaTopY, this._areaRightX, this._areaBottomY, this._areaLeftX);
-		return c2ld.getLayerData(1);
+		let c2ld: Canvas2DrawLayerData = new Canvas2DrawLayerData(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._drawAreaLeft, this._drawAreaTop, this._drawAreaRight, this._drawAreaBottom);
+		return c2ld.getDrawLayerData(1);
 	}
 	//=============================================
 	// getter/setter

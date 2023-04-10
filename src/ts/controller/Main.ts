@@ -68,6 +68,9 @@ export class Main {
 			pad = new PixcelArtData(true);
 		}
 		this._setPixcelArtData2WorkSpace(pad);
+		//カラーパレットに色を反映
+		//let colorList: Array<string> = pad.getHexColorCodeList();
+		//this._cp.setHexColorList(colorList);
 
 		//this._lc.addEventListener(this._lc.EVENT_SAVE_JSON_COMPLETE, this._onSaveJsonToLocalCompleteHandler);
 		//カラーパレットの初期化　イベントリスナーを登録したあとに実行しないと色々うごかないのでここで実行
@@ -161,7 +164,7 @@ export class Main {
 		this._lsc.save(pad);
 
 	}
-	private _onGetHexColorCodeHander = (e: Event) => {
+	private _onGetHexColorHander = (e: Event) => {
 		let ws: Workspace = <Workspace>e.target;
 		this._cp.hexColor =  ws.hexColor;
 	}
@@ -202,11 +205,26 @@ export class Main {
 			this._wsList[canvasId] = ws;
 			this._activeWsId = canvasId;
 			ws.addEventListener(ws.EVENT_CHANGE_WS, this._onWorkspaceChangeHandler);
-			ws.addEventListener(ws.EVENT_GET_HEX_COLOR_CODE, this._onGetHexColorCodeHander);
+			ws.addEventListener(ws.EVENT_EXTRACT_HEX_COLOR, this._onGetHexColorHander);
 		} else {
 			alert("この名前のワークスペースはすでに登録されています");
 		}
 	}
+	/*WSを削除するときに使う（未完成）
+	private _removeWorkSpace = (canvasId: string) => {
+		let isAdded: boolean = false;
+		let ws: Workspace = this._wsList[canvasId];
+		if(ws){
+			//_wslistから取り除いて、のこりのWSから_activeWsIdを設定する必要がある
+			this._wsList; ←
+			this._activeWsId; ←
+			ws.removeEventListener(ws.EVENT_CHANGE_WS, this._onWorkspaceChangeHandler);
+			ws.removeEventListener(ws.EVENT_EXTRACT_HEX_COLOR, this._onGetHexColorHander);
+		}else{
+			alert("この名前のワークスペースはありません");
+		}
+	}
+	*/
 	private _getActiveWorkSpace = () => {
 		return this._wsList[this._activeWsId];
 	}
@@ -220,8 +238,8 @@ export class Main {
 		ws.setPixcelArtData(pad);
 		
 		//カラーパレットに色を反映
-		let colorList: Array<string> = pad.getHexColorCodeList();
-		this._cp.setHexColorList(colorList);
+		//let colorList: Array<string> = pad.getHexColorCodeList();
+		//this._cp.setHexColorList(colorList);
 	}
 	//=============================================
 	// public

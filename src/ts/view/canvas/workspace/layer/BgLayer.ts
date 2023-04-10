@@ -31,8 +31,8 @@ export class BgLayer extends Layer {
 		let color: string;
 
 		//格子柄
-		for (var yy = this._areaTopY; yy < this._areaBottomY; yy += this._dotSize / 2) {
-			for (var xx = this._areaLeftX; xx < this._areaRightX; xx += this._dotSize / 2) {
+		for (var yy = this._drawAreaTop; yy < this._drawAreaBottom; yy += this._dotSize / 2) {
+			for (var xx = this._drawAreaLeft; xx < this._drawAreaRight; xx += this._dotSize / 2) {
 				if (yy % this._dotSize == xx % this._dotSize) {
 					color = "#FFFFFF";
 				} else {
@@ -47,41 +47,41 @@ export class BgLayer extends Layer {
 		
 		//薄い線
 		color = "#dddddd";
-		for (var xx = this._areaLeftX; xx <= this._areaRightX; xx += this._dotSize) {
+		for (var xx = this._drawAreaLeft; xx <= this._drawAreaRight; xx += this._dotSize) {
 			if (xx % (this._dotSize * 5) != 0) {
 				this.graphics.beginStroke(color);
 				this.graphics.setStrokeStyle(1);
-				this.graphics.moveTo(xx + 0.5, this._areaTopY);
-				this.graphics.lineTo(xx + 0.5, this._areaBottomY);
+				this.graphics.moveTo(xx + 0.5, this._drawAreaTop);
+				this.graphics.lineTo(xx + 0.5, this._drawAreaBottom);
 				this.graphics.endStroke();
 			}
 		}
-		for (var yy = this._areaTopY; yy <= this._areaBottomY; yy += this._dotSize) {
+		for (var yy = this._drawAreaTop; yy <= this._drawAreaBottom; yy += this._dotSize) {
 			if (yy % (this._dotSize * 5) != 0) {
 				this.graphics.beginStroke(color);
 				this.graphics.setStrokeStyle(1);
-				this.graphics.moveTo(this._areaLeftX, yy + 0.5);
-				this.graphics.lineTo(this._areaRightX, yy + 0.5);
+				this.graphics.moveTo(this._drawAreaLeft, yy + 0.5);
+				this.graphics.lineTo(this._drawAreaRight, yy + 0.5);
 				this.graphics.endStroke();
 			}
 		}
 		//濃い線
 		color = "#bbbbbb";
-		for (var xx = this._areaLeftX; xx <= this._areaRightX; xx += this._dotSize) {
+		for (var xx = this._drawAreaLeft; xx <= this._drawAreaRight; xx += this._dotSize) {
 			if (xx % (this._dotSize * 5) == 0) {
 				this.graphics.beginStroke(color);
 				this.graphics.setStrokeStyle(1);
-				this.graphics.moveTo(xx + 0.5, this._areaTopY);
-				this.graphics.lineTo(xx + 0.5, this._areaBottomY);
+				this.graphics.moveTo(xx + 0.5, this._drawAreaTop);
+				this.graphics.lineTo(xx + 0.5, this._drawAreaBottom);
 				this.graphics.endStroke();
 			}
 		}
-		for (var yy = this._areaTopY; yy <= this._areaBottomY; yy += this._dotSize) {
+		for (var yy = this._drawAreaTop; yy <= this._drawAreaBottom; yy += this._dotSize) {
 			if (yy % (this._dotSize * 5) == 0) {
 				this.graphics.beginStroke(color);
 				this.graphics.setStrokeStyle(1);
-				this.graphics.moveTo(this._areaLeftX, yy + 0.5);
-				this.graphics.lineTo(this._areaRightX, yy + 0.5);
+				this.graphics.moveTo(this._drawAreaLeft, yy + 0.5);
+				this.graphics.lineTo(this._drawAreaRight, yy + 0.5);
 				this.graphics.endStroke();
 			}
 		}
@@ -92,8 +92,8 @@ export class BgLayer extends Layer {
 	//=============================================
 	// public
 	//=============================================
-	public override setStageSize = (stageWidth:number, stageHeight:number, dotSize:number, areaTopY:number, areaRightX:number,areaBottomY:number, areaLeftX:number) => {
-		this._superSetStageSize(stageWidth, stageHeight, dotSize, areaTopY, areaRightX, areaBottomY, areaLeftX);
+	public override setStageSize = (stageWidth:number, stageHeight:number, dotSize:number, drawAreaLeft:number, drawAreaTop:number, drawAreaRight:number, drawAreaBottom:number) => {
+		this._superSetStageSize(stageWidth, stageHeight, dotSize, drawAreaLeft, drawAreaTop, drawAreaRight, drawAreaBottom);
 		//console.log("[BgLayer] change size");
 
 		this._drawGraphics();
