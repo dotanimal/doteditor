@@ -3,6 +3,7 @@ import { DrawLayerData } from "../../../model/data/DrawLayerData";
 import { PixcelArtData } from "../../../model/data/PixcelArtData";
 import { BgLayer } from "./layer/BgLayer";
 import { CursorLayer } from "./layer/CursorLayer";
+import { DragLayer } from "./layer/DragLayer";
 import { DrawLayer } from "./layer/DrawLayer";
 import { SelectRangeLayer } from "./layer/SelectRangeLayer";
 
@@ -36,6 +37,8 @@ export class Workspace extends createjs.Stage {
 	private _bgLayer: BgLayer;
 	private _cursroLayer: CursorLayer;
 	private _selectRangeLayer:SelectRangeLayer;
+	private _dragLayer:DragLayer;
+
 	private _drawLayerList: Array<DrawLayer>;
 
 	private _activeDrawLayerId: number;
@@ -66,6 +69,8 @@ export class Workspace extends createjs.Stage {
 		if (createjs.Touch.isSupported() == true) {
 			createjs.Touch.enable(this);
 		}
+		//マウスオーバーを有効にする
+		this.enableMouseOver();
 
 		this._pixcelArtDataHistoryList = [];
 		this._drawLayerList = [];
@@ -73,7 +78,16 @@ export class Workspace extends createjs.Stage {
 		this._bgLayer = new BgLayer(state);
 		this._cursroLayer = new CursorLayer(state);
 		this._selectRangeLayer = new SelectRangeLayer(state);
+		this._dragLayer = new DragLayer(state, "");
+		this._dragLayer.setStageMargin(this._stageMargin);
+
 		this._addMouseEventListener();
+		this._dragLayer.addEventListener(DragLayer.EVENT_DRAG_MOVE,(e:Event) => {
+			this._selectRangeLayer.move(
+				this._dragLayer.x,// + this._stageMargin,
+				this._dragLayer.y// + this._stageMargin
+			)
+		})
 		
 		//this.isAbleDraw = true;
 	}
@@ -102,6 +116,7 @@ export class Workspace extends createjs.Stage {
 		}
 		this._cursroLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
 		this._selectRangeLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
+		this._dragLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
 
 		this._drawAreaTop = top;
 		this._drawAreaRight = right;
@@ -162,7 +177,10 @@ export class Workspace extends createjs.Stage {
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 
 			//範囲選択
-			this._selectRangeLayer.endSelect(this.mouseX, this.mouseY, true);
+			//if(this._state.currentCategory == State.CATEGORY_SELECT){
+				this._selectRangeLayer.endSelect(this.mouseX, this.mouseY, true);
+				//this._dragLayerInit();
+			//}
 
 			//スポイトツール
 			if(this._state.current == State.EDIT_DROPPER){
@@ -241,6 +259,22 @@ export class Workspace extends createjs.Stage {
 		console.log("history", "save", this._histroyId);
 		//TODO　ログリストとログIDの値からUNDO/REDOボタンの有効・無効を切り替えられるようにしたい
 	}
+	private _copyDLDFromDraw2Drag = () => {
+		let layer: DrawLayer = this._getActiveDrawLayer();
+
+		if (layer) {
+			let left:number = this._selectRangeLayer.selectBeginX;
+			let top:number = this._selectRangeLayer.selectBeginY;
+			let right:number = this._selectRangeLayer.selectEndX;
+			let bottom:number = this._selectRangeLayer.selectEndY;
+
+			let dld :DrawLayerData = layer.getRectDrawLayerData(left, top, right, bottom);
+			layer.drawRect(left, top, right, bottom,"FF0000", true);
+			this._dragLayer.setDrawLayerData(dld);
+			this._dragLayer.x = left - this._drawAreaLeft;
+			this._dragLayer.y = top - this._drawAreaTop;
+		}
+	}
 	//=============================================
 	// public
 	//=============================================
@@ -263,6 +297,8 @@ export class Workspace extends createjs.Stage {
 		for (var key in drawLayerDataList) {
 			this._addDrawLayer(key);
 		}
+		//ドラッグレイヤーをAddChild
+		this.addChild(this._dragLayer);
 		//選択範囲表示用のレイヤーをAddChild
 		this.addChild(this._selectRangeLayer);
 		//カーソルレイヤーをAddChild
@@ -331,12 +367,31 @@ export class Workspace extends createjs.Stage {
 		}
 	}
 	public changedState = () =>{
+		//console.log(this._state.currentCategory,this._state.current);
 		if(this._state.currentCategory == State.CATEGORY_SELECT){
-
 			this._selectRangeLayer.visible = true;
+			if(this._state.current == State.SELECT_DRAG){
+				this._dragLayer.init();
+				this._copyDLDFromDraw2Drag();
+				this._dragLayer.visible = true;
+				this._cursroLayer.visible = false;
+			}else if(this._state.current == State.SELECT_DRAG_END){
+				let layer: DrawLayer = this._getActiveDrawLayer();
+				if (layer) {
+					let dld : DrawLayerData = this._dragLayer.getDrawLayerData();
+					layer.setDrawLayerData(dld);
+					this._saveHistory();
+					this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
+				}
+				this._dragLayer.init();
+				this._selectRangeLayer.init();
+			}
 		}else{
+			this._cursroLayer.visible = true;
 			this._selectRangeLayer.visible = false;
-			this._selectRangeLayer.resetSelect();
+			this._selectRangeLayer.init();
+			this._dragLayer.visible = false;
+			//this._selectRangeLayer.resetSelect();
 		}
 		this.update();
 	} 

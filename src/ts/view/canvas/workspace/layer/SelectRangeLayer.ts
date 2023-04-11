@@ -37,13 +37,25 @@ export class SelectRangeLayer extends Layer {
 	//=============================================
 	// public
 	//=============================================
+	public init = () =>{
+		this.x = 0;
+		this.y = 0;
+		this.visible = false;
+		this._isLockSelect = false;
+		this._selectBeginX = undefined;
+		this._selectBeginY = undefined;
+		this._selectEndX = undefined;
+		this._selectEndY = undefined;
+		this.graphics.clear();
+		this.updateCache();
+	}
 	public override setStageSize = (stageWidth:number, stageHeight:number, dotSize:number, drawAreaLeft:number, drawAreaTop:number, drawAreaRight:number, drawAreaBottom:number) => {
 		this._superSetStageSize(stageWidth, stageHeight, dotSize, drawAreaLeft, drawAreaTop, drawAreaRight, drawAreaBottom);
 		//console.log("[DrawLayer] change size");
 		this._isLockSelect = false;
 	}
 	public beginSelect = (mx:number, my:number) =>{
-		if(this._state.currentCategory != State.CATEGORY_SELECT){return false;}
+		if(this._state.current != State.SELECT_RANGE){return false;}
 
 		this._selectBeginX = this._adustX(mx);
 		this._selectBeginY  = this._adustY(my);
@@ -51,7 +63,7 @@ export class SelectRangeLayer extends Layer {
 		//this._isShowSelectArea = true;
 	}
 	public endSelect = (mx:number, my:number, isLockSelect:boolean = false) =>{
-		if(this._state.currentCategory != State.CATEGORY_SELECT){return false;}
+		if(this._state.current != State.SELECT_RANGE){return false;}
 		if(this._selectBeginX == undefined || this._selectBeginY == undefined){return false;}
 		if(this._isLockSelect){return false;}
 
@@ -79,7 +91,7 @@ export class SelectRangeLayer extends Layer {
 		this.updateCache();
 		
 	}
-	public resetSelect = () =>{
+	public _resetSelect = () =>{
 		this._selectBeginX = undefined;
 		this._selectBeginY = undefined;
 		this._selectEndX = undefined;
@@ -88,6 +100,10 @@ export class SelectRangeLayer extends Layer {
 		this._isLockSelect = false;
 		this.graphics.clear();
 		this.updateCache();
+	}
+	public move = (xx : number, yy : number) => {
+		this.x = xx - this.selectBeginX + this._drawAreaLeft;
+		this.y = yy - this.selectBeginY + this._drawAreaTop;
 	}
 	//=============================================
 	// getter/setter

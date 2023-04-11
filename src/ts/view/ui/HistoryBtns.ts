@@ -69,6 +69,10 @@ export class HistoryBtns extends createjs.EventDispatcher {
 			this._undoBtn.classList.remove("disabled");
 		}
 	}
+	public changedState = () =>{
+		//let state :string = this._state.current;
+		//let category:string = this._state.currentCategory;
+	}
 	//=============================================
 	// getter/setter
 	//=============================================

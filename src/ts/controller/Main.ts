@@ -82,10 +82,10 @@ export class Main {
 	//----------HistoryBtns----------
 	private _onClickHistoryBtnHandler = (e: Event) => {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
-		this._eb.reset();
-		let ws: Workspace = this._getActiveWorkSpace();
-		ws.changedState();
+		//this._eb.reset();
+		this._changeState();
 		
+		let ws: Workspace = this._getActiveWorkSpace();
 		//ws.isAbleDraw = false;
 		if(this._state.current== State.HISTORY_UNDO){
 			ws.undo();
@@ -96,8 +96,7 @@ export class Main {
 	//----------EditBtns----------
 	private _onClickEditBtnHandler = (e: Event) => {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
-		let ws: Workspace = this._getActiveWorkSpace();
-		ws.changedState();
+		this._changeState();
 		//ws.isAbleDraw = true;
 	}
 	//----------ColorPalette----------
@@ -110,9 +109,8 @@ export class Main {
 	//ドロップダウンメニューが開いた
 	private _onOpenFileDropdownMenuHandler = (e: Event) => {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
-		this._eb.reset();
-		let ws: Workspace = this._getActiveWorkSpace();
-		ws.changedState();
+		//this._eb.reset();
+		this._changeState();
 		//ws.isAbleDraw = false;
 		//this._fdm.reset();
 	}
@@ -243,6 +241,15 @@ export class Main {
 		//カラーパレットに色を反映
 		let colorList: Array<string> = pad.getHexColorCodeList();
 		this._cp.setHexColorList(colorList);
+	}
+	private _changeState = () => {
+		this._eb.changedState();
+		this._hb.changedState();
+		this._fdm.changedState();
+		this._cp.changedState();
+		
+		let ws: Workspace = this._getActiveWorkSpace();
+		ws.changedState();
 	}
 	//=============================================
 	// public

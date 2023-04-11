@@ -8,18 +8,7 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	public readonly EVENT_CLOSE_FILE_DROPDOWN: string = "event close file dropdown";
 	public readonly EVENT_SELECT_MENU_FILE_DROPDOWN: string = "event select menu file dropdown";
 	//----------private---------
-	//private _dropdown: bootstrap.Dropdown;
-
-	private _newMenu:HTMLElement;
-	private _loadMenu:HTMLElement;
-	//private _loadJsonFromLocalLink:HTMLElement;
-	//private _loadJsonFromLocalInput:HTMLInputElement;
-
-	private _saveMenu:HTMLElement;
-
-
-	private _publishMenu:HTMLElement;
-	//private _saveJsonToLocalLink:HTMLElement;
+	private _fddLink:HTMLAnchorElement;
 	
 	private _state: State;
 	private _anchorList: Array<HTMLAnchorElement>;
@@ -33,9 +22,12 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		//----------------------
 		// ドロップダウンメニュー
 		//----------------------
-		let fdd: HTMLElement = <HTMLElement>document.querySelector('#fileDropdown');
+		this._fddLink = <HTMLAnchorElement>document.querySelector('#fileDropdown > a');
+		
+		let fdd:HTMLElement = <HTMLElement>document.querySelector('#fileDropdown');
 		//オープン
 		fdd.addEventListener("show.bs.dropdown", (e: Event) => {
+			this._state.setCurrent(State.FILE_MENU_OPEN);
 			this.dispatchEvent(new createjs.Event(this.EVENT_OPEN_FILE_DROPDOWN, true, true));
 		});
 		//クローズ
@@ -105,6 +97,17 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		//this._saveLink.classList.add("disabled");
 	}
 	*/
+	
+	public changedState = () =>{
+		let state :string = this._state.current;
+		let category:string = this._state.currentCategory;
+		if(state == State.SELECT_RANGE || state == State.SELECT_DRAG){
+			this._fddLink.classList.add("disabled");
+		}else{
+			this._fddLink.classList.remove("disabled");
+		}
+		
+	}
 	//=============================================
 	// getter/setter
 	//=============================================

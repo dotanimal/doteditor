@@ -48,7 +48,7 @@ export class CursorLayer extends Layer {
 		this.graphics.clear();
 
 		//カテゴリがDraw Edit Selectのときは処理を行う
-		if(this._state.currentCategory != State.CATEGORY_DRAW && this._state.currentCategory != State.CATEGORY_EDIT && this._state.currentCategory != State.CATEGORY_SELECT){
+		if(this._state.currentCategory != State.CATEGORY_DRAW && this._state.currentCategory != State.CATEGORY_EDIT && this._state.current != State.SELECT_RANGE){
 			return false;
 		}
 

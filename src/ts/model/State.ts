@@ -14,10 +14,13 @@ export class State {
 	public static readonly EDIT_DROPPER: string = 'edit dropper';
 
 	public static readonly SELECT_RANGE: string = 'select range';
+	public static readonly SELECT_DRAG: string = 'select drag';
+	public static readonly SELECT_DRAG_END: string = 'select drag end';
 
 	public static readonly HISTORY_UNDO: string = 'history undo';
 	public static readonly HISTORY_REDO: string = 'history redo';
 
+	public static readonly FILE_MENU_OPEN: string = 'file menu open';
 	public static readonly FILE_NEW: string = 'file new';
 	public static readonly FILE_LOAD_JSON_FROM_LOCAL: string = 'file load json from local';
 	public static readonly FILE_SAVE_JSON_TO_LOCAL: string = 'file save json to local';
@@ -87,11 +90,9 @@ export class State {
 	get current(): string {
 		return this._current;
 	}
-	/*
 	get prev(): string {
 		return this._prev;
 	}
-	*/
 	get currentCategory(): string {
 		return this._currentCategory;
 	}

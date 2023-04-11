@@ -64,6 +64,14 @@ export class ColorPalette extends createjs.EventDispatcher{
 			}
 		}
 	}
+	private _apply2AllColorPicker = (func:Function) => {
+		let colorPicker: HTMLInputElement;
+		for (var i = 0; i < this._colorPickerList.length; i++) {
+			colorPicker = <HTMLInputElement>this._colorPickerList[i];
+			colorPicker.disabled = true;
+			func(colorPicker);
+		}
+	}
 	//=============================================
 	// public
 	//=============================================
@@ -101,6 +109,23 @@ export class ColorPalette extends createjs.EventDispatcher{
 		this._currentEle.value = "#" + value;
 	}
 	*/
+	public changedState = () =>{
+		let state :string = this._state.current;
+		let category:string = this._state.currentCategory;
+
+		if(state == State.SELECT_RANGE || state == State.SELECT_DRAG){
+			this._apply2AllColorPicker(function(target:HTMLInputElement){
+				target.disabled = true;
+				target.style.opacity = "0.7";
+			});
+		}else{
+			this._apply2AllColorPicker(function(target:HTMLInputElement){
+				target.disabled = false;
+				target.style.opacity = "1";
+			});
+		}
+		
+	}
 	//=============================================
 	// getter/setter
 	//=============================================

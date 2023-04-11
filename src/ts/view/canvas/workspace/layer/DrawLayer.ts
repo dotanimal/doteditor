@@ -41,8 +41,8 @@ export class DrawLayer extends Layer {
 	}
 	public drawDot = (mx: number, my: number, hexColor:string) => {
 		this.graphics.clear();
-		let xx = this._adustX(mx);
-		let yy = this._adustY(my);
+		let xx:number = this._adustX(mx);
+		let yy:number = this._adustY(my);
 		this.graphics.beginFill('#' + hexColor);
 		this.graphics.drawRect(xx, yy, this._dotSize, this._dotSize);
 		if(this._state.current== State.DRAW_PENCIL){
@@ -53,8 +53,24 @@ export class DrawLayer extends Layer {
 			this.updateCache("destination-out");
 		}
 	}
+	public drawRect = (left:number, top:number, right:number, bottom:number, hexColor:string, isDelete: boolean = false) =>{
+		this.graphics.clear();
+		let al:number = this._adustX(left);
+		let at:number = this._adustY(top);
+		let ar:number = this._adustX(right);
+		let ab:number = this._adustY(bottom);
+		this.graphics.beginFill('#' + hexColor);
+		this.graphics.drawRect(al, at, ar-al, ab-at);
+		if(!isDelete){
+			//塗り
+			this.updateCache("source-over");
+		}else{
+			//削除
+			this.updateCache("destination-out");
+		}
+	}
 	public getDotHexColor = (mx: number, my: number) : string => {
-		let dld :DrawLayerData = this.getRangeDrawLayerData(mx, my, mx+this._dotSize, my+this._dotSize);
+		let dld :DrawLayerData = this.getRectDrawLayerData(mx, my, mx+this._dotSize, my+this._dotSize);
 		let jsonObj:any = dld.getJsonObj();
 		if(jsonObj.color){
 			if(1<jsonObj.color.length){
@@ -62,7 +78,7 @@ export class DrawLayer extends Layer {
 			}
 		}
 	}
-	private getRangeDrawLayerData = (targetAreaLeft:number, targetAreaTop:number, targetAreaRight:number, targetAreaBottom:number):DrawLayerData =>{
+	public getRectDrawLayerData = (targetAreaLeft:number, targetAreaTop:number, targetAreaRight:number, targetAreaBottom:number):DrawLayerData =>{
 		let cc: HTMLCanvasElement = <HTMLCanvasElement>this.cacheCanvas;
 		let ctx: CanvasRenderingContext2D = cc.getContext("2d");
 		let left:number = targetAreaLeft - (targetAreaLeft-this._drawAreaLeft) % this._dotSize;
@@ -80,14 +96,13 @@ export class DrawLayer extends Layer {
 	}
 	*/
 	public setDrawLayerData = (dld:DrawLayerData) => {
+		this.graphics.clear();
 		let xCount :number = dld.width;
 		let yCount :number = dld.height;
 		let baseX :number = dld.x;
 		let baseY :number = dld.y;
 		let hexColorCodeList :Array<string>= dld.hexColorCodeList;
 		let dataList :Array<number>= dld.dataList;
-
-		this.graphics.clear();
 		for (var i = 0; i < dataList.length; i++) {
 			let hexColorCode :string = '';
 			let colorId :number = dataList[i];
