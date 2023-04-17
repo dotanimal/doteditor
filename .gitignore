@@ -70,3 +70,4 @@ typings/
 .next
 src/ts/class_temp.ts
 doteditor.code-workspace
+src/ts/model/connector/_WPConnector.ts

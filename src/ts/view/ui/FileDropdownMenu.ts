@@ -42,19 +42,32 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		let newLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileNewMenu');
 
 		//ローカル環境からJSONファイルを読み込む
-		let loadJsonFromLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileLoadMenu');
+		let loadJsonFromLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileLoadJsonFromLocalLink');
 
 		//ローカル環境にJSONファイルを保存
-		let saveJsonToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileSaveMenu');
+		let saveJsonToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileSaveJson2LocalLink');
 
 		//ローカル環境にSVGファイルを書き出し
-		let publishSvgToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown #filePublishMenu a#publishSvgToLocal');
+		let publishSvgToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#publishSvgToLocalLink');
+		
+
+		//WPからリストを読み込む
+		let loadListFromWpLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileLoadListFromWpLink');
+		
+		//WPに上書き保存
+		let update2WpLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileUpdate2WpLink');
+		
+		//WPに新規保存
+		let post2WpLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#filePost2WpLink');
 		
 		this._anchorList = [
 								newLink,
 								loadJsonFromLocalLink,
 								saveJsonToLocalLink,
-								publishSvgToLocalLink
+								publishSvgToLocalLink,
+								loadListFromWpLink,
+								update2WpLink,
+								post2WpLink
 							];
 		for (let anchor of this._anchorList) {
 			anchor.addEventListener('click', this._onClickHandler);
@@ -70,12 +83,18 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		let mode :string;
 		if(target.id == "fileNewMenu"){
 			mode = State.FILE_NEW;
-		}else if(target.id == "fileLoadMenu"){
+		}else if(target.id == "fileLoadJsonFromLocalLink"){
 			mode = State.FILE_LOAD_JSON_FROM_LOCAL;
-		}else if(target.id == "fileSaveMenu"){
+		}else if(target.id == "fileSaveJson2LocalLink"){
 			mode = State.FILE_SAVE_JSON_TO_LOCAL;
-		}else if(target.id == "publishSvgToLocal"){
+		}else if(target.id == "publishSvgToLocalLink"){
 			mode = State.FILE_SAVE_SVG_TO_LOCAL;
+		}else if(target.id == "fileUpdate2WpLink"){
+			mode = State.FILE_UPDATE_TO_WP;
+		}else if(target.id == "filePost2WpLink"){
+			mode = State.FILE_POST_TO_WP;
+		}else if(target.id == "fileLoadListFromWpLink"){
+			mode = State.FILE_LOAD_PAGE_SPLIT_LIST_FROM_WP;
 		}
 
 		this._state.setCurrent(mode);

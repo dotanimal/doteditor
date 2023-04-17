@@ -46,6 +46,7 @@ export class PixcelArtData {
 				this._drawLayerDataList[key] = dld;
 			}
 		}
+		this.layoutInit();
 	}
 	public getJsonObj = (): any => {
 		let obj: any = {};
@@ -121,6 +122,9 @@ export class PixcelArtData {
 	}
 	get title(): string {
 		return this._title;
+	}
+	set title(value: string) {
+		this._title = value;
 	}
 	get drawLayerDataList(): any {
 		return this._drawLayerDataList;

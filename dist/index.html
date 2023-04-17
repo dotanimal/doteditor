@@ -21,17 +21,41 @@
 					<li class="dropend">
 						<a id="fileNewMenu" class="dropdown-item" href="#">新規作成</a>
 					</li>
-					<li class="dropend">
-						<a id="fileLoadMenu" class="dropdown-item" href="#">読み込み</a>
+					<li class="dropend" id="fileLoadMenu">
+						<a class="dropdown-item dropdown-toggle" href="#">読み込み</a>
+						<ul class="dropdown-menu dropdown-menu-dark">
+							<li>
+								<a id="fileLoadJsonFromLocalLink" class="dropdown-item" href="#">PC</a>
+							</li>
+							<li>
+								<a id="fileLoadListFromWpLink" class="dropdown-item" href="#">Wordpress</a>
+							</li>
+						</ul>
 					</li>
-					<li class="dropend">
-						<a id="fileSaveMenu" class="dropdown-item" href="#">保存</a>
+					<li class="dropend" id="fileSaveMenu">
+						<a class="dropdown-item dropdown-toggle" href="#">保存</a>
+						<ul class="dropdown-menu dropdown-menu-dark">
+							<li>
+								<a id="fileSaveJson2LocalLink" class="dropdown-item" href="#">PC</a>
+							</li>
+							<lii class="dropend">
+								<a class="dropdown-item dropdown-toggle" href="#">Wordpress</a>
+								<ul class="dropdown-menu dropdown-menu-dark">
+									<li>
+										<a id="fileUpdate2WpLink" class="dropdown-item" href="#">上書き保存</a>
+									</li>
+									<li>
+										<a id="filePost2WpLink" class="dropdown-item" href="#">新規保存</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</li>
 					<li class="dropend" id="filePublishMenu">
 						<a class="dropdown-item dropdown-toggle" href="#">書き出し</a>
 						<ul class="dropdown-menu dropdown-menu-dark">
 							<li>
-								<a id="publishSvgToLocal" class="dropdown-item" href="#">SVG形式</a>
+								<a id="publishSvgToLocalLink" class="dropdown-item" href="#">SVG形式</a>
 							</li>
 						</ul>
 					</li>
@@ -85,6 +109,81 @@
 			<button type="button" class="btn btn-outline-secondary" onClick="window.close()">閉じる</button>
 		</footer>
 	</div>
+
+	<!-- loadFromWPModal -->
+	<div class="modal fade" id="loadFromWPModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">WordPressから読み込み</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="d-flex justify-content-center loadingView">
+						<div class="spinner-border" role="status">
+							<span class="visually-hidden">Loading...</span>
+						</div>
+					</div>
+					<div class="mainView">
+						<div class="topArea">
+							<canvas id="loadFromWPCanvas" class="center-block" width="759" height="275"></canvas>
+						</div>
+						<div class="bottomArea">
+							<ul id="loadFromWPPagenation" class="pagination justify-content-center">
+								<li class="page-item"><a class="page-link" href="#">&lt;&lt;</a></li>
+								<li class="page-item active"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item"><a class="page-link" href="#">&gt;&gt;</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- saveNewToWpModal -->
+	<div class="modal fade" id="saveToWpModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">新規保存</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="inputView">
+						<div class="topArea">
+							<h3>タイトル</h3>
+							<p><input type="text" class="form-control form-control-sm"></p>
+						</div>
+						<div class="middleArea">
+							<h3>プレビュー</h3>
+							<p>
+								<canvas id="saveToWpPreviewCanvas" width="" height=""></canvas>
+							</p>
+						</div>
+						<div class="bottomArea">
+							<button type="button" class="btn btn-outline-primary btn-sm">投稿する</button>
+						</div>
+					</div>
+					<div class="d-flex justify-content-center loadingView">
+						<div class="spinner-border" role="status">
+							<span class="visually-hidden">Loading...</span>
+						</div>
+					</div>
+					<div class="completeView">
+						<div class="topArea completeMessage">
+							ライブラリへの新規保存が完了しました
+						</div>
+						<div class="bottomArea">
+							<button type="button" class="btn btn-outline-primary btn-sm">閉じる</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<script src="js/script.js?p=(new Date()).getTime()"></script>
 </body>
 </html>

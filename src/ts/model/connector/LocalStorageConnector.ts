@@ -1,4 +1,4 @@
-import { PixcelArtData } from "../../model/data/PixcelArtData";
+import { PixcelArtData } from "../data/PixcelArtData";
 export class LocalStorageConnector {
 	//=============================================
 	// TODO

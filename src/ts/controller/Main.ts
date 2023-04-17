@@ -5,8 +5,11 @@ import { ColorPalette } from "../view/ui/ColorPalette";
 import { EditBtns } from "../view/ui/EditBtns";
 import { FileDropdownMenu } from "../view/ui/FileDropdownMenu";
 import { HistoryBtns } from "../view/ui/HistoryBtns";
-import { LocalConnector } from "./file/LocalConnector";
-import { LocalStorageConnector } from "./file/LocalStorageConnector";
+import { LocalConnector } from "../model/connector/LocalConnector";
+import { LocalStorageConnector } from "../model/connector/LocalStorageConnector";
+import { WPConector } from "../model/connector/WPConnector";
+import { SaveToWPController } from "./SaveToWPController";
+import { LoadFromWPController } from "./LoadFromWPController";
 
 export class Main {
 	//=============================================
@@ -30,6 +33,9 @@ export class Main {
 	private _lc: LocalConnector;
 	private _lsc: LocalStorageConnector;
 
+	private _stwpCtrl: SaveToWPController;
+	private _lfwpCtrl: LoadFromWPController;
+
 	private _wsList: { [key: string]: Workspace };
 	private _activeWsId: string;
 	//=============================================
@@ -46,6 +52,10 @@ export class Main {
 		this._lc = new LocalConnector();
 		this._lsc = new LocalStorageConnector();
 
+		let wpc:WPConector = new WPConector(this._state);
+		this._stwpCtrl = new SaveToWPController(this._state, wpc);
+		this._lfwpCtrl = new LoadFromWPController(this._state, wpc);
+
 		this._wsList = {};
 		
 		this._addWorkSpace('workspace1');
@@ -59,6 +69,7 @@ export class Main {
 
 		this._lc.addEventListener(this._lc.EVENT_LOAD_JSON_COMPLETE, this._onLoadJsonFromLocalCompleteHandler);
 
+		this._lfwpCtrl.addEventListener(LoadFromWPController.EVENT_SELECT_THUMB, this._onLoadFromWPHandler);
 		//window.addEventListener('beforeunload', this._onBeforeunloadHandler);
 
 
@@ -142,6 +153,21 @@ export class Main {
 			ws = this._getActiveWorkSpace();
 			pad = ws.getPixcelArtData();
 			this._lc.saveSvg(pad);
+		}else if(this._state.current== State.FILE_LOAD_PAGE_SPLIT_LIST_FROM_WP){
+			//WPからリストを取得
+			ws = this._getActiveWorkSpace();
+			//pad = ws.getPixcelArtData();
+			this._lfwpCtrl.open();
+		}else if(this._state.current== State.FILE_UPDATE_TO_WP){
+			//WPに上書き保存
+			ws = this._getActiveWorkSpace();
+			pad = ws.getPixcelArtData();
+			this._stwpCtrl.open(pad);
+		}else if(this._state.current== State.FILE_POST_TO_WP){
+			//WPに新規保存
+			ws = this._getActiveWorkSpace();
+			pad = ws.getPixcelArtData();
+			this._stwpCtrl.open(pad);
 		}
 	}
 	//----------Workspace----------
@@ -184,6 +210,15 @@ export class Main {
 		console.log(this._state.current);
 	}
 	*/
+	//----------LoadFromWPController----------
+	//WordPressからの読み込み完了
+	private _onLoadFromWPHandler = (e: Event) => {
+		let pad : PixcelArtData = this._lfwpCtrl.loadResultPad;
+		if(pad != null){
+			console.log('\n[Event]', e.type);
+			this._setPixcelArtData2WorkSpace(pad);
+		}
+	}
 	
 	//----------Window----------
 	private _onBeforeunloadHandler = (e:BeforeUnloadEvent) =>{

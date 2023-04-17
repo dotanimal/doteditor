@@ -164,6 +164,141 @@ $small-modal-height:200px;
 
 	}
 }
+//----------------------------
+// modal
+//----------------------------
+#loadImgFromPcModal{
+
+	.carousel-item {
+		height: 400px;
+	}
+	.selectImgScene{
+		#loadFromImgDragDropArea{
+			border: 2px dashed #CCC;
+			background-color: #F6F6F6;
+			margin: 10px;
+			padding-top:170px;
+			height: 380px;
+			text-align: center;
+			color: #999;
+			font-weight: bold;
+			font-size: 16px;
+		}
+	}
+	.adjustDotSizeScene{
+		.loadingView{
+			height:380px;
+			padding-top:160px;
+		}
+		.mainView{
+			width:100%;
+			height:380px;
+
+			.topArea{
+				display: flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+
+				.leftTopArea{
+					width:370px;
+					//background: #CCF;
+					text-align: center;
+				}
+				.rightTopArea{
+					width:370px;
+					//background: #FCC;
+					text-align: center;
+
+					#loadFromImgPreviewRangeOutput {
+						color: #333;
+					}
+				}
+			}
+			.bottomArea{
+				text-align: center;
+			}
+		}
+	}
+}
+#loadFromWPModal{
+
+	.modal-content{
+		height:480px;
+		//background: #FCC;
+	}
+	.loadingView{
+		padding-top:160px;
+	}
+	.mainView{
+		width:100%;
+		
+		.topArea{
+			padding:30px 2px 30px 3px;
+			/*
+			canvas{
+				background: #99F;
+			}
+			*/
+		}
+		.bottomArea{
+			text-align: center;
+
+			#loadFromWPPagenation{
+				margin-bottom: 0;
+				padding-bottom:0;
+			}
+		}
+	}
+}
+
+#saveToWpModal{
+
+	.inputView{
+		height:350px;
+
+		h3{
+			font-weight: normal;
+			font-size:12px;
+		}
+		.topArea{
+			input{
+				width:100%;
+				border-color:$color-gray;
+				color: $color-gray;
+			}
+			padding-bottom:5px;
+		}
+		.middleArea{
+			canvas{
+				display: block;
+				/*background: #999;*/
+				width:400px;
+				height:200px;
+				margin:0 auto;
+			}
+		}
+		.bottomArea{
+			text-align: center;
+		}
+	}
+	.loadingView{
+		height:350px;
+		padding-top:160px;
+	}
+	.completeView{
+		height:350px;
+
+		.topArea{
+			text-align: center;
+			padding-top:130px;
+			padding-bottom:150px;
+		}
+		.bottomArea{
+			text-align: center;
+		}
+	}
+}
+
 //--------------------------
 //汎用
 //--------------------------
