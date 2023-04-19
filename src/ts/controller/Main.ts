@@ -121,9 +121,21 @@ export class Main {
 	private _onOpenFileDropdownMenuHandler = (e: Event) => {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		//this._eb.reset();
+
+		let ws: Workspace = this._getActiveWorkSpace();
+		let pad: PixcelArtData = ws.getPixcelArtData();
+		
+		if(!pad.id){
+			//ワークスペースの内容はWPから読み込まれたものではない
+			this._state.setCurrent(State.FILE_MENU_OPEN_WS_IS_NEW_DRAW);
+		}
+		if(pad.width < 1 || pad.height < 1){
+			//ワークスペースに描画がない
+			this._state.setCurrent(State.FILE_MENU_OPEN_WS_IS_NO_DRAW);
+		}
+
+
 		this._changeState();
-		//ws.isAbleDraw = false;
-		//this._fdm.reset();
 	}
 	//ドロップダウンメニューが閉じた
 	private _onCloseFileDropdownMenuHandler = (e: Event) => {

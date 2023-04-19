@@ -120,15 +120,21 @@ export class PixcelArtData {
 	get id(): number {
 		return this._id;
 	}
+	set id(value: number) {
+		this._id = value;
+	}
+
 	get title(): string {
 		return this._title;
 	}
 	set title(value: string) {
 		this._title = value;
 	}
+	/*
 	get drawLayerDataList(): any {
 		return this._drawLayerDataList;
 	}
+	*/
 	
 	get x(): number {
 		return this._x;

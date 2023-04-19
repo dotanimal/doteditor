@@ -49,6 +49,9 @@ export class Workspace extends createjs.Stage {
 
 	//private _pad:PixcelArtData;
 	private _hexColor: string;
+
+	private _wpId:number;
+	private _wpTitle:string;
 	
 	//private _extractHexColor:string;
 
@@ -288,11 +291,13 @@ export class Workspace extends createjs.Stage {
 		this.addChild(this._bgLayer);
 		//this.update();
 		if (pad.id) {
-			//this._wpId = pad.id;
+			this._wpId = pad.id;
 		}
-		//this._wpTitle = data.title;
+		if(pad.title){
+			this._wpTitle = pad.title;
+		}
 
-		let drawLayerDataList: any = pad.drawLayerDataList;
+		let drawLayerDataList: any = pad.getDrawLayerDataList();
 		//レイヤーの追加
 		for (var key in drawLayerDataList) {
 			this._addDrawLayer(key);
@@ -321,6 +326,13 @@ export class Workspace extends createjs.Stage {
 	}
 	public getPixcelArtData = ():PixcelArtData => {
 		let result: PixcelArtData = new PixcelArtData();
+		if (this._wpId) {
+			result.id = this._wpId;
+		}
+		if (this._wpTitle) {
+			result.title = this._wpTitle;
+		}
+
 		let layer: DrawLayer;
 		let layerData: DrawLayerData;
 		for (let i = 0; i < this._drawLayerList.length; i++) {

@@ -59,6 +59,7 @@ export class Preview extends createjs.Shape {
 	//=============================================
 	public drawPad = (pad:PixcelArtData, isBg:boolean) :void => {
 		this._pad = pad;
+		//console.log(pad);
 		//console.log(pad.width,pad.x,this._stageWidth,this._dotSize);
 		let sx: number = Math.floor((this._stageWidth - pad.width * this._dotSize) / 2 - (pad.x * this._dotSize));
 		let sy: number = Math.floor((this._stageHeight - pad.height * this._dotSize) / 2 - (pad.y * this._dotSize));
