@@ -18,12 +18,14 @@ export class DrawLayer extends Layer {
 	private _hexColorCode : string;
 
 	//----------protected-------
+	protected _c2ld:Canvas2DrawLayerData;
 	//=============================================
 	// constructor
 	//=============================================
 	constructor(state:State, name:string) {
 		super(state);
 		this.name = name;
+		this._c2ld = new Canvas2DrawLayerData();
 	}
 	//=============================================
 	// event handler
@@ -85,9 +87,10 @@ export class DrawLayer extends Layer {
 		let top:number = targetAreaTop - (targetAreaTop-this._drawAreaTop) % this._dotSize;
 		let right:number =  targetAreaRight - (targetAreaRight-this._drawAreaRight) % this._dotSize;
 		let bottom:number = targetAreaBottom - (targetAreaBottom-this._drawAreaBottom) % this._dotSize;
-		let c2ld: Canvas2DrawLayerData = new Canvas2DrawLayerData(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, false, left,top,right,bottom);
-		let dld :DrawLayerData = c2ld.getDrawLayerData(1);
-		//let jsonObj:any = dld.getJsonObj();
+		
+		this._c2ld.init(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, false, left,top,right,bottom);
+		let dld :DrawLayerData = this._c2ld.getDrawLayerData(1);
+		this._c2ld.destroy(); 
 		return dld;
 	}
 	/*
@@ -121,9 +124,10 @@ export class DrawLayer extends Layer {
 	public getDrawLayerData = (): DrawLayerData => {
 		let cc: HTMLCanvasElement = <HTMLCanvasElement>this.cacheCanvas;
 		let ctx: CanvasRenderingContext2D = cc.getContext("2d");
-
-		let c2ld: Canvas2DrawLayerData = new Canvas2DrawLayerData(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._drawAreaLeft, this._drawAreaTop, this._drawAreaRight, this._drawAreaBottom);
-		return c2ld.getDrawLayerData(1);
+		this._c2ld.init(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._drawAreaLeft, this._drawAreaTop, this._drawAreaRight, this._drawAreaBottom);
+		let dld:DrawLayerData = this._c2ld.getDrawLayerData(1);
+		this._c2ld.destroy(); 
+		return dld;
 	}
 	//=============================================
 	// getter/setter

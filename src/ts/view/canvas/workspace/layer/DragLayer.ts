@@ -75,10 +75,11 @@ export class DragLayer extends DrawLayer {
 		let cc: HTMLCanvasElement = <HTMLCanvasElement>this.cacheCanvas;
 		let ctx: CanvasRenderingContext2D = cc.getContext("2d");
 
-		let c2ld: Canvas2DrawLayerData = new Canvas2DrawLayerData(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._drawAreaLeft, this._drawAreaTop, this._drawAreaRight, this._drawAreaBottom);
-		let dld:DrawLayerData = c2ld.getDrawLayerData(1);
+		this._c2ld.init(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._drawAreaLeft, this._drawAreaTop, this._drawAreaRight, this._drawAreaBottom);
+		let dld:DrawLayerData = this._c2ld.getDrawLayerData(1);
 		dld.x = dld.x + Math.floor((this.x - this._drawAreaLeft) / this._dotSize) + 1;
 		dld.y = dld.y + Math.floor((this.y - this._drawAreaTop) / this._dotSize) + 1;
+		this._c2ld.destroy();
 		return dld;
 	}
 	//=============================================

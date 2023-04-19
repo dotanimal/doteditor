@@ -31,72 +31,7 @@ export class Canvas2DrawLayerData {
 	//=============================================
 	// constructor
 	//=============================================
-	/**
-	 * 画像やCanvasのデータをドット絵用のデータに変換するクラス
-	 * @param {CanvasRenderingContext2D} ctx canvasのcontext2D
-	 * @param {number} dotSize 画像から色データを抽出する際のドットサイズ。小さいと処理時間やメモリ量が増える　ドットサイズが不明な画像などは最小値の１にしておいて、後でサイズを選べるほうがよいが、サイズが決まってるなら不要なデータを削除できるので、ドットサイズを指定しておいたほうがよい。
-	 * @param {Boolean} isWhiteMarginTrimming 周囲の白色の余白を削除するかどうかのフラグ
-	 * @param {Boolean} isTransparentMarginTrimming 周囲の透過の余白を削除するかどうかのフラグ
-	 */
-	constructor(ctx: CanvasRenderingContext2D, stageWidth: number, stageHeight: number, dotSize: number = 1, isWhiteMarginTrimming: Boolean = false, isTransparentMarginTrimming: Boolean = false, targetAreaLeft:number = 0, targetAreaTop:number = 0, targetAreaRight:number = 0, targetAreaBottomY:number = 0) {
-		
-		//console.log('\n[Canvas2DrawLayerData]', "\n");
-		this._imgWidth = stageWidth;
-		this._imgHeight = stageHeight;
-		this._dotSize = dotSize;
-		//console.log("\tstage\t\t\t:", stageWidth, stageHeight);
-		
-		this._targetAreaTop = targetAreaTop;
-		this._targetAreaRight = targetAreaRight;
-		this._targetAreaBottom = targetAreaBottomY;
-		this._targetAreaLeft = targetAreaLeft;
-		//console.log("\ttargetArea\t\t\t:", this._targetAreaTop, this._targetAreaRight, this._targetAreaBottom, this._targetAreaLeft)
-
-		//トリミング---------------------------------------------------
-		let colorCheckMethod: Function;
-		if (isWhiteMarginTrimming) {
-			colorCheckMethod = this._isWhiteColorCheck;
-		}
-		if (isTransparentMarginTrimming) {
-			colorCheckMethod = this._isTransparentColorCheck;
-		}
-
-		let topMargin: number = this._targetAreaTop;
-		let bottomMargin: number = stageHeight - this._targetAreaBottom;
-		let leftMargin: number = this._targetAreaLeft;
-		let rightMargin: number = stageWidth - this._targetAreaRight;
-		if (colorCheckMethod) {
-			topMargin = this._checkTopMargin(ctx, colorCheckMethod);
-			bottomMargin = this._checkBottomMargin(ctx, colorCheckMethod);
-			leftMargin = this._checkLeftMargin(ctx, colorCheckMethod);
-			rightMargin = this._checkRightMargin(ctx, colorCheckMethod);
-		}
-		//console.log("\tmargin\t\t\t:", topMargin, rightMargin, bottomMargin, leftMargin);
-
-		//色データ抽出---------------------------------------------------
-		let imgData: ImageData;
-		let hex: string;
-		this._hexDotList = [];
-		this._imgDataDotList = [];
-		this._xCount = Math.floor((this._imgWidth - rightMargin - leftMargin) / dotSize);
-		this._yCount = Math.floor((this._imgHeight - bottomMargin - topMargin) / dotSize);
-		//console.log("\tdot count\t\t:", this._xCount, this._yCount);
-
-		if(0 < this._xCount && 0 < this._yCount){	
-			for (let yy = topMargin; yy <= this._imgHeight - bottomMargin -1 ; yy += dotSize) {
-				for (let xx = leftMargin; xx <= this._imgWidth - rightMargin - 1; xx += dotSize) {
-					//console.log(xx,yy);
-					imgData = ctx.getImageData(xx, yy, 1, 1);//キャンバスのピクセル情報を取得。左上、右下。
-					hex = this._rgb2hex([imgData.data[0], imgData.data[1], imgData.data[2]]);
-					//console.log(hex);
-					this._imgDataDotList.push(imgData);
-					this._hexDotList.push(hex);
-				}
-			}
-			this._xBase = (leftMargin - this._targetAreaLeft) / this._dotSize;
-			this._yBase = (topMargin - this._targetAreaTop) / this._dotSize;
-			//console.log("\tdot base pos\t:", this._xBase,this._yBase);
-		}
+	constructor(){
 	}
 	//=============================================
 	// event handler
@@ -204,10 +139,94 @@ export class Canvas2DrawLayerData {
 	//=============================================
 	// public
 	//=============================================
-	getHexDotList = (): Array<string> => {
+	/**
+	 * 画像やCanvasのデータをドット絵用のデータに変換するクラス
+	 * @param {CanvasRenderingContext2D} ctx canvasのcontext2D
+	 * @param {number} dotSize 画像から色データを抽出する際のドットサイズ。小さいと処理時間やメモリ量が増える　ドットサイズが不明な画像などは最小値の１にしておいて、後でサイズを選べるほうがよいが、サイズが決まってるなら不要なデータを削除できるので、ドットサイズを指定しておいたほうがよい。
+	 * @param {Boolean} isWhiteMarginTrimming 周囲の白色の余白を削除するかどうかのフラグ
+	 * @param {Boolean} isTransparentMarginTrimming 周囲の透過の余白を削除するかどうかのフラグ
+	 */
+	public init = (ctx: CanvasRenderingContext2D, stageWidth: number, stageHeight: number, dotSize: number = 1, isWhiteMarginTrimming: Boolean = false, isTransparentMarginTrimming: Boolean = false, targetAreaLeft:number = 0, targetAreaTop:number = 0, targetAreaRight:number = 0, targetAreaBottomY:number = 0):void => {		
+		//console.log('\n[Canvas2DrawLayerData]', "\n");
+		this._imgWidth = stageWidth;
+		this._imgHeight = stageHeight;
+		this._dotSize = dotSize;
+		//console.log("\tstage\t\t\t:", stageWidth, stageHeight);
+		
+		this._targetAreaTop = targetAreaTop;
+		this._targetAreaRight = targetAreaRight;
+		this._targetAreaBottom = targetAreaBottomY;
+		this._targetAreaLeft = targetAreaLeft;
+		//console.log("\ttargetArea\t\t\t:", this._targetAreaTop, this._targetAreaRight, this._targetAreaBottom, this._targetAreaLeft)
+
+		//トリミング---------------------------------------------------
+		let colorCheckMethod: Function;
+		if (isWhiteMarginTrimming) {
+			colorCheckMethod = this._isWhiteColorCheck;
+		}
+		if (isTransparentMarginTrimming) {
+			colorCheckMethod = this._isTransparentColorCheck;
+		}
+
+		let topMargin: number = this._targetAreaTop;
+		let bottomMargin: number = stageHeight - this._targetAreaBottom;
+		let leftMargin: number = this._targetAreaLeft;
+		let rightMargin: number = stageWidth - this._targetAreaRight;
+		if (colorCheckMethod) {
+			topMargin = this._checkTopMargin(ctx, colorCheckMethod);
+			bottomMargin = this._checkBottomMargin(ctx, colorCheckMethod);
+			leftMargin = this._checkLeftMargin(ctx, colorCheckMethod);
+			rightMargin = this._checkRightMargin(ctx, colorCheckMethod);
+		}
+		//console.log("\tmargin\t\t\t:", topMargin, rightMargin, bottomMargin, leftMargin);
+
+		//色データ抽出---------------------------------------------------
+		let imgData: ImageData;
+		let hex: string;
+		this._hexDotList = [];
+		this._imgDataDotList = [];
+		this._xCount = Math.floor((this._imgWidth - rightMargin - leftMargin) / dotSize);
+		this._yCount = Math.floor((this._imgHeight - bottomMargin - topMargin) / dotSize);
+		//console.log("\tdot count\t\t:", this._xCount, this._yCount);
+
+		if(0 < this._xCount && 0 < this._yCount){	
+			for (let yy = topMargin; yy <= this._imgHeight - bottomMargin -1 ; yy += dotSize) {
+				for (let xx = leftMargin; xx <= this._imgWidth - rightMargin - 1; xx += dotSize) {
+					//console.log(xx,yy);
+					imgData = ctx.getImageData(xx, yy, 1, 1);//キャンバスのピクセル情報を取得。左上、右下。
+					hex = this._rgb2hex([imgData.data[0], imgData.data[1], imgData.data[2]]);
+					//console.log(hex);
+					this._imgDataDotList.push(imgData);
+					this._hexDotList.push(hex);
+				}
+			}
+			this._xBase = (leftMargin - this._targetAreaLeft) / this._dotSize;
+			this._yBase = (topMargin - this._targetAreaTop) / this._dotSize;
+			//console.log("\tdot base pos\t:", this._xBase,this._yBase);
+		}
+	}
+	public destroy = ():void =>{
+		this._dotSize = undefined;
+		this._imgWidth = undefined;
+		this._imgHeight = undefined;
+		
+		this._targetAreaTop  = undefined;
+		this._targetAreaRight  = undefined;
+		this._targetAreaBottom  = undefined;
+		this._targetAreaLeft  = undefined;
+		
+		this._xCount = undefined;
+		this._yCount = undefined;
+		this._imgDataDotList = null;
+		this._hexDotList = null;
+		
+		this._xBase = undefined;
+		this._yBase = undefined;
+	}
+	public getHexDotList = (): Array<string> => {
 		return this._hexDotList;
 	}
-	getDrawLayerData = (dotsize: number): DrawLayerData => {
+	public getDrawLayerData = (dotsize: number): DrawLayerData => {
 
 		let dld: DrawLayerData = new DrawLayerData();
 

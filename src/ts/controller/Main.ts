@@ -131,6 +131,9 @@ export class Main {
 	//ドロップダウンメニューの中のメニューを選択した
 	private _onSelectMenuFileDropdownMenuHandler = (e: Event) => {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
+
+		this._changeState();
+		
 		let ws: Workspace;
 		let pad: PixcelArtData;
 		if(this._state.current== State.FILE_NEW){
