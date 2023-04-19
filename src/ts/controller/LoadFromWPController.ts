@@ -10,6 +10,7 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 	// TODO
 	//=============================================
 	/*
+		WordPressへの接続失敗時にメッセージを出力したい
 	*/
 	//=============================================
 	// 定数/変数
@@ -99,7 +100,7 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 			this._loadingView.classList.add("display-none");
 			this._mainView.classList.remove("display-none");
 		}else{
-			console.log("WordPressからのデータ読み込みに失敗しました。");
+			alert("WordPressからのデータ読み込みに失敗しました。");
 		}
 	}
 	private _onThumbClickHandler = (e: Event) => {
