@@ -12158,8 +12158,31 @@ textarea.form-control-lg {
   font-size: 14px;
 }
 
+.modal > .modal-dialog {
+  width: 800px !important;
+  max-width: 800px !important;
+}
+.modal > .modal-dialog > .modal-content {
+  width: 800px !important;
+  max-width: 800px !important;
+}
+
+.modal-backdrop {
+  min-width: 800px !important;
+  height: 100% !important;
+}
+
+.pagination > li > a {
+  color: #333 !important;
+}
+.pagination > li.active > a {
+  background: #333 !important;
+  border-color: #333 !important;
+  color: #FFF !important;
+}
+
 #editor {
-  width: 801px !important;
+  width: 800px !important;
   margin: 0 auto;
 }
 #editor > .menu {
@@ -12227,14 +12250,14 @@ textarea.form-control-lg {
   font-size: 1px;
   line-height: 1;
   border: 0;
-  border: 1px solid #fff;
+  border: 1px solid #FFF;
 }
 #editor > .menu #colorPalette > span > input {
   margin: 2px;
   padding: 0;
   border: 0px !important;
-  color: #fff;
-  background-color: #fff;
+  color: #FFF;
+  background-color: #FFF;
   width: 26px;
   height: 26px;
   border-color: #333;
@@ -12259,14 +12282,18 @@ textarea.form-control-lg {
 
 #loadFromWPModal .modal-content {
   height: 480px;
+  /*
+  >.modal-header{
+  }
+  */
 }
-#loadFromWPModal .loadingView {
+#loadFromWPModal .modal-content > .modal-body .loadingView {
   padding-top: 160px;
 }
-#loadFromWPModal .mainView {
+#loadFromWPModal .modal-content > .modal-body .mainView {
   width: 100%;
 }
-#loadFromWPModal .mainView .topArea {
+#loadFromWPModal .modal-content > .modal-body .mainView .topArea {
   padding: 30px 2px 30px 3px;
   /*
   canvas{
@@ -12274,60 +12301,52 @@ textarea.form-control-lg {
   }
   */
 }
-#loadFromWPModal .mainView .bottomArea {
+#loadFromWPModal .modal-content > .modal-body .mainView .bottomArea {
   text-align: center;
 }
-#loadFromWPModal .mainView .bottomArea ul#loadFromWPPagenation {
+#loadFromWPModal .modal-content > .modal-body .mainView .bottomArea ul#loadFromWPPagenation {
   margin-bottom: 0;
   padding-bottom: 0;
 }
-#loadFromWPModal .mainView .bottomArea ul#loadFromWPPagenation > li > a {
-  color: #333;
-}
-#loadFromWPModal .mainView .bottomArea ul#loadFromWPPagenation > li.active > a {
-  background: #333;
-  border-color: #333;
-  color: #FFF;
-}
 
-#saveToWpModal .inputView {
+#saveToWpModal .modal-content .inputView {
   height: 350px;
 }
-#saveToWpModal .inputView h3, #saveToWpModal .inputView .h3 {
+#saveToWpModal .modal-content .inputView h3, #saveToWpModal .modal-content .inputView .h3 {
   font-weight: normal;
   font-size: 12px;
 }
-#saveToWpModal .inputView .topArea {
+#saveToWpModal .modal-content .inputView .topArea {
   padding-bottom: 5px;
 }
-#saveToWpModal .inputView .topArea input {
+#saveToWpModal .modal-content .inputView .topArea input {
   width: 100%;
   border-color: #333;
   color: #333;
 }
-#saveToWpModal .inputView .middleArea canvas {
+#saveToWpModal .modal-content .inputView .middleArea canvas {
   display: block;
   /*background: #999;*/
   width: 400px;
   height: 200px;
   margin: 0 auto;
 }
-#saveToWpModal .inputView .bottomArea {
+#saveToWpModal .modal-content .inputView .bottomArea {
   text-align: center;
 }
-#saveToWpModal .loadingView {
+#saveToWpModal .modal-content .loadingView {
   height: 350px;
   padding-top: 160px;
 }
-#saveToWpModal .completeView {
+#saveToWpModal .modal-content .completeView {
   height: 350px;
 }
-#saveToWpModal .completeView .topArea {
+#saveToWpModal .modal-content .completeView .topArea {
   text-align: center;
   padding-top: 130px;
   padding-bottom: 150px;
 }
-#saveToWpModal .completeView .bottomArea {
+#saveToWpModal .modal-content .completeView .bottomArea {
   text-align: center;
 }
 

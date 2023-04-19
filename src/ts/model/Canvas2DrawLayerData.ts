@@ -205,7 +205,7 @@ export class Canvas2DrawLayerData {
 			//console.log("\tdot base pos\t:", this._xBase,this._yBase);
 		}
 	}
-	public destroy = ():void =>{
+	public dispose = ():void =>{
 		this._dotSize = undefined;
 		this._imgWidth = undefined;
 		this._imgHeight = undefined;

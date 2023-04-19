@@ -90,7 +90,7 @@ export class DrawLayer extends Layer {
 		
 		this._c2ld.init(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, false, left,top,right,bottom);
 		let dld :DrawLayerData = this._c2ld.getDrawLayerData(1);
-		this._c2ld.destroy(); 
+		this._c2ld.dispose(); 
 		return dld;
 	}
 	/*
@@ -126,7 +126,7 @@ export class DrawLayer extends Layer {
 		let ctx: CanvasRenderingContext2D = cc.getContext("2d");
 		this._c2ld.init(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._drawAreaLeft, this._drawAreaTop, this._drawAreaRight, this._drawAreaBottom);
 		let dld:DrawLayerData = this._c2ld.getDrawLayerData(1);
-		this._c2ld.destroy(); 
+		this._c2ld.dispose(); 
 		return dld;
 	}
 	//=============================================

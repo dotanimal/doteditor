@@ -6,9 +6,7 @@
 //--------------------------
 $color-white:#FFF;
 $color-gray:#333;
-$large-modal-width:800px;
-$small-modal-width:300px;
-$small-modal-height:200px;
+$modal-width:800px;
 
 //--------------------------
 //Bootstrap の各パーツの調整
@@ -50,11 +48,45 @@ $small-modal-height:200px;
 	}
 }
 
+//モーダルウィンドウ
+.modal{
+	>.modal-dialog{
+		width:$modal-width !important;
+		max-width:$modal-width !important;
+
+		>.modal-content{
+			width:$modal-width !important;
+			max-width:$modal-width !important;
+		}
+	}
+}
+.modal-backdrop{
+	min-width:$modal-width !important;
+	height:100% !important;
+}
+
+//ページネーション
+.pagination {
+	>li{
+		>a{
+			color: $color-gray !important;
+		}
+	}
+	>li.active{
+		>a{
+			background: $color-gray !important;
+			border-color: $color-gray !important;
+			color: $color-white !important;
+		}
+	}
+}
+
 
 //--------------------------
 //--------------------------
+
 #editor{
-	width: 801px !important;
+	width: 800px !important;
 	margin:0 auto;
 
 	> .menu{
@@ -117,7 +149,7 @@ $small-modal-height:200px;
 			#selectRange:hover,
 			#selectRange.active{
 				svg{
-					fill: #FFF;
+					fill: $color-white;
 				}
 			}
 		}
@@ -129,14 +161,14 @@ $small-modal-height:200px;
 				font-size: 1px;
 				line-height: 1;
 				border: 0;
-				border: 1px solid #fff;
+				border: 1px solid $color-white;
 
 				>input{
 					margin: 2px;
 					padding: 0;
 					border: 0px !important;
-					color: #fff;
-					background-color: #fff;
+					color: $color-white;
+					background-color: $color-white;
 					width: 26px;
 					height: 26px;
 					border-color: $color-gray;
@@ -150,7 +182,7 @@ $small-modal-height:200px;
 	.workspaceArea{
 		padding: 10px 0 0 0;
 		canvas{
-			background: #FFF;
+			background: $color-white;
 			padding: 0;
 		}
 	}
@@ -168,95 +200,89 @@ $small-modal-height:200px;
 // modal
 //----------------------------
 #loadFromWPModal{
-
 	.modal-content{
 		height:480px;
 		//background: #FCC;
-	}
-	.loadingView{
-		padding-top:160px;
-	}
-	.mainView{
-		width:100%;
-		
-		.topArea{
-			padding:30px 2px 30px 3px;
-			/*
-			canvas{
-				background: #99F;
-			}
-			*/
+		/*
+		>.modal-header{
 		}
-		.bottomArea{
-			text-align: center;
-
-			ul#loadFromWPPagenation{
-				margin-bottom: 0;
-				padding-bottom:0;
-				>li{
-					>a{
-						color:#333;
-					}
-				}
-				>li.active{
-					>a{
-						background: #333;
-						border-color: #333;
-						color:#FFF;
-					}
-				}
+		*/
+		>.modal-body{
+			.loadingView{
+				padding-top:160px;
+			}
+			.mainView{
+				width:100%;
 				
+				.topArea{
+					padding:30px 2px 30px 3px;
+					/*
+					canvas{
+						background: #99F;
+					}
+					*/
+				}
+				.bottomArea{
+					text-align: center;
+		
+					ul#loadFromWPPagenation{
+						margin-bottom: 0;
+						padding-bottom:0;
+						
+					}
+				}
 			}
 		}
 	}
 }
 
 #saveToWpModal{
+	.modal-content{
+		.inputView{
+			height:350px;
 
-	.inputView{
-		height:350px;
-
-		h3{
-			font-weight: normal;
-			font-size:12px;
-		}
-		.topArea{
-			input{
-				width:100%;
-				border-color:$color-gray;
-				color: $color-gray;
+			h3{
+				font-weight: normal;
+				font-size:12px;
 			}
-			padding-bottom:5px;
-		}
-		.middleArea{
-			canvas{
-				display: block;
-				/*background: #999;*/
-				width:400px;
-				height:200px;
-				margin:0 auto;
+			.topArea{
+				input{
+					width:100%;
+					border-color:$color-gray;
+					color: $color-gray;
+				}
+				padding-bottom:5px;
+			}
+			.middleArea{
+				canvas{
+					display: block;
+					/*background: #999;*/
+					width:400px;
+					height:200px;
+					margin:0 auto;
+				}
+			}
+			.bottomArea{
+				text-align: center;
 			}
 		}
-		.bottomArea{
-			text-align: center;
+		.loadingView{
+			height:350px;
+			padding-top:160px;
 		}
-	}
-	.loadingView{
-		height:350px;
-		padding-top:160px;
-	}
-	.completeView{
-		height:350px;
+		.completeView{
+			height:350px;
 
-		.topArea{
-			text-align: center;
-			padding-top:130px;
-			padding-bottom:150px;
+			.topArea{
+				text-align: center;
+				padding-top:130px;
+				padding-bottom:150px;
+			}
+			.bottomArea{
+				text-align: center;
+			}
 		}
-		.bottomArea{
-			text-align: center;
-		}
-	}
+}
 }
 
 //--------------------------
