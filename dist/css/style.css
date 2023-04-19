@@ -12257,53 +12257,6 @@ textarea.form-control-lg {
   font-size: 12px;
 }
 
-#loadImgFromPcModal .carousel-item {
-  height: 400px;
-}
-#loadImgFromPcModal .selectImgScene #loadFromImgDragDropArea {
-  border: 2px dashed #CCC;
-  background-color: #F6F6F6;
-  margin: 10px;
-  padding-top: 170px;
-  height: 380px;
-  text-align: center;
-  color: #999;
-  font-weight: bold;
-  font-size: 16px;
-}
-#loadImgFromPcModal .adjustDotSizeScene .loadingView {
-  height: 380px;
-  padding-top: 160px;
-}
-#loadImgFromPcModal .adjustDotSizeScene .mainView {
-  width: 100%;
-  height: 380px;
-}
-#loadImgFromPcModal .adjustDotSizeScene .mainView .topArea {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-}
-#loadImgFromPcModal .adjustDotSizeScene .mainView .topArea .leftTopArea {
-  width: 370px;
-  text-align: center;
-}
-#loadImgFromPcModal .adjustDotSizeScene .mainView .topArea .rightTopArea {
-  width: 370px;
-  text-align: center;
-}
-#loadImgFromPcModal .adjustDotSizeScene .mainView .topArea .rightTopArea #loadFromImgPreviewRangeOutput {
-  color: #333;
-}
-#loadImgFromPcModal .adjustDotSizeScene .mainView .bottomArea {
-  text-align: center;
-}
-
 #loadFromWPModal .modal-content {
   height: 480px;
 }
@@ -12324,9 +12277,17 @@ textarea.form-control-lg {
 #loadFromWPModal .mainView .bottomArea {
   text-align: center;
 }
-#loadFromWPModal .mainView .bottomArea #loadFromWPPagenation {
+#loadFromWPModal .mainView .bottomArea ul#loadFromWPPagenation {
   margin-bottom: 0;
   padding-bottom: 0;
+}
+#loadFromWPModal .mainView .bottomArea ul#loadFromWPPagenation > li > a {
+  color: #333;
+}
+#loadFromWPModal .mainView .bottomArea ul#loadFromWPPagenation > li.active > a {
+  background: #333;
+  border-color: #333;
+  color: #FFF;
 }
 
 #saveToWpModal .inputView {
