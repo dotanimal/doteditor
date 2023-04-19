@@ -42,10 +42,10 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 	//=============================================
 	// constructor
 	//=============================================
-	constructor(state:State, wpc:WPConector) {
+	constructor(state:State) {
 		super();
 		this._state = state;
-		this._wpc = wpc;
+		this._wpc = new WPConector(this._state);
 
 		this._modal = new bootstrap.Modal(document.getElementById('loadFromWPModal'), { keyboard: true });
 
@@ -81,22 +81,26 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 		this._pageChange(this._pn.pageId, this._posts_per_page)
 	}
 	private _onGetPageSpritListHandler = (e: Event) => {
-		//console.log("_onPageSpritListHandler");
+		if(this._wpc.isSuccess){
+			//console.log("_onPageSpritListHandler");
 
-		let obj: any = JSON.parse(this._wpc.result);
+			let obj: any = JSON.parse(this._wpc.result);
 
-		let max_page: number = obj.max_page;
-		let current_page: number = obj.current_page;
-		let posts_per_page: number = obj.posts_per_page;
-		let posts: any = obj.posts;
+			let max_page: number = obj.max_page;
+			let current_page: number = obj.current_page;
+			let posts_per_page: number = obj.posts_per_page;
+			let posts: any = obj.posts;
 
-		//console.log(max_page, current_page, posts_per_page);
+			//console.log(max_page, current_page, posts_per_page);
 
-		this._addThumb(posts);
-		this._pn.setting(max_page, current_page);
+			this._addThumb(posts);
+			this._pn.setting(max_page, current_page);
 
-		this._loadingView.classList.add("display-none");
-		this._mainView.classList.remove("display-none");
+			this._loadingView.classList.add("display-none");
+			this._mainView.classList.remove("display-none");
+		}else{
+			console.log("WordPressからのデータ読み込みに失敗しました。");
+		}
 	}
 	private _onThumbClickHandler = (e: Event) => {
 		let thumb: Preview = <Preview>e.target;

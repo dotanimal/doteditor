@@ -34,7 +34,8 @@ export class WPConector extends createjs.EventDispatcher {
 	// event handler
 	//=============================================
 	private _onReadyStateChageHandler = (e: Event = null) => {
-		//var xhr = <XMLHttpRequest>ev.target;
+		this._isSuccess = false;
+		this._result = null;
 		if (this._xhr.readyState == 4) {// データ受信完了
 			//console.log(this._xhr.readyState, this._xhr.status, this._xhr.statusText, this._xhr.responseText);
 			var pattern = new RegExp(/2\d\d/);
@@ -56,11 +57,19 @@ export class WPConector extends createjs.EventDispatcher {
 	//=============================================
 	//新規投稿
 	public post = (pad: PixcelArtData) => {
-		this._onReadyStateChageHandler();
+		setTimeout(()=>{
+			this._isSuccess = false;
+			this._result = null;
+			this.dispatchEvent(new createjs.Event(WPConector.EVENT_COMPLETE_WPCONNECT, true, true));
+		},100);
 	}
 	//更新
 	public update = (pad: PixcelArtData) => {
-		this._onReadyStateChageHandler();
+		setTimeout(()=>{
+			this._isSuccess = false;
+			this._result = null;
+			this.dispatchEvent(new createjs.Event(WPConector.EVENT_COMPLETE_WPCONNECT, true, true));
+		},100);
 	}
 	//リストを取得
 	public getPageSplitList = (paged: number, posts_per_page: number) => {

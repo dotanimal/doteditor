@@ -52,9 +52,9 @@ export class Main {
 		this._lc = new LocalConnector();
 		this._lsc = new LocalStorageConnector();
 
-		let wpc:WPConector = new WPConector(this._state);
-		this._stwpCtrl = new SaveToWPController(this._state, wpc);
-		this._lfwpCtrl = new LoadFromWPController(this._state, wpc);
+		//let wpc:WPConector = new WPConector(this._state);
+		this._stwpCtrl = new SaveToWPController(this._state);
+		this._lfwpCtrl = new LoadFromWPController(this._state);
 
 		this._wsList = {};
 		

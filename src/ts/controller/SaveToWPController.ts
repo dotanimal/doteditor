@@ -44,10 +44,10 @@ export class SaveToWPController extends createjs.EventDispatcher {
 	//=============================================
 	// constructor
 	//=============================================
-	constructor(state:State, wpc:WPConector) {
+	constructor(state:State) {
 		super();
 		this._state = state;
-		this._wpc = wpc;
+		this._wpc = new WPConector(this._state);
 
 		this._modal = new bootstrap.Modal(document.getElementById('saveToWpModal'), { keyboard: true });
 
@@ -95,12 +95,17 @@ export class SaveToWPController extends createjs.EventDispatcher {
 		this._completeView.classList.remove("display-none");
 
 		if (this._state.current == State.FILE_POST_TO_WP) {
-			this._completeMessage.innerText = "Wordpressへの新規保存が完了しました";
-			let obj: any = JSON.parse(this._wpc.result);
-			//this._pad.setId(obj.postid);
+			if(this._wpc.isSuccess){
+				this._completeMessage.innerText = "Wordpressへの新規保存が完了しました";
+			}else{
+				this._completeMessage.innerText = "Wordpressへの新規保存が失敗しました";
+			}
 		} else if (this._state.current == State.FILE_UPDATE_TO_WP) {
-			this._completeMessage.innerText = "Wordpressへの上書き保存が完了しました";
-			let obj: any = JSON.parse(this._wpc.result);
+			if(this._wpc.isSuccess){
+				this._completeMessage.innerText = "Wordpressへの上書き保存が完了しました";
+			}else{
+				this._completeMessage.innerText = "Wordpressへの上書き保存が失敗しました";
+			}
 		}
 
 		this.dispatchEvent(new createjs.Event(SaveToWPController.EVENT_SAVE_COMPLETE_TO_WP, true, true));
