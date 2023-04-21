@@ -19,8 +19,9 @@ export class Workspace extends createjs.Stage {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public readonly EVENT_CHANGE_WS: string = "event change workspace";
-	public readonly EVENT_EXTRACT_HEX_COLOR: string = "event extract hex color";
+	public static readonly EVENT_CHANGE_WS: string = "event change workspace";
+	public static readonly EVENT_EXTRACT_HEX_COLOR_WS: string = "event extract hex color workspace";
+	public static readonly EVENT_MOUSEDOWN_WS:string = "event mousedown workspace";
 	//----------private---------
 	private _state: State;
 
@@ -62,7 +63,7 @@ export class Workspace extends createjs.Stage {
 	//=============================================
 	constructor(state: State, canvasId: string) {
 		super(canvasId);
-		
+		this.name = canvasId;
 		this._dotSize = 16;
 		this._stageMargin = 2;
 
@@ -153,6 +154,8 @@ export class Workspace extends createjs.Stage {
 		// インタラクティブの設定
 		//TODO　描画のあるところでないとイベントが発生しない？
 		this.addEventListener("stagemousedown", (e: MouseEvent) => {
+			this.dispatchEvent(new createjs.Event(Workspace.EVENT_MOUSEDOWN_WS, true, true));
+
 			//エリア外なら処理をしない
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 			//お絵かきモードでないなら処理しない
@@ -193,7 +196,7 @@ export class Workspace extends createjs.Stage {
 					//console.log(hexColor);
 					if(hexColor && this._hexColor != hexColor){
 						this._hexColor = hexColor;
-						this.dispatchEvent(new createjs.Event(this.EVENT_EXTRACT_HEX_COLOR, true, true));
+						this.dispatchEvent(new createjs.Event(Workspace.EVENT_EXTRACT_HEX_COLOR_WS, true, true));
 					}
 				}
 			}
@@ -203,7 +206,7 @@ export class Workspace extends createjs.Stage {
 				if (this._isMouseDown) {
 					if (this._state.current== State.DRAW_PENCIL || this._state.current== State.DRAW_ERACER) {
 						this._saveHistory();
-						this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
+						this.dispatchEvent(new createjs.Event(Workspace.EVENT_CHANGE_WS, true, true));
 					}
 				}
 			}
@@ -322,7 +325,7 @@ export class Workspace extends createjs.Stage {
 		}
 		this.update();
 		if(isSaveLog){this._saveHistory();}
-		this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
+		this.dispatchEvent(new createjs.Event(Workspace.EVENT_CHANGE_WS, true, true));
 	}
 	public getPixcelArtData = ():PixcelArtData => {
 		let result: PixcelArtData = new PixcelArtData();
@@ -393,7 +396,7 @@ export class Workspace extends createjs.Stage {
 					let dld : DrawLayerData = this._dragLayer.getDrawLayerData();
 					layer.setDrawLayerData(dld);
 					this._saveHistory();
-					this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));
+					this.dispatchEvent(new createjs.Event(Workspace.EVENT_CHANGE_WS, true, true));
 				}
 				this._dragLayer.init();
 				this._selectRangeLayer.init();
@@ -406,7 +409,15 @@ export class Workspace extends createjs.Stage {
 			//this._selectRangeLayer.resetSelect();
 		}
 		this.update();
-	} 
+	}
+	public active = ():void =>{
+		this._bgLayer.active();
+		this.update();
+	}
+	public inactive = ():void =>{
+		this._bgLayer.inactive();
+		this.update();
+	}
 	//=============================================
 	// getter/setter
 	//=============================================

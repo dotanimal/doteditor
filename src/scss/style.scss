@@ -86,7 +86,7 @@ $modal-width:800px;
 //--------------------------
 
 #editor{
-	width: 800px !important;
+	width: 1020px !important;
 	margin:0 auto;
 
 	> .menu{
@@ -180,10 +180,14 @@ $modal-width:800px;
 		}
 	}
 	.workspaceArea{
-		padding: 10px 0 0 0;
+		padding-top: 10px;
+		display:flex;
 		canvas{
 			background: $color-white;
 			padding: 0;
+		}
+		canvas#workspace1{
+			margin-right:20px;
 		}
 	}
 	footer{

@@ -77,8 +77,8 @@ export class DragLayer extends DrawLayer {
 
 		this._c2ld.init(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._drawAreaLeft, this._drawAreaTop, this._drawAreaRight, this._drawAreaBottom);
 		let dld:DrawLayerData = this._c2ld.getDrawLayerData(1);
-		dld.x = dld.x + Math.floor((this.x - this._drawAreaLeft) / this._dotSize) + 1;
-		dld.y = dld.y + Math.floor((this.y - this._drawAreaTop) / this._dotSize) + 1;
+		dld.x = dld.x + Math.floor((this.x - this._drawAreaLeft) / this._dotSize) + 0;
+		dld.y = dld.y + Math.floor((this.y - this._drawAreaTop) / this._dotSize) + 0;
 		this._c2ld.dispose();
 		return dld;
 	}

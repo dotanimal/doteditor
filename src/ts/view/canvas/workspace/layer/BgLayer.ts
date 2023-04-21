@@ -13,12 +13,14 @@ export class BgLayer extends Layer {
 	//=============================================
 	//----------public----------
 	//----------private---------
+	private _isActive:boolean;
 	//----------protected-------
 	//=============================================
 	// constructor
 	//=============================================
 	constructor(state:State) {
 		super(state);
+		this._isActive = false;
 	}
 	//=============================================
 	// event handler
@@ -26,8 +28,7 @@ export class BgLayer extends Layer {
 	//=============================================
 	// private
 	//=============================================
-	private _drawGraphics = () => {
-		this.graphics.clear();
+	private _drawLine = () => {
 		let color: string;
 
 		//格子柄
@@ -87,7 +88,7 @@ export class BgLayer extends Layer {
 		}
 
 		//描画した順に上書き（追記）
-		this.updateCache("source-over");
+		//this.updateCache("source-over");
 	}
 	//=============================================
 	// public
@@ -96,7 +97,35 @@ export class BgLayer extends Layer {
 		this._superSetStageSize(stageWidth, stageHeight, dotSize, drawAreaLeft, drawAreaTop, drawAreaRight, drawAreaBottom);
 		//console.log("[BgLayer] change size");
 
-		this._drawGraphics();
+		this.graphics.clear();
+		if(this._isActive){
+			this.graphics.beginFill("#ccc");
+			this.graphics.drawRect(0, 0, this._stageWidth, this._stageHeight);
+		}
+		this._drawLine();
+		this.updateCache();
+	}
+	public active = ():void =>{
+		if(!this._isActive){
+			this.graphics.clear();
+			this.graphics.beginFill("#ccc");
+			this.graphics.drawRect(0, 0, this._stageWidth, this._stageHeight);
+			this._drawLine();
+			this.updateCache();
+
+			this._isActive = true;
+		}
+	}
+	public inactive = ():void =>{
+		if(this._isActive){
+			this.graphics.clear();
+			//this.graphics.beginFill("#ccc");
+			this.graphics.drawRect(0, 0, this._stageWidth, this._stageHeight);
+			this._drawLine();
+			this.updateCache();
+
+			this._isActive = false;
+		}
 	}
 	//=============================================
 	// getter/setter

@@ -59,6 +59,7 @@ export class Main {
 		this._wsList = {};
 		
 		this._addWorkSpace('workspace1');
+		this._addWorkSpace('workspace2');
 
 		this._fdm.addEventListener(this._fdm.EVENT_OPEN_FILE_DROPDOWN, this._onOpenFileDropdownMenuHandler);
 		this._fdm.addEventListener(this._fdm.EVENT_CLOSE_FILE_DROPDOWN, this._onCloseFileDropdownMenuHandler);
@@ -73,19 +74,22 @@ export class Main {
 		//window.addEventListener('beforeunload', this._onBeforeunloadHandler);
 
 
-		let pad:PixcelArtData = this._lsc.load();
-		if(!pad){
-			//LocalStorageがなければ空のデータを作成する
-			pad = new PixcelArtData(true);
-		}
-		this._setPixcelArtData2WorkSpace(pad);
-		//カラーパレットに色を反映
-		//let colorList: Array<string> = pad.getHexColorCodeList();
-		//this._cp.setHexColorList(colorList);
-
-		//this._lc.addEventListener(this._lc.EVENT_SAVE_JSON_COMPLETE, this._onSaveJsonToLocalCompleteHandler);
 		//カラーパレットの初期化　イベントリスナーを登録したあとに実行しないと色々うごかないのでここで実行
 		this._cp.init();
+
+		//ワークスペースにローカルストレージのデータを反映
+		for (var key in this._wsList) {
+			let ws:Workspace = this._wsList[key];
+			let pad:PixcelArtData = this._lsc.load(ws.name);
+			if(!pad){
+				//LocalStorageがなければ空のデータを作成する
+				pad = new PixcelArtData(true);
+			}
+			this._setPixcelArtData2WorkSpace(ws, pad);
+		}
+		//アクティブワークスペースを設定
+		let ws:Workspace = <Workspace>this._wsList["workspace1"];
+		this._wsActiveChange(ws);
 	}
 	//=============================================
 	// event handler
@@ -153,6 +157,11 @@ export class Main {
 			ws = this._getActiveWorkSpace();
 			pad = new PixcelArtData(true);
 			ws.setPixcelArtData(pad);
+			this._wsActiveChange(ws);
+			/*
+			ws.active();
+			this._onChangeColorPaletteHandler(null);
+			*/
 		}else if(this._state.current== State.FILE_LOAD_JSON_FROM_LOCAL){
 			//ローカルからJSONファイルを読み込み
 			ws = this._getActiveWorkSpace();
@@ -187,28 +196,38 @@ export class Main {
 	}
 	//----------Workspace----------
 	//ワークスペースの変更
-	private _onWorkspaceChangeHandler = (e: Event) => {
+	private _onWSChangeHandler = (e: Event) => {
 		console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		let ws: Workspace = <Workspace>e.target;
-		if (ws.hasPrevLog) {
-			this._hb.undoBtnDisactive(false);
-		} else {
-			this._hb.undoBtnDisactive(true);
-		}
-		if (ws.hasNextLog) {
-			this._hb.redoBtnDisactive(false);
-		} else {
-			this._hb.redoBtnDisactive(true);
-		}
+		this._setupHistoryBtn(ws);
 		
 		let pad : PixcelArtData = ws.getPixcelArtData();
 		//ローカルストレージにデータを保存
-		this._lsc.save(pad);
+		this._lsc.save(ws.name, pad);
 
 	}
-	private _onGetHexColorHander = (e: Event) => {
+	//色の取得
+	private _onGetHexColorHandler = (e: Event) => {
 		let ws: Workspace = <Workspace>e.target;
 		this._cp.hexColor =  ws.hexColor;
+	}
+	//マウスダウン
+	private _onWSMousedownHandler = (e: Event) => {
+		let ws: Workspace = <Workspace>e.target;
+		let targetWsId : string = ws.name;
+		for (var key in this._wsList) {
+			ws = this._wsList[key];
+			if (key == targetWsId) {
+				this._wsActiveChange(ws);
+				/*
+				ws.active();
+				this._activeWsId = key;
+				this._onChangeColorPaletteHandler(null);
+				*/
+			}else{
+				ws.inactive();
+			}
+		}
 	}
 	//----------LocalConnector----------
 	//JSONファイルの読み込み完了
@@ -216,7 +235,8 @@ export class Main {
 		let pad : PixcelArtData = this._lc.loadResultPad;
 		if(pad != null){
 			console.log('\n[Event]', e.type);
-			this._setPixcelArtData2WorkSpace(pad);
+			let ws: Workspace = this._getActiveWorkSpace();
+			this._setPixcelArtData2WorkSpace(ws, pad);
 		}
 	}
 	/*
@@ -231,7 +251,8 @@ export class Main {
 		let pad : PixcelArtData = this._lfwpCtrl.loadResultPad;
 		if(pad != null){
 			console.log('\n[Event]', e.type);
-			this._setPixcelArtData2WorkSpace(pad);
+			let ws: Workspace = this._getActiveWorkSpace();
+			this._setPixcelArtData2WorkSpace(ws, pad);
 		}
 	}
 	
@@ -255,42 +276,49 @@ export class Main {
 			let ws: Workspace = new Workspace(this._state, canvasId);
 			this._wsList[canvasId] = ws;
 			this._activeWsId = canvasId;
-			ws.addEventListener(ws.EVENT_CHANGE_WS, this._onWorkspaceChangeHandler);
-			ws.addEventListener(ws.EVENT_EXTRACT_HEX_COLOR, this._onGetHexColorHander);
+			ws.addEventListener(Workspace.EVENT_CHANGE_WS, this._onWSChangeHandler);
+			ws.addEventListener(Workspace.EVENT_EXTRACT_HEX_COLOR_WS, this._onGetHexColorHandler);
+			ws.addEventListener(Workspace.EVENT_MOUSEDOWN_WS, this._onWSMousedownHandler);
 		} else {
 			alert("この名前のワークスペースはすでに登録されています");
 		}
 	}
-	/*WSを削除するときに使う（未完成）
-	private _removeWorkSpace = (canvasId: string) => {
-		let isAdded: boolean = false;
-		let ws: Workspace = this._wsList[canvasId];
-		if(ws){
-			//_wslistから取り除いて、のこりのWSから_activeWsIdを設定する必要がある
-			this._wsList; ←
-			this._activeWsId; ←
-			ws.removeEventListener(ws.EVENT_CHANGE_WS, this._onWorkspaceChangeHandler);
-			ws.removeEventListener(ws.EVENT_EXTRACT_HEX_COLOR, this._onGetHexColorHander);
-		}else{
-			alert("この名前のワークスペースはありません");
-		}
-	}
-	*/
 	private _getActiveWorkSpace = () => {
 		return this._wsList[this._activeWsId];
 	}
-	private _setPixcelArtData2WorkSpace = (pad: PixcelArtData) => {
+	private _setPixcelArtData2WorkSpace = (ws:Workspace, pad: PixcelArtData) => {
 		//console.log("MainController : _setPixcelArtData2WS");
 		//タイトルの反映
 		//this._titleTxtInput.value = pad.title;
 
 		//ワークスペースにデータを反映
-		let ws: Workspace = this._getActiveWorkSpace();
+		//let ws: Workspace = this._getActiveWorkSpace();
 		ws.setPixcelArtData(pad);
 		
 		//カラーパレットに色を反映
 		let colorList: Array<string> = pad.getHexColorCodeList();
 		this._cp.setHexColorList(colorList);
+	}
+	private _setupHistoryBtn = (ws:Workspace):void =>{
+		if (ws.hasPrevLog) {
+			this._hb.undoBtnDisactive(false);
+		} else {
+			this._hb.undoBtnDisactive(true);
+		}
+		if (ws.hasNextLog) {
+			this._hb.redoBtnDisactive(false);
+		} else {
+			this._hb.redoBtnDisactive(true);
+		}
+	} 
+	private _wsActiveChange = (ws:Workspace):void =>{
+		ws.active();
+		this._activeWsId = ws.name;
+
+		let hexColor : string = this._cp.hexColor;
+		ws.hexColor = hexColor;
+
+		this._setupHistoryBtn(ws);
 	}
 	private _changeState = () => {
 		this._eb.changedState();
