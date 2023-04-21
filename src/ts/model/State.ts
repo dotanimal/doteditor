@@ -14,8 +14,6 @@ export class State {
 	public static readonly EDIT_DROPPER: string = 'edit dropper';
 
 	public static readonly SELECT_RANGE: string = 'select range';
-	//public static readonly SELECT_DRAG: string = 'select drag';
-	//public static readonly SELECT_DRAG_END: string = 'select drag end';
 	public static readonly SELECT_COPY: string = 'select copy';
 	public static readonly SELECT_CUT: string = 'select cut';
 	public static readonly SELECT_END: string = 'select end';

@@ -3,7 +3,7 @@ import { DrawLayerData } from "../../../model/data/DrawLayerData";
 import { PixcelArtData } from "../../../model/data/PixcelArtData";
 import { BgLayer } from "./layer/BgLayer";
 import { CursorLayer } from "./layer/CursorLayer";
-import { DragLayer } from "./layer/DragLayer";
+import { TemporaryLayer } from "./layer/TemporaryLayer";
 import { DrawLayer } from "./layer/DrawLayer";
 import { SelectRangeLayer } from "./layer/SelectRangeLayer";
 
@@ -38,7 +38,7 @@ export class Workspace extends createjs.Stage {
 	private _bgLayer: BgLayer;
 	private _cursroLayer: CursorLayer;
 	private _selectRangeLayer:SelectRangeLayer;
-	private _dragLayer:DragLayer;
+	private _tempLayer:TemporaryLayer;
 
 	private _drawLayerList: Array<DrawLayer>;
 
@@ -56,7 +56,7 @@ export class Workspace extends createjs.Stage {
 	
 	//private _extractHexColor:string;
 
-	private _isAbleDraw :boolean;
+	//private _isAbleDraw :boolean;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -82,28 +82,17 @@ export class Workspace extends createjs.Stage {
 		this._bgLayer = new BgLayer(state);
 		this._cursroLayer = new CursorLayer(state);
 		this._selectRangeLayer = new SelectRangeLayer(state);
-		this._dragLayer = new DragLayer(state, "");
-		this._dragLayer.setStageMargin(this._stageMargin);
+		this._tempLayer = new TemporaryLayer(state, "");
+		this._tempLayer.setStageMargin(this._stageMargin);
 
 		this._addMouseEventListener();
 		
-		this._dragLayer.addEventListener(DragLayer.EVENT_DRAG_MOVE,(e:Event) => {
+		this._tempLayer.addEventListener(TemporaryLayer.EVENT_MOVE_TEMP,(e:Event) => {
 			this._selectRangeLayer.move(
-				this._dragLayer.x,// + this._stageMargin,
-				this._dragLayer.y// + this._stageMargin
+				this._tempLayer.x,// + this._stageMargin,
+				this._tempLayer.y// + this._stageMargin
 			)
 		});
-		/*
-		this._dragLayer.addEventListener(DragLayer.EVENT_MOVE_FIXED,(e:Event) => {
-			this._state.setCurrent(State.SELECT_END);
-			let dld:DrawLayerData =  this._dragLayer.getDrawLayerData();
-			let dl:DrawLayer = this._getActiveDrawLayer();
-			dl.setDrawLayerData(dld);
-			this._saveHistory();
-			this.dispatchEvent(new createjs.Event(Workspace.EVENT_CHANGE_WS, true, true));
-		});
-		*/		
-		//this.isAbleDraw = true;
 	}
 	//=============================================
 	// event handler
@@ -130,7 +119,7 @@ export class Workspace extends createjs.Stage {
 		}
 		this._cursroLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
 		this._selectRangeLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
-		this._dragLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
+		this._tempLayer.setStageSize(stageW, stageH, this._dotSize, left, top, right, bottom);
 
 		this._drawAreaTop = top;
 		this._drawAreaRight = right;
@@ -193,15 +182,14 @@ export class Workspace extends createjs.Stage {
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 
 			//範囲選択
-			//if(this._state.currentCategory == State.CATEGORY_SELECT){
+
 			this._selectRangeLayer.endSelect(this.mouseX, this.mouseY, true);
-				//this._dragLayerInit();
-			//}
+
 
 			//コピーもしくはカットモード中にマウスアップしたら、セレクトモード終了
 			if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
 				this._state.setCurrent(State.SELECT_END);
-				let dld:DrawLayerData =  this._dragLayer.getDrawLayerData();
+				let dld:DrawLayerData =  this._tempLayer.getDrawLayerData();
 				let dl:DrawLayer = this._getActiveDrawLayer();
 				dl.setDrawLayerData(dld);
 				this._saveHistory();
@@ -241,7 +229,7 @@ export class Workspace extends createjs.Stage {
 			this._cursroLayer.move(this.mouseX, this.mouseY);
 			
 			//一時表示するレイヤー
-			this._dragLayer.move(this.mouseX, this.mouseY);
+			this._tempLayer.move(this.mouseX, this.mouseY);
 			
 			//範囲選択
 			this._selectRangeLayer.endSelect(this.mouseX,this.mouseY);
@@ -288,23 +276,6 @@ export class Workspace extends createjs.Stage {
 		console.log("history", "save", this._histroyId);
 		//TODO　ログリストとログIDの値からUNDO/REDOボタンの有効・無効を切り替えられるようにしたい
 	}
-	private _copyDLDFromDraw2Drag = () => {
-		let layer: DrawLayer = this._getActiveDrawLayer();
-
-		if (layer) {
-			let left:number = this._selectRangeLayer.selectBeginX;
-			let top:number = this._selectRangeLayer.selectBeginY;
-			/*
-			let right:number = this._selectRangeLayer.selectEndX;
-			let bottom:number = this._selectRangeLayer.selectEndY;
-			*/
-			let dld :DrawLayerData = this.getSelectRangeDLD(true);
-
-			this._dragLayer.setDrawLayerData(dld);
-			this._dragLayer.x = left - this._drawAreaLeft;
-			this._dragLayer.y = top - this._drawAreaTop;
-		}
-	}
 	//=============================================
 	// public
 	//=============================================
@@ -329,8 +300,8 @@ export class Workspace extends createjs.Stage {
 		for (var key in drawLayerDataList) {
 			this._addDrawLayer(key);
 		}
-		//ドラッグレイヤーをAddChild
-		this.addChild(this._dragLayer);
+		//テンポラリレイヤーをAddChild
+		this.addChild(this._tempLayer);
 		//選択範囲表示用のレイヤーをAddChild
 		this.addChild(this._selectRangeLayer);
 		//カーソルレイヤーをAddChild
@@ -414,18 +385,18 @@ export class Workspace extends createjs.Stage {
 				this._cursroLayer.visible = false;
 
 			}else if(this._state.current == State.SELECT_END){
-				this._dragLayer.visible = false;
+				this._tempLayer.visible = false;
 				this._cursroLayer.visible = false;
 				this._selectRangeLayer.visible = false;
 				
-				this._dragLayer.init();
+				this._tempLayer.init();
 				this._selectRangeLayer.init();
 			}
 		}else{
 			this._cursroLayer.visible = true;
 			this._selectRangeLayer.visible = false;
 			this._selectRangeLayer.init();
-			this._dragLayer.visible = false;
+			this._tempLayer.visible = false;
 			//this._selectRangeLayer.resetSelect();
 		}
 		this.update();
@@ -455,15 +426,15 @@ export class Workspace extends createjs.Stage {
 		return result;
 	}
 	public setSelectRangeDLD = (dld:DrawLayerData):void =>{
-		this._dragLayer.visible = true;
-		this._dragLayer.setDrawLayerData(dld);
+		this._tempLayer.visible = true;
+		this._tempLayer.setDrawLayerData(dld);
 		
 		let xCount :number = dld.width;
 		let yCount :number = dld.height;
 		let baseX :number = dld.x;
 		let baseY :number = dld.y;
-		let bx:number = this._dragLayer.drawAreaLeft + baseX * this._dotSize;
-		let by:number = this._dragLayer.drawAreaTop + baseY * this._dotSize;
+		let bx:number = this._tempLayer.drawAreaLeft + baseX * this._dotSize;
+		let by:number = this._tempLayer.drawAreaTop + baseY * this._dotSize;
 		let ex:number = bx + (baseX + (xCount-1)) * this._dotSize;
 		let ey:number = by + (baseY + (yCount-1)) * this._dotSize;
 		

@@ -3,7 +3,7 @@ import { State } from "../../../../model/State";
 import { DrawLayerData } from "../../../../model/data/DrawLayerData";
 import { DrawLayer } from "./DrawLayer";
 
-export class DragLayer extends DrawLayer {
+export class TemporaryLayer extends DrawLayer {
 	//=============================================
 	// TODO
 	//=============================================
@@ -14,12 +14,9 @@ export class DragLayer extends DrawLayer {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public static readonly EVENT_DRAG_MOVE: string = "event drag move";
-	//public static readonly EVENT_MOVE_FIXED: string = "event move fixed";
+	public static readonly EVENT_MOVE_TEMP: string = "event move temporary layer";
 	//----------private---------
 	private _stageMargin:number;
-	//private _dragPointX :number ;
-	//private _dragPointY :number ; 
 	private _width:number;
 	private _height:number;
 	//----------protected-------
@@ -28,51 +25,10 @@ export class DragLayer extends DrawLayer {
 	//=============================================
 	constructor(state:State, name:string) {
 		super(state, name);
-
-		/*
-		this.addEventListener("mouseover", this._onMouseOverHandler);
-		this.addEventListener("mouseout", this._onMouseOutHandler);
-		this.addEventListener("mousedown", this._onMouseDownHandler);
-		this.addEventListener("pressmove", this._onPressMoveHandler);
-		this.addEventListener("pressup", this._onPressUpHandler);
-		*/
 	}
 	//=============================================
 	// event handler
 	//=============================================
-	/*
-	private _onMouseOverHandler = (e:MouseEvent) => {
-		if(this._state.current == State.SELECT_DRAG){
-			this.alpha = 0.75;
-		}
-	}
-	private _onMouseOutHandler = (e:MouseEvent) => {
-		if(this._state.current == State.SELECT_DRAG){
-			this.alpha = 1;
-		}
-	}
-	private _onMouseDownHandler = (e:MouseEvent) => {
-		if(this._state.current == State.SELECT_DRAG){
-			this._dragPointX = this.stage.mouseX - this.x;
-			this._dragPointY = this.stage.mouseY - this.y;
-			this.alpha = 0.5;
-		}
-	}
-	private _onPressMoveHandler = (e:MouseEvent) => {
-		if(this._state.current == State.SELECT_DRAG){
-			let xx:number = this.stage.mouseX - this._dragPointX;
-			let yy:number = this.stage.mouseY - this._dragPointY;
-			this.x= this._adustX(xx) + this._drawAreaLeft - this._stageMargin;
-			this.y= this._adustY(yy) + this._drawAreaTop - this._stageMargin;
-			this.dispatchEvent(new createjs.Event(DragLayer.EVENT_DRAG_MOVE, true, true));
-		}
-	}
-	private _onPressUpHandler = (e:MouseEvent) => {
-		if(this._state.current == State.SELECT_DRAG){
-			this.alpha = 0.75;
-		}
-	}
-	*/
 	//=============================================
 	// private
 	//=============================================
@@ -135,7 +91,7 @@ export class DragLayer extends DrawLayer {
 			let yy:number = mouseY - this._height/2;
 			this.x= this._adustX(xx) + this._drawAreaLeft - this._stageMargin;
 			this.y= this._adustY(yy) + this._drawAreaTop - this._stageMargin;
-			this.dispatchEvent(new createjs.Event(DragLayer.EVENT_DRAG_MOVE, true, true));
+			this.dispatchEvent(new createjs.Event(TemporaryLayer.EVENT_MOVE_TEMP, true, true));
 		}
 	}
 	//=============================================

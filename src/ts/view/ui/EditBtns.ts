@@ -19,7 +19,6 @@ export class EditBtns extends createjs.EventDispatcher {
 	private _eracerBtn: HTMLButtonElement;
 	private _dropperBtn: HTMLButtonElement;
 	private _rangeSelectBtn: HTMLButtonElement;
-	//private _dragBtn: HTMLButtonElement;
 	private _copyBtn: HTMLButtonElement;
 	private _cutBtn: HTMLButtonElement;
 	private _pasteBtn: HTMLButtonElement;
@@ -58,12 +57,6 @@ export class EditBtns extends createjs.EventDispatcher {
 		}else{
 			//同じボタンを押して非アクティブにした場合
 			state = null;
-			/*
-			if(target.id == "drag"){
-				//ドラッグボタンを非アクティブにしたときだけ特別なイベントを送る
-				state = State.SELECT_DRAG_END;
-			}
-			*/
 		}
 		this._state.setCurrent(state);
 		//this.changedState();
@@ -136,11 +129,6 @@ export class EditBtns extends createjs.EventDispatcher {
 
 		//鉛筆が選択されている状態にする
 		this._pencilBtn.click();
-		/*
-		this._btnsInactive(this._pencilBtn);
-		this._state.setCurrent(State.DRAW_PENCIL);
-		this.dispatchEvent(new createjs.Event(this.EVENT_CLICK_EDIT_BTN, true, true));
-		*/
 	}
 	public changedState = () =>{
 		let state :string = this._state.current;
