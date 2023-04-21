@@ -75,10 +75,30 @@ export class DragLayer extends DrawLayer {
 		let cc: HTMLCanvasElement = <HTMLCanvasElement>this.cacheCanvas;
 		let ctx: CanvasRenderingContext2D = cc.getContext("2d");
 
-		this._c2ld.init(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._drawAreaLeft, this._drawAreaTop, this._drawAreaRight, this._drawAreaBottom);
+		console.log(
+			this._stageWidth, 
+			this._stageHeight,
+			this._dotSize,
+			this._drawAreaLeft,
+			this._drawAreaTop,
+			this._drawAreaRight,
+			this._drawAreaBottom
+		);
+		this._c2ld.init(
+			ctx,
+			this._stageWidth,
+			this._stageHeight,
+			this._dotSize,
+			false,
+			true,
+			this._drawAreaLeft,
+			this._drawAreaTop,
+			this._drawAreaRight,
+			this._drawAreaBottom
+		);
 		let dld:DrawLayerData = this._c2ld.getDrawLayerData(1);
-		dld.x = dld.x + Math.floor((this.x - this._drawAreaLeft) / this._dotSize) + 0;
-		dld.y = dld.y + Math.floor((this.y - this._drawAreaTop) / this._dotSize) + 0;
+		dld.x = dld.x + Math.floor((this.x - this._drawAreaLeft + this._stageMargin) / this._dotSize) + 1;
+		dld.y = dld.y + Math.floor((this.y - this._drawAreaTop + this._stageMargin) / this._dotSize) + 1;
 		this._c2ld.dispose();
 		return dld;
 	}
