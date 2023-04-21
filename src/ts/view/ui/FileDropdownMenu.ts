@@ -133,7 +133,7 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	public changedState = () =>{
 		let state :string = this._state.current;
 		let category:string = this._state.currentCategory;
-		if(state == State.SELECT_RANGE || state == State.SELECT_DRAG){
+		if(state == State.SELECT_RANGE){
 			this._fddLink.classList.add("disabled");
 			return false;
 		}

@@ -86,6 +86,7 @@ export class Workspace extends createjs.Stage {
 		this._dragLayer.setStageMargin(this._stageMargin);
 
 		this._addMouseEventListener();
+		
 		this._dragLayer.addEventListener(DragLayer.EVENT_DRAG_MOVE,(e:Event) => {
 			this._selectRangeLayer.move(
 				this._dragLayer.x,// + this._stageMargin,
@@ -408,23 +409,8 @@ export class Workspace extends createjs.Stage {
 		//console.log(this._state.currentCategory,this._state.current);
 		if(this._state.currentCategory == State.CATEGORY_SELECT){
 			this._selectRangeLayer.visible = true;
-			if(this._state.current == State.SELECT_DRAG){
-				this._dragLayer.init();
-				this._copyDLDFromDraw2Drag();
-				this._dragLayer.visible = true;
-				this._cursroLayer.visible = false;
-			}else if(this._state.current == State.SELECT_DRAG_END){
-				let layer: DrawLayer = this._getActiveDrawLayer();
-				if (layer) {
-					let dld : DrawLayerData = this._dragLayer.getDrawLayerData();
-					layer.setDrawLayerData(dld);
-					this._saveHistory();
-					this.dispatchEvent(new createjs.Event(Workspace.EVENT_CHANGE_WS, true, true));
-				}
-				this._dragLayer.init();
-				this._selectRangeLayer.init();
-
-			}else if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
+			
+			if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
 				this._cursroLayer.visible = false;
 
 			}else if(this._state.current == State.SELECT_END){
@@ -435,11 +421,6 @@ export class Workspace extends createjs.Stage {
 				this._dragLayer.init();
 				this._selectRangeLayer.init();
 			}
-			/*
-			else if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
-				this._dragLayer.visible = true;
-			}
-			*/
 		}else{
 			this._cursroLayer.visible = true;
 			this._selectRangeLayer.visible = false;

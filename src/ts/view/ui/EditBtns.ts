@@ -19,7 +19,7 @@ export class EditBtns extends createjs.EventDispatcher {
 	private _eracerBtn: HTMLButtonElement;
 	private _dropperBtn: HTMLButtonElement;
 	private _rangeSelectBtn: HTMLButtonElement;
-	private _dragBtn: HTMLButtonElement;
+	//private _dragBtn: HTMLButtonElement;
 	private _copyBtn: HTMLButtonElement;
 	private _cutBtn: HTMLButtonElement;
 	private _pasteBtn: HTMLButtonElement;
@@ -48,8 +48,6 @@ export class EditBtns extends createjs.EventDispatcher {
 			state = State.EDIT_DROPPER;
 		}else if(target.id == "selectRange"){
 			state = State.SELECT_RANGE;
-		}else if(target.id == "drag"){
-			state = State.SELECT_DRAG;
 		}else if(target.id == "copy"){
 			state = State.SELECT_COPY;
 		}else if(target.id == "cut"){
@@ -60,10 +58,12 @@ export class EditBtns extends createjs.EventDispatcher {
 		}else{
 			//同じボタンを押して非アクティブにした場合
 			state = null;
+			/*
 			if(target.id == "drag"){
 				//ドラッグボタンを非アクティブにしたときだけ特別なイベントを送る
 				state = State.SELECT_DRAG_END;
 			}
+			*/
 		}
 		this._state.setCurrent(state);
 		//this.changedState();
@@ -94,7 +94,6 @@ export class EditBtns extends createjs.EventDispatcher {
 		eracer:boolean,
 		dropper:boolean,
 		rangeSelect:boolean,
-		drag:boolean,
 		copy:boolean,
 		cut:boolean
 	) : void => {
@@ -102,7 +101,6 @@ export class EditBtns extends createjs.EventDispatcher {
 		this._btnAble(this._eracerBtn, eracer);
 		this._btnAble(this._dropperBtn, dropper);
 		this._btnAble(this._rangeSelectBtn, rangeSelect);
-		this._btnAble(this._dragBtn, drag);
 		this._btnAble(this._copyBtn, copy);
 		this._btnAble(this._cutBtn, cut);
 	}
@@ -111,7 +109,6 @@ export class EditBtns extends createjs.EventDispatcher {
 			btn.classList.remove("active");
 			btn.classList.remove("disabled");
 		}
-		this._btnAble(this._dragBtn, false);
 	}
 	//=============================================
 	// public
@@ -121,7 +118,6 @@ export class EditBtns extends createjs.EventDispatcher {
 		this._eracerBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #eracer');
 		this._dropperBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #dropper');
 		this._rangeSelectBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #selectRange');
-		this._dragBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #drag');
 
 		this._copyBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #copy');
 		this._cutBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #cut');
@@ -131,7 +127,6 @@ export class EditBtns extends createjs.EventDispatcher {
 			this._eracerBtn,
 			this._dropperBtn,
 			this._rangeSelectBtn,
-			this._dragBtn,
 			this._copyBtn,
 			this._cutBtn
 		];
@@ -158,7 +153,6 @@ export class EditBtns extends createjs.EventDispatcher {
 				true,
 				true,
 				false,
-				false,
 				false
 			);
 		}else if(state == State.DRAW_ERACER){
@@ -167,7 +161,6 @@ export class EditBtns extends createjs.EventDispatcher {
 				true,
 				true,
 				true,
-				false,
 				false,
 				false
 			);
@@ -178,7 +171,6 @@ export class EditBtns extends createjs.EventDispatcher {
 				true,
 				true,
 				false,
-				false,
 				false
 			);
 		}else if(state == State.SELECT_RANGE){
@@ -188,32 +180,10 @@ export class EditBtns extends createjs.EventDispatcher {
 				true,
 				true,
 				true,
-				true,
 				true
-			);
-		}else if(state == State.SELECT_DRAG){
-			this._btnsAble(
-				false,
-				false,
-				false,
-				false,
-				true,
-				false,
-				false
-			);
-		}else if(state == State.SELECT_DRAG_END){
-			this._btnsAble(
-				true,
-				true,
-				true,
-				true,
-				false,
-				false,
-				false
 			);
 		}else if(state == State.SELECT_COPY){
 			this._btnsAble(
-				false,
 				false,
 				false,
 				false,
@@ -228,7 +198,6 @@ export class EditBtns extends createjs.EventDispatcher {
 				false,
 				false,
 				false,
-				false,
 				false
 			);
 		}else if(state == State.SELECT_END){
@@ -237,7 +206,6 @@ export class EditBtns extends createjs.EventDispatcher {
 				true,
 				true,
 				true,
-				false,
 				false,
 				false
 			);
@@ -252,7 +220,6 @@ export class EditBtns extends createjs.EventDispatcher {
 				true,
 				true,
 				true,
-				false,
 				false,
 				false
 			);

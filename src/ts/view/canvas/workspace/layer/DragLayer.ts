@@ -15,11 +15,11 @@ export class DragLayer extends DrawLayer {
 	//=============================================
 	//----------public----------
 	public static readonly EVENT_DRAG_MOVE: string = "event drag move";
-	public static readonly EVENT_MOVE_FIXED: string = "event move fixed";
+	//public static readonly EVENT_MOVE_FIXED: string = "event move fixed";
 	//----------private---------
 	private _stageMargin:number;
-	private _dragPointX :number ;
-	private _dragPointY :number ; 
+	//private _dragPointX :number ;
+	//private _dragPointY :number ; 
 	private _width:number;
 	private _height:number;
 	//----------protected-------
@@ -28,16 +28,19 @@ export class DragLayer extends DrawLayer {
 	//=============================================
 	constructor(state:State, name:string) {
 		super(state, name);
-		
+
+		/*
 		this.addEventListener("mouseover", this._onMouseOverHandler);
 		this.addEventListener("mouseout", this._onMouseOutHandler);
 		this.addEventListener("mousedown", this._onMouseDownHandler);
 		this.addEventListener("pressmove", this._onPressMoveHandler);
 		this.addEventListener("pressup", this._onPressUpHandler);
+		*/
 	}
 	//=============================================
 	// event handler
 	//=============================================
+	/*
 	private _onMouseOverHandler = (e:MouseEvent) => {
 		if(this._state.current == State.SELECT_DRAG){
 			this.alpha = 0.75;
@@ -68,12 +71,8 @@ export class DragLayer extends DrawLayer {
 		if(this._state.current == State.SELECT_DRAG){
 			this.alpha = 0.75;
 		}
-		/*
-		if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
-			this.dispatchEvent(new createjs.Event(DragLayer.EVENT_MOVE_FIXED, true, true));
-		}
-		*/
 	}
+	*/
 	//=============================================
 	// private
 	//=============================================
@@ -142,22 +141,10 @@ export class DragLayer extends DrawLayer {
 	//=============================================
 	// getter/setter
 	//=============================================
-	get width(): number {
-		return this._width;
-	}
-	get height(): number {
-		return this._height;
-	}
 	get drawAreaLeft():number{
 		return this._drawAreaLeft;
 	}
 	get drawAreaTop():number{
 		return this._drawAreaTop;
-	}
-	get drawAreaRight():number{
-		return this._drawAreaRight;
-	}
-	get drawAreaBottom():number{
-		return this._drawAreaBottom;
 	}
 }

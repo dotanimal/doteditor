@@ -113,7 +113,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 		let state :string = this._state.current;
 		let category:string = this._state.currentCategory;
 
-		if(state == State.SELECT_RANGE || state == State.SELECT_DRAG){
+		if(state == State.SELECT_RANGE){
 			this._apply2AllColorPicker(function(target:HTMLInputElement){
 				target.disabled = true;
 				target.style.opacity = "0.7";
