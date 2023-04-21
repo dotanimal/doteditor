@@ -137,7 +137,8 @@ $modal-width:800px;
 		#drawBtnGrp{
 			margin-right:30px;
 
-			#selectRange{
+			#selectRange,
+			#copy{
 				padding-left:4px;
 				padding-right:4px;
 				svg{
@@ -147,7 +148,9 @@ $modal-width:800px;
 				}
 			}
 			#selectRange:hover,
-			#selectRange.active{
+			#selectRange.active,
+			#copy:hover,
+			#copy.active{
 				svg{
 					fill: $color-white;
 				}

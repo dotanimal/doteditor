@@ -34,6 +34,16 @@ export class SelectRangeLayer extends Layer {
 	//=============================================
 	// private
 	//=============================================
+	private _resetSelect = () =>{
+		this._selectBeginX = undefined;
+		this._selectBeginY = undefined;
+		this._selectEndX = undefined;
+		this._selectEndY = undefined;
+		//this._isShowSelectArea = false;
+		this._isLockSelect = false;
+		this.graphics.clear();
+		this.updateCache();
+	}
 	//=============================================
 	// public
 	//=============================================
@@ -55,7 +65,7 @@ export class SelectRangeLayer extends Layer {
 		this._isLockSelect = false;
 	}
 	public beginSelect = (mx:number, my:number) =>{
-		if(this._state.current != State.SELECT_RANGE){return false;}
+		if(	this._state.current != State.SELECT_RANGE){ return false;}
 
 		this._selectBeginX = this._adustX(mx);
 		this._selectBeginY  = this._adustY(my);
@@ -63,7 +73,7 @@ export class SelectRangeLayer extends Layer {
 		//this._isShowSelectArea = true;
 	}
 	public endSelect = (mx:number, my:number, isLockSelect:boolean = false) =>{
-		if(this._state.current != State.SELECT_RANGE){return false;}
+		if(	this._state.current != State.SELECT_RANGE){ return false;}
 		if(this._selectBeginX == undefined || this._selectBeginY == undefined){return false;}
 		if(this._isLockSelect){return false;}
 
@@ -91,14 +101,28 @@ export class SelectRangeLayer extends Layer {
 		this.updateCache();
 		
 	}
-	public _resetSelect = () =>{
-		this._selectBeginX = undefined;
-		this._selectBeginY = undefined;
-		this._selectEndX = undefined;
-		this._selectEndY = undefined;
-		//this._isShowSelectArea = false;
-		this._isLockSelect = false;
+	public setBeginEnd = (bx:number, by:number, ex:number, ey:number) :void =>{
+		this._selectBeginX = this._adustX(bx);
+		this._selectBeginY  = this._adustY(by);
+
+		this._selectEndX = this._adustX(ex) + this._dotSize;
+		this._selectEndY = this._adustY(ey) + this._dotSize;
+
 		this.graphics.clear();
+
+		if( this._selectBeginX < this._selectEndX && this._selectBeginY < this._selectEndY ){
+			this.graphics.beginStroke(this._LINE_HEX_COLOR);
+			this.graphics.setStrokeDash([4,2],0);
+			this.graphics.setStrokeStyle(2);
+	
+			this.graphics.moveTo(this._selectBeginX,	this._selectBeginY);
+			this.graphics.lineTo(this._selectEndX,		this._selectBeginY);
+			this.graphics.lineTo(this._selectEndX,		this._selectEndY);
+			this.graphics.lineTo(this._selectBeginX,	this._selectEndY);
+			this.graphics.lineTo(this._selectBeginX,	this._selectBeginY);
+	
+			this.graphics.endStroke();
+		}
 		this.updateCache();
 	}
 	public move = (xx : number, yy : number) => {

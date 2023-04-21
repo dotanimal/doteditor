@@ -12229,17 +12229,21 @@ textarea.form-control-lg {
 #editor > .menu #drawBtnGrp {
   margin-right: 30px;
 }
-#editor > .menu #drawBtnGrp #selectRange {
+#editor > .menu #drawBtnGrp #selectRange,
+#editor > .menu #drawBtnGrp #copy {
   padding-left: 4px;
   padding-right: 4px;
 }
-#editor > .menu #drawBtnGrp #selectRange svg {
+#editor > .menu #drawBtnGrp #selectRange svg,
+#editor > .menu #drawBtnGrp #copy svg {
   fill: #000;
   width: 22px;
   height: 22px;
 }
 #editor > .menu #drawBtnGrp #selectRange:hover svg,
-#editor > .menu #drawBtnGrp #selectRange.active svg {
+#editor > .menu #drawBtnGrp #selectRange.active svg,
+#editor > .menu #drawBtnGrp #copy:hover svg,
+#editor > .menu #drawBtnGrp #copy.active svg {
   fill: #FFF;
 }
 #editor > .menu #colorPalette {

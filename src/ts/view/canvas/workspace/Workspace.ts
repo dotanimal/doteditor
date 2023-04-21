@@ -91,8 +91,17 @@ export class Workspace extends createjs.Stage {
 				this._dragLayer.x,// + this._stageMargin,
 				this._dragLayer.y// + this._stageMargin
 			)
-		})
-		
+		});
+		/*
+		this._dragLayer.addEventListener(DragLayer.EVENT_MOVE_FIXED,(e:Event) => {
+			this._state.setCurrent(State.SELECT_END);
+			let dld:DrawLayerData =  this._dragLayer.getDrawLayerData();
+			let dl:DrawLayer = this._getActiveDrawLayer();
+			dl.setDrawLayerData(dld);
+			this._saveHistory();
+			this.dispatchEvent(new createjs.Event(Workspace.EVENT_CHANGE_WS, true, true));
+		});
+		*/		
 		//this.isAbleDraw = true;
 	}
 	//=============================================
@@ -184,9 +193,19 @@ export class Workspace extends createjs.Stage {
 
 			//範囲選択
 			//if(this._state.currentCategory == State.CATEGORY_SELECT){
-				this._selectRangeLayer.endSelect(this.mouseX, this.mouseY, true);
+			this._selectRangeLayer.endSelect(this.mouseX, this.mouseY, true);
 				//this._dragLayerInit();
 			//}
+
+			//コピーもしくはカットモード中にマウスアップしたら、セレクトモード終了
+			if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
+				this._state.setCurrent(State.SELECT_END);
+				let dld:DrawLayerData =  this._dragLayer.getDrawLayerData();
+				let dl:DrawLayer = this._getActiveDrawLayer();
+				dl.setDrawLayerData(dld);
+				this._saveHistory();
+				this.dispatchEvent(new createjs.Event(Workspace.EVENT_CHANGE_WS, true, true));
+			}
 
 			//スポイトツール
 			if(this._state.current == State.EDIT_DROPPER){
@@ -219,6 +238,9 @@ export class Workspace extends createjs.Stage {
 
 			//カーソル
 			this._cursroLayer.move(this.mouseX, this.mouseY);
+			
+			//一時表示するレイヤー
+			this._dragLayer.move(this.mouseX, this.mouseY);
 			
 			//範囲選択
 			this._selectRangeLayer.endSelect(this.mouseX,this.mouseY);
@@ -271,11 +293,12 @@ export class Workspace extends createjs.Stage {
 		if (layer) {
 			let left:number = this._selectRangeLayer.selectBeginX;
 			let top:number = this._selectRangeLayer.selectBeginY;
+			/*
 			let right:number = this._selectRangeLayer.selectEndX;
 			let bottom:number = this._selectRangeLayer.selectEndY;
+			*/
+			let dld :DrawLayerData = this.getSelectRangeDLD(true);
 
-			let dld :DrawLayerData = layer.getRectDrawLayerData(left, top, right, bottom);
-			layer.drawRect(left, top, right, bottom,"FF0000", true);
 			this._dragLayer.setDrawLayerData(dld);
 			this._dragLayer.x = left - this._drawAreaLeft;
 			this._dragLayer.y = top - this._drawAreaTop;
@@ -400,7 +423,23 @@ export class Workspace extends createjs.Stage {
 				}
 				this._dragLayer.init();
 				this._selectRangeLayer.init();
+
+			}else if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
+				this._cursroLayer.visible = false;
+
+			}else if(this._state.current == State.SELECT_END){
+				this._dragLayer.visible = false;
+				this._cursroLayer.visible = false;
+				this._selectRangeLayer.visible = false;
+				
+				this._dragLayer.init();
+				this._selectRangeLayer.init();
 			}
+			/*
+			else if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
+				this._dragLayer.visible = true;
+			}
+			*/
 		}else{
 			this._cursroLayer.visible = true;
 			this._selectRangeLayer.visible = false;
@@ -417,6 +456,39 @@ export class Workspace extends createjs.Stage {
 	public inactive = ():void =>{
 		this._bgLayer.inactive();
 		this.update();
+	}
+	public getSelectRangeDLD = (isDelete:boolean):DrawLayerData =>{
+		let result : DrawLayerData;
+		let layer: DrawLayer = this._getActiveDrawLayer();
+		if (layer) {
+			let left:number = this._selectRangeLayer.selectBeginX;
+			let top:number = this._selectRangeLayer.selectBeginY;
+			let right:number = this._selectRangeLayer.selectEndX;
+			let bottom:number = this._selectRangeLayer.selectEndY;
+			result = layer.getRectDrawLayerData(left, top, right, bottom);
+			if(isDelete){
+				layer.drawRect(left, top, right, bottom,"FF0000", true);
+				this.update();
+			}
+		}
+		return result;
+	}
+	public setSelectRangeDLD = (dld:DrawLayerData):void =>{
+		this._dragLayer.visible = true;
+		this._dragLayer.setDrawLayerData(dld);
+		
+		let xCount :number = dld.width;
+		let yCount :number = dld.height;
+		let baseX :number = dld.x;
+		let baseY :number = dld.y;
+		let bx:number = this._dragLayer.drawAreaLeft + baseX * this._dotSize;
+		let by:number = this._dragLayer.drawAreaTop + baseY * this._dotSize;
+		let ex:number = bx + (baseX + (xCount-1)) * this._dotSize;
+		let ey:number = by + (baseY + (yCount-1)) * this._dotSize;
+		
+		this._selectRangeLayer.init();
+		this._selectRangeLayer.visible = true;
+		this._selectRangeLayer.setBeginEnd(bx,by,ex,ey);
 	}
 	//=============================================
 	// getter/setter

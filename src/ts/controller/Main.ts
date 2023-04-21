@@ -10,6 +10,7 @@ import { LocalStorageConnector } from "../model/connector/LocalStorageConnector"
 import { WPConector } from "../model/connector/WPConnector";
 import { SaveToWPController } from "./SaveToWPController";
 import { LoadFromWPController } from "./LoadFromWPController";
+import { DrawLayerData } from "../model/data/DrawLayerData";
 
 export class Main {
 	//=============================================
@@ -38,6 +39,8 @@ export class Main {
 
 	private _wsList: { [key: string]: Workspace };
 	private _activeWsId: string;
+
+	//private _selectDLD:DrawLayerData;
 	//=============================================
 	// constructor
 	//=============================================
@@ -73,10 +76,6 @@ export class Main {
 		this._lfwpCtrl.addEventListener(LoadFromWPController.EVENT_SELECT_THUMB, this._onLoadFromWPHandler);
 		//window.addEventListener('beforeunload', this._onBeforeunloadHandler);
 
-
-		//カラーパレットの初期化　イベントリスナーを登録したあとに実行しないと色々うごかないのでここで実行
-		this._cp.init();
-
 		//ワークスペースにローカルストレージのデータを反映
 		for (var key in this._wsList) {
 			let ws:Workspace = this._wsList[key];
@@ -90,6 +89,11 @@ export class Main {
 		//アクティブワークスペースを設定
 		let ws:Workspace = <Workspace>this._wsList["workspace1"];
 		this._wsActiveChange(ws);
+
+		
+		//最後に初期化が必要なもの
+		this._cp.init();
+		this._eb.init();
 	}
 	//=============================================
 	// event handler
@@ -112,6 +116,22 @@ export class Main {
 	private _onClickEditBtnHandler = (e: Event) => {
 		//console.log('\n[Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this._changeState();
+		
+		if(this._state.current == State.SELECT_COPY){
+			let ws: Workspace = this._getActiveWorkSpace();
+			let dld:DrawLayerData = ws.getSelectRangeDLD(false);
+			for (var key in this._wsList) {
+				ws = this._wsList[key];
+				ws.setSelectRangeDLD(dld);
+			}
+		}else if(this._state.current == State.SELECT_CUT){
+			let ws: Workspace = this._getActiveWorkSpace();
+			let dld:DrawLayerData = ws.getSelectRangeDLD(true);
+			for (var key in this._wsList) {
+				ws = this._wsList[key];
+				ws.setSelectRangeDLD(dld);
+			}
+		}
 		//ws.isAbleDraw = true;
 	}
 	//----------ColorPalette----------
@@ -201,6 +221,14 @@ export class Main {
 		let ws: Workspace = <Workspace>e.target;
 		this._setupHistoryBtn(ws);
 		
+		//コピーまたはカットが終わった
+		if(this._state.current == State.SELECT_END){
+			this._changeState();
+			//this._state.setCurrent(null);
+
+
+		}
+		
 		let pad : PixcelArtData = ws.getPixcelArtData();
 		//ローカルストレージにデータを保存
 		this._lsc.save(ws.name, pad);
@@ -215,17 +243,20 @@ export class Main {
 	private _onWSMousedownHandler = (e: Event) => {
 		let ws: Workspace = <Workspace>e.target;
 		let targetWsId : string = ws.name;
-		for (var key in this._wsList) {
-			ws = this._wsList[key];
-			if (key == targetWsId) {
-				this._wsActiveChange(ws);
-				/*
-				ws.active();
-				this._activeWsId = key;
-				this._onChangeColorPaletteHandler(null);
-				*/
-			}else{
-				ws.inactive();
+		if(this._activeWsId != targetWsId){
+			//アクティブWSの変更
+			for (var key in this._wsList) {
+				ws = this._wsList[key];
+				if (key == targetWsId) {
+					this._wsActiveChange(ws);
+					/*
+					ws.active();
+					this._activeWsId = key;
+					this._onChangeColorPaletteHandler(null);
+					*/
+				}else{
+					ws.inactive();
+				}
 			}
 		}
 	}
@@ -326,8 +357,14 @@ export class Main {
 		this._fdm.changedState();
 		this._cp.changedState();
 		
-		let ws: Workspace = this._getActiveWorkSpace();
-		ws.changedState();
+
+		for (var key in this._wsList) {
+			let ws:Workspace = this._wsList[key];
+			ws.changedState();
+		}
+
+		//let ws: Workspace = this._getActiveWorkSpace();
+		//ws.changedState();
 	}
 	//=============================================
 	// public

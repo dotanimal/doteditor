@@ -13,13 +13,16 @@ export class EditBtns extends createjs.EventDispatcher {
 	public readonly EVENT_CLICK_EDIT_BTN: string = "event click edit btn";
 	//----------private---------
 	private _state: State;
-	private _btnList: Array<HTMLElement>;
+	private _btnList: Array<HTMLButtonElement>;
 
-	private _pencilBtn: HTMLElement;
-	private _eracerBtn: HTMLElement;
-	private _dropperBtn: HTMLElement;
-	private _rangeSelectBtn: HTMLElement;
-	private _dragBtn: HTMLElement;
+	private _pencilBtn: HTMLButtonElement;
+	private _eracerBtn: HTMLButtonElement;
+	private _dropperBtn: HTMLButtonElement;
+	private _rangeSelectBtn: HTMLButtonElement;
+	private _dragBtn: HTMLButtonElement;
+	private _copyBtn: HTMLButtonElement;
+	private _cutBtn: HTMLButtonElement;
+	private _pasteBtn: HTMLButtonElement;
 		
 	//----------protected-------
 	//=============================================
@@ -29,22 +32,6 @@ export class EditBtns extends createjs.EventDispatcher {
 		super();
 		
 		this._state = state;
-
-		this._pencilBtn = <HTMLElement>document.querySelector('#drawBtnGrp > #pencil');
-		this._eracerBtn = <HTMLElement>document.querySelector('#drawBtnGrp > #eracer');
-		this._dropperBtn = <HTMLElement>document.querySelector('#drawBtnGrp > #dropper');
-		this._rangeSelectBtn = <HTMLElement>document.querySelector('#drawBtnGrp > #selectRange');
-		this._dragBtn = <HTMLElement>document.querySelector('#drawBtnGrp > #drag');
-		
-		this._btnList = [this._pencilBtn, this._eracerBtn, this._dropperBtn, this._rangeSelectBtn, this._dragBtn/**/];
-		for (let btn of this._btnList) {
-			btn.addEventListener('click', this._onClickHandler);
-		}
-
-		//鉛筆が選択されている状態にする
-		this._btnsInactive(this._pencilBtn);
-		this._state.setCurrent(State.DRAW_PENCIL);
-		this.dispatchEvent(new createjs.Event(this.EVENT_CLICK_EDIT_BTN, true, true));
 	}
 	//=============================================
 	// event handler
@@ -63,6 +50,10 @@ export class EditBtns extends createjs.EventDispatcher {
 			state = State.SELECT_RANGE;
 		}else if(target.id == "drag"){
 			state = State.SELECT_DRAG;
+		}else if(target.id == "copy"){
+			state = State.SELECT_COPY;
+		}else if(target.id == "cut"){
+			state = State.SELECT_CUT;
 		}
 		if(this._state.current!= state){
 			this._btnsInactive(target);
@@ -98,9 +89,23 @@ export class EditBtns extends createjs.EventDispatcher {
 			target.classList.add("disabled");
 		}
 	}
-	//=============================================
-	// public
-	//=============================================
+	private _btnsAble = (
+		pencil:boolean,
+		eracer:boolean,
+		dropper:boolean,
+		rangeSelect:boolean,
+		drag:boolean,
+		copy:boolean,
+		cut:boolean
+	) : void => {
+		this._btnAble(this._pencilBtn, pencil);
+		this._btnAble(this._eracerBtn, eracer);
+		this._btnAble(this._dropperBtn, dropper);
+		this._btnAble(this._rangeSelectBtn, rangeSelect);
+		this._btnAble(this._dragBtn, drag);
+		this._btnAble(this._copyBtn, copy);
+		this._btnAble(this._cutBtn, cut);
+	}
 	private _reset = () => {
 		for (let btn of this._btnList) {
 			btn.classList.remove("active");
@@ -108,51 +113,149 @@ export class EditBtns extends createjs.EventDispatcher {
 		}
 		this._btnAble(this._dragBtn, false);
 	}
+	//=============================================
+	// public
+	//=============================================
+	public init = ():void =>{
+		this._pencilBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #pencil');
+		this._eracerBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #eracer');
+		this._dropperBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #dropper');
+		this._rangeSelectBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #selectRange');
+		this._dragBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #drag');
+
+		this._copyBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #copy');
+		this._cutBtn = <HTMLButtonElement>document.querySelector('#drawBtnGrp > #cut');
+		
+		this._btnList = [
+			this._pencilBtn,
+			this._eracerBtn,
+			this._dropperBtn,
+			this._rangeSelectBtn,
+			this._dragBtn,
+			this._copyBtn,
+			this._cutBtn
+		];
+		for (let btn of this._btnList) {
+			btn.addEventListener('click', this._onClickHandler);
+		}
+
+		//鉛筆が選択されている状態にする
+		this._pencilBtn.click();
+		/*
+		this._btnsInactive(this._pencilBtn);
+		this._state.setCurrent(State.DRAW_PENCIL);
+		this.dispatchEvent(new createjs.Event(this.EVENT_CLICK_EDIT_BTN, true, true));
+		*/
+	}
 	public changedState = () =>{
 		let state :string = this._state.current;
 		let category:string = this._state.currentCategory;
 
 		if(state == State.DRAW_PENCIL){
-			this._btnAble(this._pencilBtn, true);
-			this._btnAble(this._eracerBtn, true);
-			this._btnAble(this._dropperBtn, true);
-			this._btnAble(this._rangeSelectBtn, true);
-			this._btnAble(this._dragBtn, false);
+			this._btnsAble(
+				true,
+				true,
+				true,
+				true,
+				false,
+				false,
+				false
+			);
 		}else if(state == State.DRAW_ERACER){
-			this._btnAble(this._pencilBtn, true);
-			this._btnAble(this._eracerBtn, true);
-			this._btnAble(this._dropperBtn, true);
-			this._btnAble(this._rangeSelectBtn, true);
-			this._btnAble(this._dragBtn, false);
+			this._btnsAble(
+				true,
+				true,
+				true,
+				true,
+				false,
+				false,
+				false
+			);
 		}else if(state == State.EDIT_DROPPER){
-			this._btnAble(this._pencilBtn, true);
-			this._btnAble(this._eracerBtn, true);
-			this._btnAble(this._dropperBtn, true);
-			this._btnAble(this._rangeSelectBtn, true);
-			this._btnAble(this._dragBtn, false);
+			this._btnsAble(
+				true,
+				true,
+				true,
+				true,
+				false,
+				false,
+				false
+			);
 		}else if(state == State.SELECT_RANGE){
-			this._btnAble(this._pencilBtn, true);
-			this._btnAble(this._eracerBtn, true);
-			this._btnAble(this._dropperBtn, true);
-			this._btnAble(this._rangeSelectBtn, true);
-			this._btnAble(this._dragBtn, true);
+			this._btnsAble(
+				true,
+				true,
+				true,
+				true,
+				true,
+				true,
+				true
+			);
 		}else if(state == State.SELECT_DRAG){
-			this._btnAble(this._pencilBtn, false);
-			this._btnAble(this._eracerBtn, false);
-			this._btnAble(this._dropperBtn, false);
-			this._btnAble(this._rangeSelectBtn, false);
-			this._btnAble(this._dragBtn, true);
+			this._btnsAble(
+				false,
+				false,
+				false,
+				false,
+				true,
+				false,
+				false
+			);
 		}else if(state == State.SELECT_DRAG_END){
-			this._btnAble(this._pencilBtn, true);
-			this._btnAble(this._eracerBtn, true);
-			this._btnAble(this._dropperBtn, true);
-			this._btnAble(this._rangeSelectBtn, true);
-			this._btnAble(this._dragBtn, false);
+			this._btnsAble(
+				true,
+				true,
+				true,
+				true,
+				false,
+				false,
+				false
+			);
+		}else if(state == State.SELECT_COPY){
+			this._btnsAble(
+				false,
+				false,
+				false,
+				false,
+				false,
+				false,
+				false
+			);
+		}else if(state == State.SELECT_CUT){
+			this._btnsAble(
+				false,
+				false,
+				false,
+				false,
+				false,
+				false,
+				false
+			);
+		}else if(state == State.SELECT_END){
+			this._btnsAble(
+				true,
+				true,
+				true,
+				true,
+				false,
+				false,
+				false
+			);
 		}
 		if(category == State.CATEGORY_FILE){
 			this._reset();
 		}else if(category == State.CATEGORY_HISTORY){
 			this._reset();
+		}else if(category == null){
+			this._btnsAble(
+				true,
+				true,
+				true,
+				true,
+				false,
+				false,
+				false
+			);
 		}
 	}
 	//=============================================

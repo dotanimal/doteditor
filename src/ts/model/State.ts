@@ -16,6 +16,9 @@ export class State {
 	public static readonly SELECT_RANGE: string = 'select range';
 	public static readonly SELECT_DRAG: string = 'select drag';
 	public static readonly SELECT_DRAG_END: string = 'select drag end';
+	public static readonly SELECT_COPY: string = 'select copy';
+	public static readonly SELECT_CUT: string = 'select cut';
+	public static readonly SELECT_END: string = 'select end';
 
 	public static readonly HISTORY_UNDO: string = 'history undo';
 	public static readonly HISTORY_REDO: string = 'history redo';
