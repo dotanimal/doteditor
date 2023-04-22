@@ -79,8 +79,8 @@ export class TemporaryLayer extends DrawLayer {
 			this._drawAreaBottom
 		);
 		let dld:DrawLayerData = this._c2ld.getDrawLayerData(1);
-		dld.x = dld.x + Math.floor((this.x - this._drawAreaLeft + this._stageMargin) / this._dotSize) + 0;
-		dld.y = dld.y + Math.floor((this.y - this._drawAreaTop + this._stageMargin) / this._dotSize) + 0;
+		dld.x = dld.x + Math.floor(this.x / this._dotSize);
+		dld.y = dld.y + Math.floor(this.y / this._dotSize);
 		this._c2ld.dispose();
 		return dld;
 	}
@@ -89,8 +89,14 @@ export class TemporaryLayer extends DrawLayer {
 			this.alpha = 0.5;
 			let xx:number = mouseX - this._width/2;
 			let yy:number = mouseY - this._height/2;
-			this.x= this._adustX(xx) + this._drawAreaLeft - this._stageMargin;
-			this.y= this._adustY(yy) + this._drawAreaTop - this._stageMargin;
+			
+			this.x = this._adustX(xx - this._drawAreaLeft)+(this._drawAreaLeft-this._stageMargin);
+			this.y = this._adustY(yy - this._drawAreaTop)+(this._drawAreaTop-this._stageMargin);
+			//console.log(mouseX, xx, this._drawAreaLeft, this._stageMargin, this.x);
+			
+			//this.x= this._adustX(xx) - this._drawAreaLeft + this._stageMargin;
+			//this.y= this._adustY(yy) - this._drawAreaTop + this._stageMargin;
+			
 			this.dispatchEvent(new createjs.Event(TemporaryLayer.EVENT_MOVE_TEMP, true, true));
 		}
 	}
