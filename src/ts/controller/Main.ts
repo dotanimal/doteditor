@@ -372,8 +372,9 @@ export class Main {
 			], {
 			sizes: sizes,
 			minSize: 50,
-			maxSize: 500,
+			maxSize: 501,
 			gutterSize: 30,
+			snapOffset: 5,
 			direction:"horizontal",
 			onDragEnd: function (sizes) {
 				localStorage.setItem('dotanimal-doteditor-split-sizes', JSON.stringify(sizes))
