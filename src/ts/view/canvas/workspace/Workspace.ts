@@ -21,7 +21,8 @@ export class Workspace extends createjs.Stage {
 	//----------public----------
 	public static readonly EVENT_CHANGE_WS: string = "event change workspace";
 	public static readonly EVENT_EXTRACT_HEX_COLOR_WS: string = "event extract hex color workspace";
-	public static readonly EVENT_MOUSE_MOVE_WS:string = "event mouse move workspace";
+	//public static readonly EVENT_MOUSE_MOVE_WS:string = "event mouse move workspace";
+	public static readonly EVENT_MOUSE_DOWN_WS:string = "event mouse down workspace";
 	//----------private---------
 	private _state: State;
 
@@ -43,20 +44,15 @@ export class Workspace extends createjs.Stage {
 	private _drawLayerList: Array<DrawLayer>;
 
 	private _activeDrawLayerId: number;
-	//private _workspaceDataLogList: Array<WorkspaceData>;
 
 	private _pixcelArtDataHistoryList: Array<PixcelArtData>;
 	private _histroyId: number;
 
-	//private _pad:PixcelArtData;
 	private _hexColor: string;
 
 	private _wpId:number;
 	private _wpTitle:string;
 	
-	//private _extractHexColor:string;
-
-	//private _isAbleDraw :boolean;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -153,13 +149,13 @@ export class Workspace extends createjs.Stage {
 		// インタラクティブの設定
 		//TODO　描画のあるところでないとイベントが発生しない？
 		this.addEventListener("stagemousedown", (e: MouseEvent) => {
-			
 
 			//エリア外なら処理をしない
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 			//お絵かきモードでないなら処理しない
 			//if(!this.isAbleDraw){return false;}
 
+			this.dispatchEvent(new createjs.Event(Workspace.EVENT_MOUSE_DOWN_WS, true, true));
 
 			//範囲選択
 			this._selectRangeLayer.beginSelect(this.mouseX,this.mouseY);
@@ -215,7 +211,7 @@ export class Workspace extends createjs.Stage {
 			//エリア外なら処理をしない
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 
-			this.dispatchEvent(new createjs.Event(Workspace.EVENT_MOUSE_MOVE_WS, true, true));
+			//this.dispatchEvent(new createjs.Event(Workspace.EVENT_MOUSE_MOVE_WS, true, true));
 
 			//カーソル
 			this._cursroLayer.move(this.mouseX, this.mouseY);
@@ -248,6 +244,24 @@ export class Workspace extends createjs.Stage {
 				this._saveHistory();
 				this.dispatchEvent(new createjs.Event(Workspace.EVENT_CHANGE_WS, true, true));
 			}
+		});
+		
+		this.addEventListener("rollover", (e: MouseEvent) => {
+			this._cursroLayer.visible = true;
+			if(this._state.currentCategory == State.CATEGORY_SELECT){
+				this._selectRangeLayer.visible = true;
+				if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
+					this._tempLayer.visible = true;
+				}
+			}
+		});
+		this.addEventListener("rollout", (e: MouseEvent) => {	
+			this._cursroLayer.visible = false;
+			this._tempLayer.visible = false;
+			if(this._state.current != State.SELECT_RANGE){
+				this._selectRangeLayer.visible = false;
+			}
+			this.update();
 		});
 	}
 	private _getActiveDrawLayer = (): DrawLayer => {
@@ -406,24 +420,10 @@ export class Workspace extends createjs.Stage {
 	}
 	public active = ():void =>{
 		this._bgLayer.active();
-
-		this._cursroLayer.visible = true;
-		if(this._state.currentCategory == State.CATEGORY_SELECT){
-			this._selectRangeLayer.visible = true;
-			if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
-				this._tempLayer.visible = true;
-			}
-		}
-		
 		this.update();
 	}
 	public inactive = ():void =>{
 		this._bgLayer.inactive();
-
-		this._cursroLayer.visible = false;
-		this._tempLayer.visible = false;
-		this._selectRangeLayer.visible = false;
-		
 		this.update();
 	}
 	public getSelectRangeDLD = (isDelete:boolean):DrawLayerData =>{

@@ -242,10 +242,10 @@ export class Main {
 		let ws: Workspace = <Workspace>e.target;
 		this._cp.hexColor =  ws.hexColor;
 	}
-	//ワークスペースへのロールオーバー
-	private _onWSRollOverHandler = (e: Event) => {
+	//ワークスペースへのマウスダウン
+	private _onWSMouseDownHandler = (e: Event) => {
 		let ws: Workspace = <Workspace>e.target;
-		//console.log("over", ws.name);
+		//console.log("mousedown", ws.name);
 		let targetWsId : string = ws.name;
 		if(this._activeWsId != targetWsId){
 			//アクティブWSの変更
@@ -253,11 +253,6 @@ export class Main {
 				ws = this._wsList[key];
 				if (key == targetWsId) {
 					this._wsActiveChange(ws);
-					/*
-					ws.active();
-					this._activeWsId = key;
-					this._onChangeColorPaletteHandler(null);
-					*/
 				}else{
 					ws.inactive();
 				}
@@ -274,12 +269,6 @@ export class Main {
 			this._setPixcelArtData2WorkSpace(ws, pad);
 		}
 	}
-	/*
-	//JSONファイルの保存完了
-	private _onSaveJsonToLocalCompleteHandler = (e: Event) => {
-		console.log(this._state.current);
-	}
-	*/
 	//----------LoadFromWPController----------
 	//WordPressからの読み込み完了
 	private _onLoadFromWPHandler = (e: Event) => {
@@ -313,7 +302,7 @@ export class Main {
 			this._activeWsId = canvasId;
 			ws.addEventListener(Workspace.EVENT_CHANGE_WS, this._onWSChangeHandler);
 			ws.addEventListener(Workspace.EVENT_EXTRACT_HEX_COLOR_WS, this._onGetHexColorHandler);
-			ws.addEventListener("rollover", this._onWSRollOverHandler);
+			ws.addEventListener(Workspace.EVENT_MOUSE_DOWN_WS, this._onWSMouseDownHandler);
 		} else {
 			alert("この名前のワークスペースはすでに登録されています");
 		}

@@ -12299,7 +12299,7 @@ textarea.form-control-lg {
 }
 #editor .workspaceArea #workspace1Container::-webkit-scrollbar:horizontal,
 #editor .workspaceArea #workspace2Container::-webkit-scrollbar:horizontal {
-  height: 10px;
+  height: 2px;
 }
 #editor .workspaceArea #workspace1Container::-webkit-scrollbar-button,
 #editor .workspaceArea #workspace2Container::-webkit-scrollbar-button {
