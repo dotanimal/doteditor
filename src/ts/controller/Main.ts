@@ -239,9 +239,10 @@ export class Main {
 		let ws: Workspace = <Workspace>e.target;
 		this._cp.hexColor =  ws.hexColor;
 	}
-	//マウスダウン
-	private _onWSMousedownHandler = (e: Event) => {
+	//ワークスペースへのロールオーバー
+	private _onWSRollOverHandler = (e: Event) => {
 		let ws: Workspace = <Workspace>e.target;
+		//console.log("over", ws.name);
 		let targetWsId : string = ws.name;
 		if(this._activeWsId != targetWsId){
 			//アクティブWSの変更
@@ -309,7 +310,7 @@ export class Main {
 			this._activeWsId = canvasId;
 			ws.addEventListener(Workspace.EVENT_CHANGE_WS, this._onWSChangeHandler);
 			ws.addEventListener(Workspace.EVENT_EXTRACT_HEX_COLOR_WS, this._onGetHexColorHandler);
-			ws.addEventListener(Workspace.EVENT_MOUSEDOWN_WS, this._onWSMousedownHandler);
+			ws.addEventListener("rollover", this._onWSRollOverHandler);
 		} else {
 			alert("この名前のワークスペースはすでに登録されています");
 		}

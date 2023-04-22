@@ -21,7 +21,7 @@ export class Workspace extends createjs.Stage {
 	//----------public----------
 	public static readonly EVENT_CHANGE_WS: string = "event change workspace";
 	public static readonly EVENT_EXTRACT_HEX_COLOR_WS: string = "event extract hex color workspace";
-	public static readonly EVENT_MOUSEDOWN_WS:string = "event mousedown workspace";
+	public static readonly EVENT_MOUSE_MOVE_WS:string = "event mouse move workspace";
 	//----------private---------
 	private _state: State;
 
@@ -153,7 +153,7 @@ export class Workspace extends createjs.Stage {
 		// インタラクティブの設定
 		//TODO　描画のあるところでないとイベントが発生しない？
 		this.addEventListener("stagemousedown", (e: MouseEvent) => {
-			this.dispatchEvent(new createjs.Event(Workspace.EVENT_MOUSEDOWN_WS, true, true));
+			
 
 			//エリア外なら処理をしない
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
@@ -186,16 +186,6 @@ export class Workspace extends createjs.Stage {
 			this._selectRangeLayer.endSelect(this.mouseX, this.mouseY, true);
 
 
-			//コピーもしくはカットモード中にマウスアップしたら、セレクトモード終了
-			if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
-				this._state.setCurrent(State.SELECT_END);
-				let dld:DrawLayerData =  this._tempLayer.getDrawLayerData();
-				let dl:DrawLayer = this._getActiveDrawLayer();
-				dl.setDrawLayerData(dld);
-				this._saveHistory();
-				this.dispatchEvent(new createjs.Event(Workspace.EVENT_CHANGE_WS, true, true));
-			}
-
 			//スポイトツール
 			if(this._state.current == State.EDIT_DROPPER){
 				let layer: DrawLayer = this._getActiveDrawLayer();
@@ -225,6 +215,8 @@ export class Workspace extends createjs.Stage {
 			//エリア外なら処理をしない
 			if(!this._areaHitTest(this.mouseX,this.mouseY)){return false;}
 
+			this.dispatchEvent(new createjs.Event(Workspace.EVENT_MOUSE_MOVE_WS, true, true));
+
 			//カーソル
 			this._cursroLayer.move(this.mouseX, this.mouseY);
 			
@@ -245,6 +237,17 @@ export class Workspace extends createjs.Stage {
 			}
 			//描画の更新
 			this.update();
+		});
+		this.addEventListener("click", (e: MouseEvent) => {
+			//コピーもしくはカットモード中にマウスアップしたら、セレクトモード終了
+			if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
+				this._state.setCurrent(State.SELECT_END);
+				let dld:DrawLayerData =  this._tempLayer.getDrawLayerData();
+				let dl:DrawLayer = this._getActiveDrawLayer();
+				dl.setDrawLayerData(dld);
+				this._saveHistory();
+				this.dispatchEvent(new createjs.Event(Workspace.EVENT_CHANGE_WS, true, true));
+			}
 		});
 	}
 	private _getActiveDrawLayer = (): DrawLayer => {
@@ -403,10 +406,24 @@ export class Workspace extends createjs.Stage {
 	}
 	public active = ():void =>{
 		this._bgLayer.active();
+
+		this._cursroLayer.visible = true;
+		if(this._state.currentCategory == State.CATEGORY_SELECT){
+			this._selectRangeLayer.visible = true;
+			if(this._state.current == State.SELECT_COPY || this._state.current == State.SELECT_CUT){
+				this._tempLayer.visible = true;
+			}
+		}
+		
 		this.update();
 	}
 	public inactive = ():void =>{
 		this._bgLayer.inactive();
+
+		this._cursroLayer.visible = false;
+		this._tempLayer.visible = false;
+		this._selectRangeLayer.visible = false;
+		
 		this.update();
 	}
 	public getSelectRangeDLD = (isDelete:boolean):DrawLayerData =>{

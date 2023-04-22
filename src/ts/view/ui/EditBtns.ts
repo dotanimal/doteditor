@@ -80,6 +80,7 @@ export class EditBtns extends createjs.EventDispatcher {
 			target.classList.remove("disabled");
 		}else{
 			target.classList.add("disabled");
+			target.classList.remove("active");
 		}
 	}
 	private _btnsAble = (
