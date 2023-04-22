@@ -5,6 +5,8 @@
 		"typeRoots": [
 			"./node_modules/@types"
 		],
-		"noImplicitOverride": true
+		"noImplicitOverride": true,
+		"moduleResolution": "node",
+		"esModuleInterop": true
 	}
 }

@@ -86,7 +86,7 @@ $modal-width:800px;
 //--------------------------
 
 #editor{
-	width: 1020px !important;
+	width: 800px !important;
 	margin:0 auto;
 
 	> .menu{
@@ -184,14 +184,60 @@ $modal-width:800px;
 	}
 	.workspaceArea{
 		padding-top: 10px;
-		display:flex;
+		display: flex;
+		flex-direction: row;
+		#workspace1Container,
+		#workspace2Container{
+			text-align: center;
+			background-color: #FFF;
+			overflow-x: scroll;
+			
+			/*スクロールバーのデザイン*/
+			&::-webkit-scrollbar {
+				overflow:hidden;
+				width:2px;
+				background:#EEE;
+		
+				&:horizontal {
+					height:10px;
+				}
+			}
+			&::-webkit-scrollbar-button {
+				   display:none;
+			}
+			&::-webkit-scrollbar-piece {
+					background:#eee;
+					&:start {
+							background:#eee;
+					}
+			}
+			&::-webkit-scrollbar-thumb {
+					background:#AAA;
+			}
+			&::-webkit-scrollbar-corner {
+					background:#AAA;
+			}
+		}
+		.gutter {
+			background-color: #FFF;
+			background-repeat: no-repeat;
+			background-position: 50%;
+		}
+		.gutter.gutter-horizontal {
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+		}
+		
 		canvas{
 			background: $color-white;
 			padding: 0;
+			width:500px;
+			height:500px;
 		}
+		/*
 		canvas#workspace1{
 			margin-right:20px;
 		}
+		*/
 	}
 	footer{
 		padding:100px 0px 20px 0;

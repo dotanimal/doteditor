@@ -7,10 +7,10 @@ import { FileDropdownMenu } from "../view/ui/FileDropdownMenu";
 import { HistoryBtns } from "../view/ui/HistoryBtns";
 import { LocalConnector } from "../model/connector/LocalConnector";
 import { LocalStorageConnector } from "../model/connector/LocalStorageConnector";
-import { WPConector } from "../model/connector/WPConnector";
 import { SaveToWPController } from "./SaveToWPController";
 import { LoadFromWPController } from "./LoadFromWPController";
 import { DrawLayerData } from "../model/data/DrawLayerData";
+import Split from 'split.js';
 
 export class Main {
 	//=============================================
@@ -86,6 +86,9 @@ export class Main {
 			}
 			this._setPixcelArtData2WorkSpace(ws, pad);
 		}
+
+		this._setSplit();
+
 		//アクティブワークスペースを設定
 		let ws:Workspace = <Workspace>this._wsList["workspace1"];
 		this._wsActiveChange(ws);
@@ -366,6 +369,27 @@ export class Main {
 
 		//let ws: Workspace = this._getActiveWorkSpace();
 		//ws.changedState();
+	}
+	private _setSplit =():void =>{
+		var sizes:any = localStorage.getItem('dotanimal-doteditor-split-sizes');
+		if (sizes) {
+			sizes = JSON.parse(sizes);
+		} else {
+			sizes = [50, 50] // default sizes
+		}
+		Split([
+			'#workspace1Container',
+			'#workspace2Container',
+			], {
+			sizes: sizes,
+			minSize: 50,
+			maxSize: 500,
+			gutterSize: 30,
+			direction:"horizontal",
+			onDragEnd: function (sizes) {
+				localStorage.setItem('dotanimal-doteditor-split-sizes', JSON.stringify(sizes))
+			},
+		});
 	}
 	//=============================================
 	// public

@@ -12182,7 +12182,7 @@ textarea.form-control-lg {
 }
 
 #editor {
-  width: 1020px !important;
+  width: 800px !important;
   margin: 0 auto;
 }
 #editor > .menu {
@@ -12274,13 +12274,66 @@ textarea.form-control-lg {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  /*
+  canvas#workspace1{
+  	margin-right:20px;
+  }
+  */
+}
+#editor .workspaceArea #workspace1Container,
+#editor .workspaceArea #workspace2Container {
+  text-align: center;
+  background-color: #FFF;
+  overflow-x: scroll;
+  /*スクロールバーのデザイン*/
+}
+#editor .workspaceArea #workspace1Container::-webkit-scrollbar,
+#editor .workspaceArea #workspace2Container::-webkit-scrollbar {
+  overflow: hidden;
+  width: 2px;
+  background: #EEE;
+}
+#editor .workspaceArea #workspace1Container::-webkit-scrollbar:horizontal,
+#editor .workspaceArea #workspace2Container::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+#editor .workspaceArea #workspace1Container::-webkit-scrollbar-button,
+#editor .workspaceArea #workspace2Container::-webkit-scrollbar-button {
+  display: none;
+}
+#editor .workspaceArea #workspace1Container::-webkit-scrollbar-piece,
+#editor .workspaceArea #workspace2Container::-webkit-scrollbar-piece {
+  background: #eee;
+}
+#editor .workspaceArea #workspace1Container::-webkit-scrollbar-piece:start,
+#editor .workspaceArea #workspace2Container::-webkit-scrollbar-piece:start {
+  background: #eee;
+}
+#editor .workspaceArea #workspace1Container::-webkit-scrollbar-thumb,
+#editor .workspaceArea #workspace2Container::-webkit-scrollbar-thumb {
+  background: #AAA;
+}
+#editor .workspaceArea #workspace1Container::-webkit-scrollbar-corner,
+#editor .workspaceArea #workspace2Container::-webkit-scrollbar-corner {
+  background: #AAA;
+}
+#editor .workspaceArea .gutter {
+  background-color: #FFF;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+#editor .workspaceArea .gutter.gutter-horizontal {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
 }
 #editor .workspaceArea canvas {
   background: #FFF;
   padding: 0;
-}
-#editor .workspaceArea canvas#workspace1 {
-  margin-right: 20px;
+  width: 500px;
+  height: 500px;
 }
 #editor footer {
   padding: 100px 0px 20px 0;
