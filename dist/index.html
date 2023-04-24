@@ -19,7 +19,7 @@
 </head>
 <body>
 	<div id="editor">
-		<div class="menu">
+		<div id="editorTop">
 			<div id="fileDropdown">
 				<a class="btn btn-outline-dark btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">ファイル</a>
 				<ul class="dropdown-menu dropdown-menu-dark">
@@ -83,11 +83,6 @@
 				<button id="dropper" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
 					<i class="bi bi-eyedropper"></i>
 				</button>
-				<!--
-				<button id="droplet" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
-					<i class="bi bi-droplet-fill"></i>
-				</button>
-				-->
 				<button id="selectRange" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
 					<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 96 960 960" width="20"><path d="M219.231 885.537q-19.784 0-33.872-14.088-14.088-14.088-14.088-33.872h47.96v47.96Zm-47.96-125.152v-71.193h47.96v71.193h-47.96Zm0-148.385v-71.192h47.96V612h-47.96Zm0-148.385v-71.192h47.96v71.192h-47.96Zm0-148.384q0-19.784 14.088-33.872 14.088-14.088 33.872-14.088v47.96h-47.96Zm125.152 570.306v-47.96h71.192v47.96h-71.192Zm0-570.306v-47.96h71.192v47.96h-71.192Zm148.385 570.306v-47.96H516v47.96h-71.192Zm0-570.306v-47.96H516v47.96h-71.192Zm148.384 570.306v-47.96h71.193v47.96h-71.193Zm0-570.306v-47.96h71.193v47.96h-71.193Zm148.385 570.306v-47.96h47.96q0 20.307-14.088 34.134-14.088 13.826-33.872 13.826Zm0-121.306v-71.192h47.96v71.192h-47.96Zm0-152.231v-71.192h47.96V612h-47.96Zm0-152.231v-71.192h47.96v71.192h-47.96Zm0-144.538v-47.96q19.784 0 33.872 14.088 14.088 14.088 14.088 33.872h-47.96Z"/></svg>
 				</button>
@@ -97,6 +92,11 @@
 				<button id="cut" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
 					<i class="bi bi-scissors"></i>
 				</button>
+				<!--
+				<button id="droplet" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
+					<i class="bi bi-droplet-fill"></i>
+				</button>
+				-->
 			</div>
 			<div id="colorPalette">
 				<span><input class="editColorPicker" type="color" value="#FFFFFF"></span>
@@ -110,13 +110,54 @@
 				<span><input class="editColorPicker" type="color" value="#FFFFFF"></span>
 			</div>
 		</div>
-		<div class="workspaceArea">
-			<div id="workspace1Container">
-				<canvas id="workspace1" width="500" height="500"></canvas>
+		<div id="editorMiddle">
+			<div id="editorMiddleLeft">
 			</div>
-			<div id="workspace2Container">
-				<canvas id="workspace2" width="500" height="500"></canvas>
+			<div id="editorMiddleCenter">
+				<div id="workspace1Container">
+					<canvas id="workspace1" width="500" height="500"></canvas>
+				</div>
+				<div id="workspace2Container">
+					<canvas id="workspace2" width="500" height="500"></canvas>
+				</div>
 			</div>
+			<div id="editorMiddleRight">
+
+				<div class="accordion">
+					<div class="accordion-item">
+					  <h2 class="accordion-header" id="previewStayOpen-heading">
+						<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#previewStayOpen-collapse" aria-expanded="true" aria-controls="previewStayOpen-collapse">
+							プレビュー
+						</button>
+					  </h2>
+					  <div id="previewStayOpen-collapse" class="accordion-collapse collapse show" aria-labelledby="previewStayOpen-heading">
+						<div class="accordion-body">
+							<canvas id="previewCanvas" width="260" height="100"></canvas>
+							<input id="previewRange" class="inputRange" type="range" value="2" min="1" max="10" step="1">
+						</div>
+					  </div>
+					</div>
+					<!--
+					<div class="accordion-item">
+					  <h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+							レイヤー
+						</button>
+					  </h2>
+					  <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+						<div class="accordion-body">
+							テキスト
+						</div>
+					  </div>
+					</div>
+					-->
+				  </div>
+
+
+			</div>
+		</div>
+		<div id="editorBottom">
+			
 		</div>
 		<footer>
 			<button type="button" class="btn btn-outline-secondary" onClick="window.close()">閉じる</button>

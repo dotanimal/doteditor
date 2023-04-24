@@ -80,17 +80,70 @@ $modal-width:800px;
 		}
 	}
 }
+//アコーディオンメニュー
+.accordion{
+	.accordion-item{
+		h2.accordion-header{
+			button.accordion-button{
+				padding:5px 10px 5px 10px;
+				font-size:14px;
+				color:$color-gray;
+				background-color:$color-white;
+				&::after{
+					width:14px;
+					height:14px;
+					background-size: 14px;
+					background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2333333'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+				}
+			}
+		}
+		.accordion-body{
+			padding:0;
+		}
+	}
+}
+
 
 
 //--------------------------
+// editor
+//--------------------------
+.inputRange[type="range"] {
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: #ddd;
+	height: 2px !important;
+	width: 100%;
+
+	&:focus,
+	&:active {
+		outline: none;
+	}
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance: none;
+		cursor: pointer;
+		position: relative;
+		border: none;
+		width: 12px;
+		height: 12px;
+		display: block;
+		background-color: #777;
+		border-radius: 50%;
+		-webkit-border-radius: 50%;
+	}
+  }
+//--------------------------
+// editor
 //--------------------------
 
 #editor{
-	width: 800px !important;
+	width: 1100px !important;
 	margin:0 auto;
 
-	> .menu{
-
+	> #editorTop{
+		/*background-color: #F99;*/
+		margin-bottom:10px;
 		#fileDropdown{
 			margin-right:30px;
 		}
@@ -182,62 +235,98 @@ $modal-width:800px;
 			}
 		}
 	}
-	.workspaceArea{
-		padding-top: 10px;
+	> #editorMiddle{
+		/*background-color: #9F9;*/
 		display: flex;
 		flex-direction: row;
-		#workspace1Container,
-		#workspace2Container{
-			text-align: center;
-			background-color: #FFF;
-			overflow-x: scroll;
+
+		#editorMiddleLeft{
+		}
+		#editorMiddleCenter{
+			width:800px;
+			display: flex;
+			flex-direction: row;
+			#workspace1Container,
+			#workspace2Container{
+				text-align: center;
+				background-color: #FFF;
+				overflow-x: scroll;
+				
+				/*スクロールバーのデザイン*/
+				&::-webkit-scrollbar {
+					overflow:hidden;
+					width:2px;
+					background:#EEE;
 			
-			/*スクロールバーのデザイン*/
-			&::-webkit-scrollbar {
-				overflow:hidden;
-				width:2px;
-				background:#EEE;
-		
-				&:horizontal {
-					height:2px;
+					&:horizontal {
+						height:2px;
+					}
+				}
+				&::-webkit-scrollbar-button {
+					   display:none;
+				}
+				&::-webkit-scrollbar-piece {
+						background:#eee;
+						&:start {
+								background:#eee;
+						}
+				}
+				&::-webkit-scrollbar-thumb {
+						background:#AAA;
+				}
+				&::-webkit-scrollbar-corner {
+						background:#AAA;
 				}
 			}
-			&::-webkit-scrollbar-button {
-				   display:none;
+			.gutter {
+				background-color: #FFF;
+				background-repeat: no-repeat;
+				background-position: 50%;
 			}
-			&::-webkit-scrollbar-piece {
-					background:#eee;
-					&:start {
-							background:#eee;
+			.gutter.gutter-horizontal {
+				background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+			}
+			
+			canvas{
+				background: $color-white;
+				padding: 0;
+				width:500px;
+				height:500px;
+			}
+			/*
+			canvas#workspace1{
+				margin-right:20px;
+			}
+			*/
+		}
+		#editorMiddleRight{
+			/*background-color: #9FF;*/
+			width:260px;
+			margin-left:40px;
+
+			#previewStayOpen-collapse{
+				padding:4px 0px 7px 0px;
+
+				.accordion-body{
+					font-size:1;
+					line-height: 1;
+					text-align: center;
+					#previewCanvas{
+						width:260px;
+						height:100px;
 					}
+					#previewRange{
+						width:100px;
+						margin:0 auto;
+					}
+				}
+				
 			}
-			&::-webkit-scrollbar-thumb {
-					background:#AAA;
-			}
-			&::-webkit-scrollbar-corner {
-					background:#AAA;
-			}
+
 		}
-		.gutter {
-			background-color: #FFF;
-			background-repeat: no-repeat;
-			background-position: 50%;
-		}
-		.gutter.gutter-horizontal {
-			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
-		}
-		
-		canvas{
-			background: $color-white;
-			padding: 0;
-			width:500px;
-			height:500px;
-		}
-		/*
-		canvas#workspace1{
-			margin-right:20px;
-		}
-		*/
+	}
+	> #editorBottom{
+		background: #FFF;/*エラー対策で指定してるだけ*/
 	}
 	footer{
 		padding:100px 0px 20px 0;

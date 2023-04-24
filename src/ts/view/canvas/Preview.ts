@@ -45,6 +45,7 @@ export class Preview extends createjs.Shape {
 					hexColorCode = dld.hexColorCodeList[colorId];
 					this.graphics.beginFill('#' + hexColorCode);
 					this.graphics.drawRect((xx + dld.x) * this._dotSize + sx, (yy + dld.y) * this._dotSize + sy, this._dotSize, this._dotSize);
+					//console.log((xx + dld.x) * this._dotSize + sx, (yy + dld.y) * this._dotSize + sy, this._dotSize, this._dotSize);
 				}
 			}
 		}
@@ -110,5 +111,8 @@ export class Preview extends createjs.Shape {
 	//=============================================
 	get pixcelArtData(): PixcelArtData {
 		return this._pad;
+	}
+	set dotSize(value:number){
+		this._dotSize = value;
 	}
 }

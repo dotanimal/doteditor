@@ -1,3 +1,4 @@
+import { KeyBindManager } from "../../model/KeyBindManager";
 import { State } from "../../model/State";
 
 export class EditBtns extends createjs.EventDispatcher {
@@ -13,6 +14,7 @@ export class EditBtns extends createjs.EventDispatcher {
 	public readonly EVENT_CLICK_EDIT_BTN: string = "event click edit btn";
 	//----------private---------
 	private _state: State;
+	private _keyBindManager:KeyBindManager;
 	private _btnList: Array<HTMLButtonElement>;
 
 	private _pencilBtn: HTMLButtonElement;
@@ -27,10 +29,11 @@ export class EditBtns extends createjs.EventDispatcher {
 	//=============================================
 	// constructor
 	//=============================================
-	constructor(state : State) {
+	constructor(state : State, keyBindManager:KeyBindManager) {
 		super();
 		
 		this._state = state;
+		this._keyBindManager = keyBindManager;
 	}
 	//=============================================
 	// event handler
@@ -48,9 +51,13 @@ export class EditBtns extends createjs.EventDispatcher {
 		}else if(target.id == "selectRange"){
 			state = State.SELECT_RANGE;
 		}else if(target.id == "copy"){
-			state = State.SELECT_COPY;
+			if(this._state.current == State.SELECT_RANGE){
+				state = State.SELECT_COPY;
+			}
 		}else if(target.id == "cut"){
-			state = State.SELECT_CUT;
+			if(this._state.current == State.SELECT_RANGE){
+				state = State.SELECT_CUT;
+			}
 		}
 		if(this._state.current!= state){
 			this._btnsInactive(target);
@@ -127,6 +134,14 @@ export class EditBtns extends createjs.EventDispatcher {
 		for (let btn of this._btnList) {
 			btn.addEventListener('click', this._onClickHandler);
 		}
+
+		//キーバインドの設定
+		this._keyBindManager.add("p", this._pencilBtn, KeyBindManager.METHOD_TYPE_CLICK);
+		this._keyBindManager.add("e", this._eracerBtn, KeyBindManager.METHOD_TYPE_CLICK);
+		this._keyBindManager.add("d", this._dropperBtn, KeyBindManager.METHOD_TYPE_CLICK);
+		this._keyBindManager.add("r", this._rangeSelectBtn, KeyBindManager.METHOD_TYPE_CLICK);
+		this._keyBindManager.add("c", this._copyBtn, KeyBindManager.METHOD_TYPE_CLICK);
+		this._keyBindManager.add("x", this._cutBtn, KeyBindManager.METHOD_TYPE_CLICK);
 
 		//鉛筆が選択されている状態にする
 		this._pencilBtn.click();

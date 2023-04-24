@@ -11,6 +11,8 @@ import { SaveToWPController } from "./SaveToWPController";
 import { LoadFromWPController } from "./LoadFromWPController";
 import { DrawLayerData } from "../model/data/DrawLayerData";
 import Split from 'split.js';
+import { PreviewController } from "./PreviewController";
+import { KeyBindManager } from "../model/KeyBindManager";
 
 export class Main {
 	//=============================================
@@ -36,6 +38,7 @@ export class Main {
 
 	private _stwpCtrl: SaveToWPController;
 	private _lfwpCtrl: LoadFromWPController;
+	private _prvwCtrl:PreviewController;
 
 	private _wsList: { [key: string]: Workspace };
 	private _activeWsId: string;
@@ -47,8 +50,11 @@ export class Main {
 	constructor() {
 		this._state = new State();
 		
+		//キーバインドの設定
+		let km:KeyBindManager = new KeyBindManager();
+		
 		this._fdm = new FileDropdownMenu(this._state);
-		this._eb = new EditBtns(this._state);
+		this._eb = new EditBtns(this._state, km);
 		this._hb = new HistoryBtns(this._state);
 		this._cp = new ColorPalette(this._state);
 
@@ -58,6 +64,7 @@ export class Main {
 		//let wpc:WPConector = new WPConector(this._state);
 		this._stwpCtrl = new SaveToWPController(this._state);
 		this._lfwpCtrl = new LoadFromWPController(this._state);
+		this._prvwCtrl = new PreviewController(this._state);
 
 		this._wsList = {};
 		
@@ -89,9 +96,11 @@ export class Main {
 
 		this._setSplit();
 
+
 		//アクティブワークスペースを設定
 		let ws:Workspace = <Workspace>this._wsList["workspace1"];
 		this._wsActiveChange(ws);
+		//this._prvwCtrl.setPad(ws.getPixcelArtData());
 
 		
 		//最後に初期化が必要なもの
@@ -228,11 +237,13 @@ export class Main {
 		if(this._state.current == State.SELECT_END){
 			this._changeState();
 			//this._state.setCurrent(null);
-
-
 		}
 		
 		let pad : PixcelArtData = ws.getPixcelArtData();
+
+		//プレビューに反映
+		this._prvwCtrl.setPad(pad);
+		
 		//ローカルストレージにデータを保存
 		this._lsc.save(ws.name, pad);
 
@@ -338,6 +349,9 @@ export class Main {
 	private _wsActiveChange = (ws:Workspace):void =>{
 		ws.active();
 		this._activeWsId = ws.name;
+		
+		//プレビューに反映
+		this._prvwCtrl.setPad(ws.getPixcelArtData());
 
 		let hexColor : string = this._cp.hexColor;
 		ws.hexColor = hexColor;
@@ -373,7 +387,7 @@ export class Main {
 			sizes: sizes,
 			minSize: 50,
 			maxSize: 501,
-			gutterSize: 30,
+			gutterSize: 16,
 			snapOffset: 5,
 			direction:"horizontal",
 			onDragEnd: function (sizes) {
