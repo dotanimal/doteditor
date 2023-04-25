@@ -18,11 +18,6 @@ export class KeyBindManager {
 	//=============================================
 	constructor() {
 		this._list = {};
-		/*
-		document.addEventListener("kyepress", (e:KeyboardEvent) => {
-			//console.log(e, e.key);
-		});
-		*/
 		document.addEventListener("keydown", (e:KeyboardEvent) => {
 			if(e.key != this._currentKey){
 				let data:KeyBindManagerData = this._list[e.key];

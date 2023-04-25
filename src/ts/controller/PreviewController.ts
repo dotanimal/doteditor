@@ -36,6 +36,7 @@ export class PreviewController extends createjs.EventDispatcher {
 		this._stage.addChild(this._preview);
 
 		this._slider.addEventListener('input', this._onSliderChangeHandler);
+		
 		//this._slider.addEventListener('change', this._onSliderChangeHandler);
 	}
 	//=============================================
