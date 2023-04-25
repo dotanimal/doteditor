@@ -374,24 +374,24 @@ export class Main {
 		//ws.changedState();
 	}
 	private _setSplit =():void =>{
-		let sizes:any = localStorage.getItem('dotanimal-doteditor-split-sizes'); //LocalStrage
+		var sizes:any = localStorage.getItem('dotanimal-doteditor-split-sizes');
 		if (sizes) {
 			sizes = JSON.parse(sizes);
 		} else {
-			sizes = [50, 50] // デフォルトのサイズ
+			sizes = [50, 50] // default sizes
 		}
 		Split([
-			'#workspace1Container', //分割対象となるセレクタを指定　
+			'#workspace1Container',
 			'#workspace2Container',
 			], {
 			sizes: sizes,
-			minSize: 50, //画面の最小値
-			maxSize: 501, //画面の最大値
-			gutterSize: 16, //画面領域を変更するハンドルのサイズ
-			snapOffset: 5, //ハンドルから画面端までの距離がここで指定した数値よりも下回ったらハンドルを画面端に吸着する
-			direction:"horizontal", //分割の方向
+			minSize: 50,
+			maxSize: 501,
+			gutterSize: 16,
+			snapOffset: 5,
+			direction:"horizontal",
 			onDragEnd: function (sizes) {
-				localStorage.setItem('dotanimal-doteditor-split-sizes', JSON.stringify(sizes)) //幅を変更するたびにLocalStrageに保存
+				localStorage.setItem('dotanimal-doteditor-split-sizes', JSON.stringify(sizes))
 			},
 		});
 	}
