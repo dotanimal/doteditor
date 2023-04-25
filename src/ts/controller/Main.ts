@@ -381,6 +381,7 @@ export class Main {
 			sizes = [50, 50] // デフォルトのサイズ
 		}
 		Split([
+			
 			'#workspace1Container', //分割対象となるセレクタを指定　
 			'#workspace2Container',
 			], {
