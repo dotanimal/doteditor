@@ -29,6 +29,8 @@ export class State {
 	public static readonly FILE_LOAD_JSON_FROM_LOCAL: string = 'file load json from local';
 	public static readonly FILE_SAVE_JSON_TO_LOCAL: string = 'file save json to local';
 	public static readonly FILE_SAVE_SVG_TO_LOCAL: string = 'file save svg to local';
+	public static readonly FILE_SAVE_PNG_TO_LOCAL: string = 'file save png to local';
+	public static readonly FILE_SAVE_JPEG_TO_LOCAL: string = 'file save jpeg to local';
 	
 	public static readonly FILE_POST_TO_WP: string = 'file post to wordpress';
 	public static readonly FILE_UPDATE_TO_WP: string = 'file update to wordpress';

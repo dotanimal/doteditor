@@ -62,6 +62,10 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 
 		//ローカル環境にSVGファイルを書き出し
 		let publishSvgToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#publishSvgToLocalLink');
+		//ローカル環境にPNGファイルを書き出し
+		let publishPngToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#publishPngToLocalLink');
+		//ローカル環境にJPEGファイルを書き出し
+		let publishJpegToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#publishJpegToLocalLink');
 		
 
 		//WPからリストを読み込む
@@ -78,6 +82,8 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 								loadJsonFromLocalLink,
 								saveJsonToLocalLink,
 								publishSvgToLocalLink,
+								publishPngToLocalLink,
+								publishJpegToLocalLink,
 								loadListFromWpLink,
 								this._update2WpLink,
 								post2WpLink
@@ -102,6 +108,10 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 			mode = State.FILE_SAVE_JSON_TO_LOCAL;
 		}else if(target.id == "publishSvgToLocalLink"){
 			mode = State.FILE_SAVE_SVG_TO_LOCAL;
+		}else if(target.id == "publishPngToLocalLink"){
+			mode = State.FILE_SAVE_PNG_TO_LOCAL;
+		}else if(target.id == "publishJpegToLocalLink"){
+			mode = State.FILE_SAVE_JPEG_TO_LOCAL;
 		}else if(target.id == "fileUpdate2WpLink"){
 			mode = State.FILE_UPDATE_TO_WP;
 		}else if(target.id == "filePost2WpLink"){

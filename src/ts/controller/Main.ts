@@ -209,6 +209,16 @@ export class Main {
 			ws = this._getActiveWorkSpace();
 			pad = ws.getPixcelArtData();
 			this._lc.saveSvg(pad);
+		}else if(this._state.current== State.FILE_SAVE_PNG_TO_LOCAL){
+			//ローカルにPNGファイルを保存
+			ws = this._getActiveWorkSpace();
+			pad = ws.getPixcelArtData();
+			this._lc.savePng(pad);
+		}else if(this._state.current== State.FILE_SAVE_JPEG_TO_LOCAL){
+			//ローカルにJPEGファイルを保存
+			ws = this._getActiveWorkSpace();
+			pad = ws.getPixcelArtData();
+			this._lc.saveJpeg(pad);
 		}else if(this._state.current== State.FILE_LOAD_PAGE_SPLIT_LIST_FROM_WP){
 			//WPからリストを取得
 			ws = this._getActiveWorkSpace();

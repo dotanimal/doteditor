@@ -1,3 +1,4 @@
+import { Preview } from "../../view/canvas/Preview";
 import { PixcelArtData } from "../data/PixcelArtData";
 
 export class LocalConnector extends createjs.EventDispatcher {
@@ -19,6 +20,11 @@ export class LocalConnector extends createjs.EventDispatcher {
 	//load json
 	private _loadJsonFromLocalInput:HTMLInputElement;
 	private _loadResultPad:PixcelArtData;
+
+	//save png
+	private _stage: createjs.Stage;
+	private _preview: Preview;
+	private _bg: createjs.Shape;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -43,6 +49,20 @@ export class LocalConnector extends createjs.EventDispatcher {
 			}
 			e.preventDefault();
 		});
+
+		let cvs:HTMLCanvasElement = <HTMLCanvasElement>document.createElement("CANVAS");
+		cvs.width = 500;
+		cvs.height = 500;
+
+		this._stage = new createjs.Stage(cvs);
+		
+		this._bg = new createjs.Shape();
+		this._bg.graphics.beginFill('#' + "FFFFFF");
+		this._bg.graphics.drawRect(0, 0, cvs.width, cvs.height);
+		this._stage.addChild(this._bg);
+
+		this._preview = new Preview(cvs.width, cvs.height, 10);
+		this._stage.addChild(this._preview);
 	}
 	//=============================================
 	// event handler
@@ -50,8 +70,22 @@ export class LocalConnector extends createjs.EventDispatcher {
 	//=============================================
 	// private
 	//=============================================
-	private _bolbSave = (txt:string, filename:string, filetype:string, completeEventType:string) => {
-		const blob :Blob = new Blob([txt], { type: filetype });
+	private _saveFile = (blob:Blob, filename:string, accept:any, description:string) =>{
+		//Firefoxやスマホではwindow.showSaveFilePickerに対応していないので、対応していない場合は別の方法で保存する
+		(async ()=> {
+			if(typeof window.showSaveFilePicker == 'function'){
+				//console.log("_filePickerSaveFile");
+				//let accept:any = {"application/json": [".json"]};
+				await this._filePickerSaveFile(blob, filename, accept, description,this.EVENT_SAVE_JSON_COMPLETE);	
+				
+			}else{
+				//console.log("_blobSaveFile");
+				this._blobSaveFile(	blob, filename, this.EVENT_SAVE_JSON_COMPLETE);
+			}
+		})();
+	}
+	private _blobSaveFile = (blob:Blob, filename:string, completeEventType:string) => {
+		//const blob :Blob = new Blob([txt], { type: filetype });
 		const a:HTMLAnchorElement = <HTMLAnchorElement>document.createElement("a");
 		const url :string = window.URL.createObjectURL(blob);
 		a.download = filename;
@@ -66,9 +100,10 @@ export class LocalConnector extends createjs.EventDispatcher {
 		this.dispatchEvent(new createjs.Event(completeEventType, true, true));
 	}
 	//File System Access API
-	private _filePickerSave = async (txt:string, accept:any, description:string,  completeEventType:string) => {
+	//Secured Contextな環境でしか使えない（httpsやlocalhostなど）
+	private _filePickerSaveFile = async (blob:Blob, filename:string, accept:any, description:string,  completeEventType:string) => {
 		try {
-			const textContent = txt;
+			//const textContent = txt;
 			// メイン処理
 			const saveFileOptions = {
 				types: [
@@ -76,18 +111,19 @@ export class LocalConnector extends createjs.EventDispatcher {
 						description: description,
 						accept: accept
 					}
-				]
+				],
+				suggestedName: filename,
 			};
 			const handle = await window.showSaveFilePicker(saveFileOptions);
 			// writable作成
 			const writable = await handle.createWritable();
 			// コンテンツを書き込む
-			await writable.write(textContent);
+			await writable.write(blob);
 			// ファイル閉じる
 			await writable.close();
-			console.log("\tresult","\t:\t","success");
+			//console.log("\tresult","\t:\t","success");
 		} catch (error) {
-			console.log("\tresult","\t:\t","fail");
+			//console.log("\tresult","\t:\t","fail");
 		} finally{
 			this.dispatchEvent(new createjs.Event(completeEventType, true, true));
 		}
@@ -95,22 +131,9 @@ export class LocalConnector extends createjs.EventDispatcher {
 	//=============================================
 	// public
 	//=============================================
-	public saveJson = (pad:PixcelArtData, filename:string = "dot.json") => {
-		const jsonObj :any = pad.getJsonObj();
-		const jsonStr :string = JSON.stringify(jsonObj.dot_json);
-		console.log('\n[Local]', "saveJson\n", jsonStr);
-		(async ()=> {
-			//Firefoxやスマホではwindow.showSaveFilePickerに対応していないので、対応していない場合は別の方法で保存する
-			if(typeof window.showSaveFilePicker == 'function'){
-				console.log("window.showSaveFilePicker");
-				let accept:any = {"application/json": [".json"]};
-				this._filePickerSave(jsonStr, accept, "JSON Files",this.EVENT_SAVE_JSON_COMPLETE  )
-			}else{
-				this._bolbSave(jsonStr, filename,'application/json', this.EVENT_SAVE_JSON_COMPLETE);
-			}
-		})();
-	}
-	
+	//---------------------- 
+	// load
+	//---------------------- 
 	public loadJson = () => {
 		//console.log("load json");
 		this._loadResultPad = null;
@@ -120,6 +143,36 @@ export class LocalConnector extends createjs.EventDispatcher {
 		//クリックイベントを発生させファイル選択ダイアログを表示
 		this._loadJsonFromLocalInput.click();
 	}
+	//---------------------- 
+	// save
+	//---------------------- 
+	public saveJson = (pad:PixcelArtData, filename:string = "dot.json") => {
+		const jsonObj :any = pad.getJsonObj();
+		const jsonStr :string = JSON.stringify(jsonObj.dot_json);
+		//console.log('\n[Local]', "saveJson\n", jsonStr);
+		const blob :Blob = new Blob([jsonStr], { type: 'application/json' });
+		this._saveFile(
+			blob,
+			filename,
+			{"application/json": [".json"]},
+			"JSON Files"
+		);
+		/*
+		(async ()=> {
+			const blob :Blob = new Blob([jsonStr], { type: 'application/json' });
+			//Firefoxやスマホではwindow.showSaveFilePickerに対応していないので、対応していない場合は別の方法で保存する
+			if(typeof window.showSaveFilePicker == 'function'){
+				console.log("window.showSaveFilePicker");
+				let accept:any = {"application/json": [".json"]};
+				this._filePickerSave(blob, filename, accept, "JSON Files",this.EVENT_SAVE_JSON_COMPLETE  )
+			}else{
+				//this._bolbSave(	blob, filename,'application/json', this.EVENT_SAVE_JSON_COMPLETE);
+				this._bolbSave(	blob, filename, this.EVENT_SAVE_JSON_COMPLETE);
+			}
+		})();
+		*/
+	}
+	
 	public saveSvg = (pad:PixcelArtData, filename:string = "dot.svg") => {
 		const PATH :string = "../cmn/php/dotjson2img.php";
 
@@ -129,31 +182,89 @@ export class LocalConnector extends createjs.EventDispatcher {
 		let xhr : XMLHttpRequest = new XMLHttpRequest();
 		xhr.onreadystatechange = (e: Event) => {
 			if (xhr.readyState == 4) {// データ受信完了
-				//console.log(this._xhr.readyState, this._xhr.status, this._xhr.statusText, this._xhr.responseText);
 				var pattern = new RegExp(/2\d\d/);
 				if (pattern.test(String(xhr.status)) == true) { //200番台
-					//var data = e.responseText; // responseXML もあり
-					//console.log('Complete! :', e.status, e.statusText);
-					let xhrResTxt :string = xhr.responseText;
+					const blob :Blob = new Blob([xhr.responseText], { type: 'image/svg+xml' });
+					this._saveFile(
+						blob,
+						filename,
+						{"image/svg+xml": [".svg"]},
+						"SVG Files"
+					);
+
+					/*
 					(async ()=> {
+						const blob :Blob = new Blob([xhrResTxt], { type: 'image/svg+xml' });
 						//Firefoxやスマホではwindow.showSaveFilePickerに対応していないので、対応していない場合は別の方法で保存する
 						if(typeof window.showSaveFilePicker == 'function'){
-							console.log("window.showSaveFilePicker");
 							let accept:any = {"image/svg+xml": [".svg"]};
-							this._filePickerSave(xhrResTxt, accept, "SVG Files",this.EVENT_SAVE_SVG_COMPLETE);
+							this._filePickerSave(blob, filename, accept, "SVG Files",this.EVENT_SAVE_SVG_COMPLETE);
 						}else{
-							this._bolbSave(xhrResTxt, filename ,'image/svg+xml', this.EVENT_SAVE_SVG_COMPLETE);
+							this._bolbSave(blob, filename , this.EVENT_SAVE_SVG_COMPLETE);
 						}
 					})();
+					*/
 				} else {
 					//console.log('Failed. : ', this._xhr.status, this._xhr.statusText);
 				}
-				//this.dispatchEvent(new createjs.Event(this.EVENT_CONVERT_SVG_COMPLETE, true, true));
 			}
 		}
 		xhr.open('POST', PATH);
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		xhr.send("type=svg&dot_json=" + dot_json_str);
+	}
+	
+	public savePng = (pad:PixcelArtData, filename:string = "dot.png") => {
+		let cvs:HTMLCanvasElement = <HTMLCanvasElement>this._stage.canvas;
+		this._bg.visible = false;
+		this._preview.graphics.clear();
+		this._preview.drawPad(pad, false);
+		this._stage.update();
+
+		cvs.toBlob(async (blob:Blob)=> {
+			this._saveFile(
+				blob,
+				filename,
+				{"image/png": [".png"]},
+				"PNG Files"
+			);
+			/*
+			if(typeof window.showSaveFilePicker == 'function'){
+				let accept:any = {"image/png": [".png"]};
+				this._filePickerSave(result, filename, accept, "PNG Files",this.EVENT_SAVE_SVG_COMPLETE);
+			}else{
+				this._bolbSave(result, filename , this.EVENT_SAVE_SVG_COMPLETE);
+			}
+			*/
+			this._preview.graphics.clear();
+			this._stage.update();
+		},"image/png");
+	}
+	public saveJpeg = (pad:PixcelArtData, filename:string = "dot.jpg") => {
+		let cvs:HTMLCanvasElement = <HTMLCanvasElement>this._stage.canvas;
+		this._bg.visible = true;
+		this._preview.graphics.clear();
+		this._preview.drawPad(pad, false);
+		this._stage.update();
+		
+		cvs.toBlob(async (blob:Blob)=> {
+			this._saveFile(
+				blob,
+				filename,
+				{"image/jpeg": [".jpg"]},
+				"JPEG Files"
+			);
+			/*
+			if(typeof window.showSaveFilePicker == 'function'){
+				let accept:any = {"image/jpeg": [".jpg"]};
+				this._filePickerSave(result, filename, accept, "JPEG Files",this.EVENT_SAVE_SVG_COMPLETE);
+			}else{
+				this._bolbSave(result, filename , this.EVENT_SAVE_SVG_COMPLETE);
+			}
+			*/
+			this._preview.graphics.clear();
+			this._stage.update();
+		},"image/jpeg", 1);
 	}
 	//=============================================
 	// getter/setter
