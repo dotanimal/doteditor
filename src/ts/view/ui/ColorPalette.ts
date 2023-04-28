@@ -26,7 +26,7 @@ export class ColorPalette extends createjs.EventDispatcher{
 		
 		this._state = state;
 
-		this._colorPickerList = document.querySelectorAll('#editor > #editorTop #colorPalette span input');
+		this._colorPickerList = document.querySelectorAll('#colorPalette span input');
 
 		let colorPicker: HTMLInputElement;
 		for (var i = 0; i < this._colorPickerList.length; i++) {

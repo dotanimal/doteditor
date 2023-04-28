@@ -105,9 +105,7 @@ $modal-width:800px;
 
 
 
-//--------------------------
-// editor
-//--------------------------
+//ハンドル
 .inputRange[type="range"] {
 	-webkit-appearance: none;
 	appearance: none;
@@ -132,118 +130,118 @@ $modal-width:800px;
 		border-radius: 50%;
 		-webkit-border-radius: 50%;
 	}
-  }
+}
 //--------------------------
 // editor
 //--------------------------
 
 #editor{
 	width: 1100px !important;
-	margin:0 auto;
+	height: 600px;
+	margin:10px auto 0 auto;
+	display: flex;
+	flex-direction: row;
+	//background-color: #FCC;
+	
+	> #editorLeft{
+		width:800px !important;
 
-	> #editorTop{
-		/*background-color: #F99;*/
-		margin-bottom:10px;
-		#fileDropdown{
-			margin-right:30px;
-		}
-		#fileLoadInputs{
-			display:none;
-		}
+		> #editorLeftTop{
+			display: flex;
+			flex-direction: row;
 
-		button{
-			padding-top:0;
-			padding-bottom:0;
-			line-height: 1;
-			height: 31px;
-			border-color:$color-gray;
-			color: $color-gray;
-		}
-		button:hover,
-		button.active{
-			color:$color-white;
-		}
-		//background: #CFC;
-		padding: 10px 0 0 0;
-		display: flex;
-		flex-direction: row;
-
-
-		//history
-		#historyBtnGrp{
-			margin-right:10px;
-			/*
-			#undo{
-				
+			#fileDropdown{
+				margin-right:30px;
 			}
-			*/
-			#redo{
-				>i{
-					display: inline-block;
-					transform: scaleX(-1);
-				}
+			#fileLoadInputs{
+				display:none;
 			}
-		}
 
-
-		//edit
-		#drawBtnGrp{
-			margin-right:30px;
-
-			#selectRange,
-			#copy{
-				padding-left:4px;
-				padding-right:4px;
-				svg{
-					fill: #000;
-					width:22px;
-					height:22px;
-				}
-			}
-			#selectRange:hover,
-			#selectRange.active,
-			#copy:hover,
-			#copy.active{
-				svg{
-					fill: $color-white;
-				}
-			}
-		}
-		#colorPalette{
-			margin-right:10px;
-
-			>span{
-				display: inline-block;
-				font-size: 1px;
+			button{
+				padding-top:0;
+				padding-bottom:0;
 				line-height: 1;
-				border: 0;
-				border: 1px solid $color-white;
-
-				>input{
-					margin: 2px;
-					padding: 0;
-					border: 0px !important;
-					color: $color-white;
-					background-color: $color-white;
-					width: 26px;
-					height: 26px;
-					border-color: $color-gray;
-				}
-			} 
-			>span.active{
-				border: 1px solid $color-gray;
+				height: 31px;
+				border-color:$color-gray;
+				color: $color-gray;
 			}
-		}
-	}
-	> #editorMiddle{
-		/*background-color: #9F9;*/
-		display: flex;
-		flex-direction: row;
+			button:hover,
+			button.active{
+				color:$color-white;
+			}
+			//history
+			#historyBtnGrp{
+				margin-right:10px;
+				/*
+				#undo{
+					
+				}
+				*/
+				#redo{
+					>i{
+						display: inline-block;
+						transform: scaleX(-1);
+					}
+				}
+			}
 
-		#editorMiddleLeft{
+			//edit
+			#drawBtnGrp{
+				margin-right:30px;
+
+				#selectRange,
+				#copy{
+					padding-left:4px;
+					padding-right:4px;
+					svg{
+						fill: #000;
+						width:22px;
+						height:22px;
+					}
+				}
+				#selectRange:hover,
+				#selectRange.active,
+				#copy:hover,
+				#copy.active{
+					svg{
+						fill: $color-white;
+					}
+				}
+			}
+
+			//color
+			#colorPalette{
+				margin-right:10px;
+
+				>span{
+					display: inline-block;
+					font-size: 1px;
+					line-height: 1;
+					border: 0;
+					border: 1px solid $color-white;
+
+					>input{
+						margin: 2px;
+						padding: 0;
+						border: 0px !important;
+						color: $color-white;
+						background-color: $color-white;
+						width: 26px;
+						height: 26px;
+						border-color: $color-gray;
+					}
+				} 
+				>span.active{
+					border: 1px solid $color-gray;
+				}
+			}
+
+
 		}
-		#editorMiddleCenter{
-			width:800px;
+
+		> #editorLeftMiddle{
+			/*background-color: #9F9;*/
+
 			display: flex;
 			flex-direction: row;
 			#workspace1Container,
@@ -263,12 +261,12 @@ $modal-width:800px;
 					}
 				}
 				&::-webkit-scrollbar-button {
-					   display:none;
+						display:none;
 				}
 				&::-webkit-scrollbar-piece {
 						background:#eee;
 						&:start {
-								background:#eee;
+							background:#eee;
 						}
 				}
 				&::-webkit-scrollbar-thumb {
@@ -293,51 +291,26 @@ $modal-width:800px;
 				width:500px;
 				height:500px;
 			}
-			/*
-			canvas#workspace1{
-				margin-right:20px;
-			}
-			*/
 		}
-		#editorMiddleRight{
-			/*background-color: #9FF;*/
-			width:260px;
-			margin-left:40px;
 
-			#previewStayOpen-collapse{
-				padding:4px 0px 7px 0px;
-
-				.accordion-body{
-					font-size:1;
-					line-height: 1;
-					text-align: center;
-					#previewCanvas{
-						width:260px;
-						height:100px;
-					}
-					#previewRange{
-						width:100px;
-						margin:0 auto;
-					}
-				}
-				
-			}
-
-		}
 	}
-	> #editorBottom{
-		background: #FFF;/*エラー対策で指定してるだけ*/
-	}
-	footer{
-		padding:100px 0px 20px 0;
-		text-align: center;
-
-		button{
-			font-size: 12px;
-		}
-
+	> #editorRight{
+		margin-left:20px;
 	}
 }
+//--------------------------
+// footer
+//--------------------------
+footer{
+	padding:100px 0px 20px 0;
+	text-align: center;
+
+	button{
+		font-size: 12px;
+	}
+
+}
+@import "./editor-right.scss";
 //----------------------------
 // modal
 //----------------------------

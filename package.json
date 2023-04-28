@@ -13,6 +13,7 @@
   "devDependencies": {
     "@types/bootstrap": "^5.2.6",
     "@types/createjs": "^0.0.29",
+    "@types/sortablejs": "^1.15.1",
     "@types/wicg-file-system-access": "^2020.9.5",
     "autoprefixer": "^10.4.14",
     "bootstrap": "^5.2.3",
@@ -22,6 +23,7 @@
     "postcss-loader": "^7.1.0",
     "sass": "^1.60.0",
     "sass-loader": "^13.2.2",
+    "sortablejs": "^1.15.0",
     "split.js": "^1.6.5",
     "terser-webpack-plugin": "^5.3.7",
     "ts-loader": "^9.4.2",

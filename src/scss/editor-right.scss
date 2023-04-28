@@ -1,0 +1,108 @@
+
+
+
+#editorRight{
+	//background-color: #9FF;
+	color:#333;
+	height:100%;
+	.accordion-header{
+
+	}
+	.accordion-collapse{
+		padding:4px 0px 7px 0px;
+
+		.accordion-body{
+			font-size:1;
+			line-height: 1;
+			text-align: center;
+		}
+		
+	}
+	#previwAccordionGroup-collapse{
+		#previewCanvas{
+			width:260px;
+			height:100px;
+			margin:0 auto;
+		}
+		#previewRange{
+			width:100px;
+			margin:0 auto;
+		}
+	}
+
+	#layerAccordionGroup-collapse{
+		#layerPanelBody{
+			padding:5px;
+
+			$layer-panel-row-parts-height:25px;
+			
+			.layerPanelRow{
+				display: flex;
+				flex-direction: row;
+				line-height:$layer-panel-row-parts-height;
+				padding:5px;
+
+				&.active{//複数クラス
+					background-color: #F1F1F1 !important;
+					border-color: #CCC !important;
+					color:#333 !important;
+				}
+				.layerPanelRowCanvas{
+					display: block;
+					width:25px;
+					height:$layer-panel-row-parts-height;
+					background-color: #FFF;
+					border:1px solid #CCC;
+				}
+				.layerPanelRowEye::after {
+					display: block;
+					width: 30px;
+					padding-top: 1px;
+					height:$layer-panel-row-parts-height;
+					//background-color: #FF9;
+					font-family:'bootstrap-icons';
+					content: "\F341";
+					cursor:pointer;
+				}
+				.layerPanelRowEye.hide::after{
+					content: "\F340";
+				}
+				.layerPanelRowTxt{
+					display: block;
+					width: auto;
+					height:$layer-panel-row-parts-height;
+					//background-color: #9FF;
+					overflow: hidden;
+					font-size:12px;
+					cursor:text;
+				}
+				.layerPanelRowHandle{
+					display: block;
+					width: 20px;
+					height:$layer-panel-row-parts-height - 10px;
+					margin-top:5px;
+					//background-color: #F99;
+					margin-left: auto;
+					background-repeat: no-repeat;
+					background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+					background-position: 70% 50%;
+					cursor:move;
+				}
+			}
+		}
+		#layerPanelFooter{
+			#addLayerPanelRow{
+				cursor:pointer;
+				> svg{
+					display: inline-block;
+					transform: scaleY(-1);
+				}
+			}
+			#deleteLayerPanelRow{
+				cursor:pointer;
+				display: inline-block;
+			}
+		}
+	}
+}
+
