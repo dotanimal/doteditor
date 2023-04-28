@@ -12396,6 +12396,11 @@ footer button {
 #editorRight {
   color: #333;
   height: 100%;
+  /*
+  .accordion-header{
+
+  }
+  */
 }
 #editorRight .accordion-collapse {
   padding: 4px 0px 7px 0px;
@@ -12433,6 +12438,9 @@ footer button {
   border-color: #CCC !important;
   color: #333 !important;
 }
+#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow.hide {
+  display: none;
+}
 #editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowCanvas {
   display: block;
   width: 25px;
@@ -12459,6 +12467,28 @@ footer button {
   overflow: hidden;
   font-size: 12px;
   cursor: text;
+}
+#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowTxt > span.hide,
+#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowTxt > input.hide {
+  display: none;
+}
+#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowTxt > input {
+  line-height: 1.4;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowTxt > input::-moz-selection {
+  color: #fff;
+  background-color: #666;
+}
+#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowTxt > input::selection {
+  color: #fff;
+  background-color: #666;
 }
 #editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowHandle {
   display: block;

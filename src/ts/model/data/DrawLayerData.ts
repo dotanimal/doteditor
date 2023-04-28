@@ -4,7 +4,7 @@ export class DrawLayerData {
 	//=============================================
 	//----------public----------
 	//----------private---------
-	//private _name: string;
+	private _name: string;
 
 	private _x: number;
 	private _y: number;
@@ -17,6 +17,7 @@ export class DrawLayerData {
 	//=============================================
 	constructor(isBlank:boolean = false) {
 		if(isBlank){
+			this._name = "body"
 			this._hexColorCodeList = ["","333333"];
 		}else{
 			this._hexColorCodeList = [];
@@ -64,14 +65,12 @@ export class DrawLayerData {
 	//=============================================
 	// getter/setter
 	//=============================================
-	/*
 	get name(): string {
 		return this._name;
 	}
 	set name(value: string) {
 		this._name = value;
 	}
-	*/
 	get x(): number {
 		return this._x;
 	}

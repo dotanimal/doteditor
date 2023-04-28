@@ -13,7 +13,7 @@ import { DrawLayerData } from "../model/data/DrawLayerData";
 import Split from 'split.js';
 import { PreviewController } from "./PreviewController";
 import { KeyBindManager } from "../model/KeyBindManager";
-import { LayerController } from "./LayerController";
+import { LayerPanelController } from "./LayerPanelController";
 
 export class Main {
 	//=============================================
@@ -40,7 +40,7 @@ export class Main {
 	private _stwpCtrl: SaveToWPController;
 	private _lfwpCtrl: LoadFromWPController;
 	private _prvwCtrl:PreviewController;
-	private _lyrCtrl:LayerController;
+	private _lypnCtrl:LayerPanelController;
 
 	private _wsList: { [key: string]: Workspace };
 	private _activeWsId: string;
@@ -67,7 +67,7 @@ export class Main {
 		this._stwpCtrl = new SaveToWPController(this._state);
 		this._lfwpCtrl = new LoadFromWPController(this._state);
 		this._prvwCtrl = new PreviewController(this._state);
-		this._lyrCtrl = new LayerController(this._state);
+		this._lypnCtrl = new LayerPanelController(this._state);
 
 		this._wsList = {};
 		

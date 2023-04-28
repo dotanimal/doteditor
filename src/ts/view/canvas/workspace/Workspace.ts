@@ -124,6 +124,7 @@ export class Workspace extends createjs.Stage {
 
 		this.update();
 	}
+	/**/
 	private _addDrawLayer = (layerName:string) =>{
 		let dl : DrawLayer;
 		let isExist:boolean = false;
@@ -265,6 +266,13 @@ export class Workspace extends createjs.Stage {
 		});
 	}
 	private _getActiveDrawLayer = (): DrawLayer => {
+		/*
+		console.log("_getActiveDrawLayer",this._drawLayerList.length);
+		for(var i=0;i<this._drawLayerList.length;i++){
+			let dl:DrawLayer = this._drawLayerList[i];
+			console.log("drawlayer name", dl.name);
+		}
+		*/
 		if (this._drawLayerList.length < 1) {
 			return null;
 		}
@@ -312,10 +320,14 @@ export class Workspace extends createjs.Stage {
 			this._wpTitle = pad.title;
 		}
 
-		let drawLayerDataList: any = pad.getDrawLayerDataList();
+		let drawLayerDataList: Array<DrawLayerData> = pad.getDrawLayerDataList();
+		
 		//レイヤーの追加
-		for (var key in drawLayerDataList) {
-			this._addDrawLayer(key);
+		for(var i = 0; i < drawLayerDataList.length; i++){
+			let dld:DrawLayerData = drawLayerDataList[i];
+			//console.log(dld.name)
+			this._addDrawLayer(dld.name);
+			//dl.setDrawLayerData(dld);
 		}
 		//テンポラリレイヤーをAddChild
 		this.addChild(this._tempLayer);
@@ -332,8 +344,13 @@ export class Workspace extends createjs.Stage {
 		let dld: DrawLayerData;
 		for (var i = 0; i < this._drawLayerList.length; i++) {
 			dl = this._drawLayerList[i];
-			dld = drawLayerDataList[dl.name];
-			dl.setDrawLayerData(dld);
+			for (var j = 0; j < drawLayerDataList.length; j++) {
+				dld = drawLayerDataList[j];
+				if(dld.name == dl.name){
+					dl.setDrawLayerData(dld);
+					break
+				}
+			}
 		}
 		this.update();
 		if(isSaveLog){this._saveHistory();}
@@ -354,7 +371,7 @@ export class Workspace extends createjs.Stage {
 			layer = this._drawLayerList [i];
 			layerData = layer.getDrawLayerData();
 			//if(layerData){
-			result.addDrawLayerData(layer.name, layerData);
+			result.addDrawLayerData(layerData);
 			//}
 		}
 		result.layoutInit();
@@ -366,8 +383,6 @@ export class Workspace extends createjs.Stage {
 			this._histroyId--;
 			console.log("history", "undo", this._histroyId);
 			let pad: PixcelArtData = this._pixcelArtDataHistoryList[this._histroyId];//TODO リストにはPixcelArtDataをいれるようにする
-			//let data: PixcelArtData = new PixcelArtData()
-			//data.setJson(jsonObj);
 			this.setPixcelArtData(pad,false);
 
 			//this.dispatchEvent(new createjs.Event(this.EVENT_CHANGE_WS, true, true));

@@ -1,0 +1,245 @@
+import { DrawLayerData } from "../../model/data/DrawLayerData";
+import { Preview } from "../canvas/Preview";
+
+export class LayerPanelRow extends createjs.EventDispatcher {
+	//=============================================
+	// TODO
+	//=============================================
+	/*
+	*/
+	//=============================================
+	// 定数/変数
+	//=============================================
+	//----------public----------
+	//public readonly EVENT_CLICK_HISTORY_BTN: string = "event click history btn";
+	//----------private---------
+	private _target:HTMLElement;
+	private _isActive:boolean; //現在選択中の場合にTrue
+	private _isShow:boolean; //パネルに追加されていたらTrue
+
+	private _eye:Eye;
+	private _txt:Txt;
+	private _preview:Preview;
+	private _stage:createjs.Stage;
+	private _sw:number;
+	private _sh:number;
+	//----------protected-------
+	//=============================================
+	// constructor
+	//=============================================
+	constructor(target:HTMLElement) {
+		super();
+		this._target = target;
+
+		this._eye = new Eye(this._target.querySelector(".layerPanelRowEye"));
+		this._txt = new Txt(this._target.querySelector(".layerPanelRowTxt"));
+
+		let cvs:HTMLCanvasElement = <HTMLCanvasElement>document.querySelector('#previewCanvas');
+		this._preview = new Preview(cvs.width, cvs.height, 1);
+		this._stage = new createjs.Stage(cvs);
+		this._stage.addChild(this._preview);
+
+		this._eye.addEventListener(Eye.EVENT_CHANGE_EYE, this._onChangeEyeHandler);
+		this._txt.addEventListener(Txt.EVENT_CHANGE_TXT, this._onChangeTxtHandler);
+	}
+	//=============================================
+	// event handler
+	//=============================================
+	private _onChangeEyeHandler = (e:Event) =>{
+		console.log("[layer]", "change", "eye", this._eye.visible);
+	}
+	private _onChangeTxtHandler = (e:Event) =>{
+		console.log("[layer]", "change", "txt", this._txt.value);
+	}
+	//=============================================
+	// private
+	//=============================================
+	//=============================================
+	// public
+	//=============================================
+	public setDld = (dld:DrawLayerData):void =>{
+
+		//プレビューへの反映
+		this._preview.graphics.clear();
+		this._preview.drawDld(dld, 0, 0,this._sw, this._sh, false);
+		this._stage.update();
+	}
+	//=============================================
+	// public
+	//=============================================
+	public show = () :void =>{
+		if(!this._isShow){
+			this._target.classList.add("hide");
+			this._isShow = true;
+		}
+	}
+	public hide = () :void =>{
+		if(this._isShow){
+			this._target.classList.remove("hide");
+			this._isShow = false;
+		}
+	}
+	public active = () :void =>{
+		if(!this._isActive){
+			this._target.classList.add("active");
+			this._isActive = true;
+		}
+	}
+	public inactive = () :void =>{
+		if(this._isActive){
+			this._target.classList.remove("active");
+			this._isActive = false;
+		}
+	}
+	//=============================================
+	// getter/setter
+	//=============================================
+	get txt():string{
+		return this._txt.value;
+	}
+	get visilbe():boolean{
+		return this._eye.visible;
+	}
+	get isActive(): boolean {
+		return this._isActive;
+	}
+	get isShow():boolean{
+		return this._isShow;
+	}
+}
+class Eye extends createjs.EventDispatcher {
+	//=============================================
+	// TODO
+	//=============================================
+	/*
+	*/
+	//=============================================
+	// 定数/変数
+	//=============================================
+	//----------public----------
+	public static readonly EVENT_CHANGE_EYE: string = "event change eye";
+	//----------private---------
+	private _target:HTMLElement;
+	private _visible:boolean;
+	//----------protected-------
+	//=============================================
+	// constructor
+	//=============================================
+	constructor(target:HTMLElement) {
+		super();
+		this._target = target;
+
+		this._visible = true;
+
+		this._target.addEventListener("click", this._onClickHandler);
+	}
+	//=============================================
+	// event handler
+	//=============================================
+	private _onClickHandler = (e:Event) =>{
+		if(this._visible){
+			this._target.classList.add("hide");
+			this._visible = false;
+		}else{
+			this._target.classList.remove("hide");
+			this._visible = true;
+		}
+		this.dispatchEvent(new createjs.Event(Eye.EVENT_CHANGE_EYE, true, true));
+	}
+	//=============================================
+	// private
+	//=============================================
+	//=============================================
+	// public
+	//=============================================
+	//=============================================
+	// getter/setter
+	//=============================================
+	get visible(): boolean {
+		return this._visible;
+	}
+}
+class Txt extends createjs.EventDispatcher {
+	//=============================================
+	// TODO
+	//=============================================
+	/*
+	*/
+	//=============================================
+	// 定数/変数
+	//=============================================
+	//----------public----------
+	public static readonly EVENT_CHANGE_TXT: string = "event change txt";
+	//----------private---------
+	private _target:HTMLElement;
+	private _span:HTMLElement;
+	private _input:HTMLInputElement;
+	private _isEdit:boolean;
+	//----------protected-------
+	//=============================================
+	// constructor
+	//=============================================
+	constructor(target:HTMLElement) {
+		super();
+		this._target = target;
+		this._span = <HTMLElement>this._target.querySelector("span");
+		this._input = <HTMLInputElement>this._target.querySelector("input");
+
+		this._isEdit = false;
+		this._input.classList.add("hide");
+		//this._span.classList.add("hide");
+
+		this._span.addEventListener("click", this._onClickSpanHandler);
+		this._input.addEventListener("blur", this._onBlurInputHandler);
+		this._input.addEventListener("input", this._onInputInputHandler);
+	}
+	//=============================================
+	// event handler
+	//=============================================
+	private _onClickSpanHandler = (e:Event) =>{
+		if(!this._isEdit){
+			this._input.value = this._span.innerText;
+			this._span.classList.add("hide");
+			this._input.classList.remove("hide");
+			this._input.focus();
+			this._input.select();//全選択状態にする
+			this._isEdit = true;
+		}
+	}
+	private _onBlurInputHandler = (e:Event) =>{
+		if(this._isEdit){
+			this._span.classList.remove("hide");
+			this._input.classList.add("hide");
+			let value :string = this._input.value;
+			if(value){
+				if(this._input.value != this._span.innerText){
+					this._span.innerText = this._input.value;
+					this.dispatchEvent(new createjs.Event(Txt.EVENT_CHANGE_TXT, true, true));
+				}
+			}
+			this._isEdit = false;
+		}
+	}
+	private _onInputInputHandler = (e:Event) =>{
+		//半角英数に制限
+		if(this._isEdit){
+			let str:string = this._input.value;
+			while(str.match(/[^A-Z^a-z\d\-]/)){
+				str=str.replace(/[^A-Z^a-z\d\-]/,"");
+			}
+			this._input.value = str;
+		}
+	}
+	//=============================================
+	// private
+	//=============================================
+	//=============================================
+	// public
+	//=============================================
+	//=============================================
+	// getter/setter
+	//=============================================
+	get value(): string {
+		return this._span.innerText;
+	}
+}

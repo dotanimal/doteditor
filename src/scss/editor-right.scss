@@ -5,9 +5,11 @@
 	//background-color: #9FF;
 	color:#333;
 	height:100%;
+	/*
 	.accordion-header{
 
 	}
+	*/
 	.accordion-collapse{
 		padding:4px 0px 7px 0px;
 
@@ -47,6 +49,9 @@
 					border-color: #CCC !important;
 					color:#333 !important;
 				}
+				&.hide{//複数クラス
+					display: none;
+				}
 				.layerPanelRowCanvas{
 					display: block;
 					width:25px;
@@ -75,6 +80,24 @@
 					overflow: hidden;
 					font-size:12px;
 					cursor:text;
+
+					>span.hide,
+					>input.hide{
+						display: none;
+					}
+					>input{
+						line-height: 1.4;
+						appearance: none;
+						background: transparent;
+						border:none; 
+						outline:none;
+						padding:0;
+
+						&::selection {
+							color: #fff;
+							background-color: #666;
+						}
+					}
 				}
 				.layerPanelRowHandle{
 					display: block;

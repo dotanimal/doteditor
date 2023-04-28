@@ -10,7 +10,8 @@ export class PixcelArtData {
 	private _id: number;
 	private _title: string;
 	private _dotJsonObj: any;
-	private _drawLayerDataList: any;
+	//private _drawLayerDataList: any;
+	private _drawLayerDataList: Array<DrawLayerData>;
 	private _x: number;
 	private _y: number;
 	private _width: number;
@@ -19,9 +20,9 @@ export class PixcelArtData {
 	// constructor
 	//=============================================
 	constructor(isBlank:boolean = false) {
-		this._drawLayerDataList = {};
+		this._drawLayerDataList = [];
 		if(isBlank){
-			this.addDrawLayerData("body", new DrawLayerData(true));
+			this.addDrawLayerData(new DrawLayerData(true));
 		}
 	}
 	//=============================================
@@ -34,25 +35,25 @@ export class PixcelArtData {
 		this._id = id;
 		this._title = title;
 
-		this._drawLayerDataList = {};
+		this._drawLayerDataList = [];
 		if (dotJsonObj != null) {
 			this._dotJsonObj = dotJsonObj;
 
 			for (var key in this._dotJsonObj) {
 				let layerJsonObj: any = this._dotJsonObj[key];
 				let dld: DrawLayerData = new DrawLayerData();
-				//console.log(key, layerJson);
+				dld.name = key;
 				dld.setJsonObj(layerJsonObj);
-				this._drawLayerDataList[key] = dld;
+				this._drawLayerDataList.push(dld);
 			}
 		}
 		this.layoutInit();
 	}
 	public getJsonObj = (): any => {
 		let obj: any = {};
-		for (var key in this._drawLayerDataList) {
-			let layerData: DrawLayerData = this._drawLayerDataList[key];
-			obj[key] = layerData.getJsonObj();
+		for(var i = 0; i < this._drawLayerDataList.length; i++){
+			let dld: DrawLayerData = this._drawLayerDataList[i];
+			obj[dld.name] = dld.getJsonObj();
 		}
 		let result: any = { "id": this._id, "title": this._title, "dot_json": obj };
 		//console.log('\n[JsonObj]', "\n\t", result);
@@ -62,8 +63,8 @@ export class PixcelArtData {
 	//色配列を返す
 	public getHexColorCodeList = (): Array<string> => {
 		let result: Array<string> = [];
-		for (var key in this._drawLayerDataList) {
-			let dld: DrawLayerData = this._drawLayerDataList[key];
+		for(var i = 0; i < this._drawLayerDataList.length; i++){
+			let dld: DrawLayerData = this._drawLayerDataList[i];
 			let hexColorCodeList: Array<string> = dld.hexColorCodeList;
 			result = result.concat(hexColorCodeList);
 		}
@@ -73,40 +74,41 @@ export class PixcelArtData {
 		result.shift();
 		return result;
 	}
-	public addDrawLayerData = (name: string, layerData: DrawLayerData) => {
-		//console.log("setLayerData", name, layerData);
-		this._drawLayerDataList[name] = layerData;
-		//this.layoutDataInit();
+	public addDrawLayerData = (dld: DrawLayerData) => {
+		this._drawLayerDataList.push(dld);
 	}
-	public getDrawLayerDataList = () => {
+	public getDrawLayerDataList = ():Array<DrawLayerData> => {
 		return this._drawLayerDataList;
 	}
 	public layoutInit = () => {
 		//console.log(this._dotJsonObj);
+		/*
 		for (var key in this._dotJsonObj) {
 			let dot_json: any = this._dotJsonObj[key];
 			let layerData: DrawLayerData = new DrawLayerData();
+			layerData.name = key;
 			layerData.setJsonObj(dot_json);
-			this._drawLayerDataList[key] = layerData;
+			this._drawLayerDataList.push(layerData);
 		}
+		*/
 		let minX: number = Number.MAX_SAFE_INTEGER;
 		let minY: number = Number.MAX_SAFE_INTEGER;
 		let maxX: number = 0;
 		let maxY: number = 0;
 		//console.log(this._drawLayerDataList);
-		for (var key in this._drawLayerDataList) {
-			let ld: DrawLayerData = this._drawLayerDataList[key];
-			if (ld.x < minX) {
-				minX = ld.x;
+		for(var i = 0; i < this._drawLayerDataList.length; i++){
+			let dld: DrawLayerData = this._drawLayerDataList[i];
+			if (dld.x < minX) {
+				minX = dld.x;
 			}
-			if (ld.y < minY) {
-				minY = ld.y;
+			if (dld.y < minY) {
+				minY = dld.y;
 			}
-			if (maxX < ld.x + ld.width) {
-				maxX = ld.x + ld.width;
+			if (maxX < dld.x + dld.width) {
+				maxX = dld.x + dld.width;
 			}
-			if (maxY < ld.y + ld.height) {
-				maxY = ld.y + ld.height;
+			if (maxY < dld.y + dld.height) {
+				maxY = dld.y + dld.height;
 			}
 		}
 		this._x = minX;
@@ -123,19 +125,12 @@ export class PixcelArtData {
 	set id(value: number) {
 		this._id = value;
 	}
-
 	get title(): string {
 		return this._title;
 	}
 	set title(value: string) {
 		this._title = value;
 	}
-	/*
-	get drawLayerDataList(): any {
-		return this._drawLayerDataList;
-	}
-	*/
-	
 	get x(): number {
 		return this._x;
 	}
