@@ -12,11 +12,13 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public static readonly EVENT_CHANGE_LAYERPANEL: string = "event change layer panel";
+	public static readonly EVENT_CHANGE_DATA_LAYERPANEL: string = "event change data layer panel";
+	public static readonly EVENT_CHANGE_ACTIVELAYER_LAYERPANEL: string = "event change active layer layer panel";
 	//----------private---------
 	private _state:State;
 	private _lprList:Array<LayerPanelRow>;
 	private _pad:PixcelArtData;
+	private _activeLayerId:number;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -63,19 +65,33 @@ export class LayerPanelController extends createjs.EventDispatcher {
 				lpr.inactive();
 			}
 		}
+		let rowSpanList:NodeListOf<Element> = document.querySelectorAll('#layerPanelBody > ul > li > .layerPanelRowTxt > span');
+		let rowSpan :HTMLElement;
+		let rowSpanTxt:string
+		for (var j = rowSpanList.length-1; 0<j; j--) {
+			rowSpan = <HTMLElement>rowSpanList[j];
+			rowSpanTxt = rowSpan.innerHTML;
+			if(target.txt == rowSpanTxt){
+				let idx:number = this._lprList.length - 1 - j;
+				this._activeLayerId = idx;
+				break;
+			}
+		}
+
+
 		this._state.setCurrent(State.LAYER_CHANGE);
 		console.log('\n[LayerPanel Event]', e.type, "\n\t" + "state : " + this._state.current);
-		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_LAYERPANEL, true, true));
+		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_ACTIVELAYER_LAYERPANEL, true, true));
 	}
 	private _onChangeLPRHandler = (e:Event) =>{
 		this._state.setCurrent(State.LAYER_CHANGE);
 		console.log('\n[LayerPanel Event]', e.type, "\n\t" + "state : " + this._state.current);
-		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_LAYERPANEL, true, true));
+		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
 	}
 	private _onChangeSortableHandler = (e:Event) =>{
 		this._state.setCurrent(State.LAYER_CHANGE);
 		console.log('\n[LayerPanel Event]', e.type, "\n\t" + "state : " + this._state.current);
-		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_LAYERPANEL, true, true));
+		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
 	}
 	//=============================================
 	// private
@@ -134,7 +150,11 @@ export class LayerPanelController extends createjs.EventDispatcher {
 
 		return this._pad;
 	}
+	
 	//=============================================
 	// getter/setter
 	//=============================================
+	get activeLayerId ():number{
+		return this._activeLayerId;
+	}
 }

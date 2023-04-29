@@ -84,7 +84,8 @@ export class Main {
 		this._lc.addEventListener(this._lc.EVENT_LOAD_JSON_COMPLETE, this._onLoadJsonFromLocalCompleteHandler);
 
 		this._lfwpCtrl.addEventListener(LoadFromWPController.EVENT_SELECT_THUMB, this._onLoadFromWPHandler);
-		this._lypnCtrl.addEventListener(LayerPanelController.EVENT_CHANGE_LAYERPANEL, this._onChangeLayerPanelHandler);
+		this._lypnCtrl.addEventListener(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, this._onChangeDataLPHandler);
+		this._lypnCtrl.addEventListener(LayerPanelController.EVENT_CHANGE_ACTIVELAYER_LAYERPANEL, this._onChangeActiveLaylerLPlHandler);
 		//window.addEventListener('beforeunload', this._onBeforeunloadHandler);
 
 		//ワークスペースにローカルストレージのデータを反映
@@ -311,13 +312,18 @@ export class Main {
 		}
 	}
 	//----------LayerPanelController----------
-	private _onChangeLayerPanelHandler = (e:Event) => {
+	private _onChangeDataLPHandler = (e:Event) => {
 		let pad : PixcelArtData = this._lypnCtrl.getPad();
 		if(pad != null){
 			console.log('\n[Event]', e.type);
 			let ws: Workspace = this._getActiveWorkSpace();
 			this._setPixcelArtData2WorkSpace(ws, pad);
 		}
+	}
+	private _onChangeActiveLaylerLPlHandler = (e:Event) => {
+		let id:number = this._lypnCtrl.activeLayerId;
+		let ws: Workspace = this._getActiveWorkSpace();
+		ws.setActiveLayerId(id);
 	}
 	//----------Window----------
 	private _onBeforeunloadHandler = (e:BeforeUnloadEvent) =>{

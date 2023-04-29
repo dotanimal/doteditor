@@ -481,6 +481,9 @@ export class Workspace extends createjs.Stage {
 		this._selectRangeLayer.visible = true;
 		this._selectRangeLayer.setBeginEnd(bx,by,ex,ey);
 	}
+	public setActiveLayerId = (value:number):void =>{
+		this._activeDrawLayerId = value;
+	}
 	//=============================================
 	// getter/setter
 	//=============================================
