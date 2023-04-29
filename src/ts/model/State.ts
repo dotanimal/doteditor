@@ -21,6 +21,8 @@ export class State {
 	public static readonly HISTORY_UNDO: string = 'history undo';
 	public static readonly HISTORY_REDO: string = 'history redo';
 
+	public static readonly LAYER_CHANGE: string = 'layer change';
+
 	public static readonly FILE_MENU_OPEN: string = 'file menu open';
 	public static readonly FILE_MENU_OPEN_WS_IS_NEW_DRAW: string = 'file menu open ws is new draw';
 	public static readonly FILE_MENU_OPEN_WS_IS_NO_DRAW: string = 'file menu open ws is no draw';
@@ -43,6 +45,7 @@ export class State {
 	public static readonly CATEGORY_SELECT:string = 'category select';
 	public static readonly CATEGORY_HISTORY:string = 'category histroy';
 	public static readonly CATEGORY_FILE:string = 'category file';
+	public static readonly CATEGORY_LAYER:string = 'category layer';
 
 	//----------private---------
 	private _currentCategory : string;
@@ -75,6 +78,8 @@ export class State {
 			result = State.CATEGORY_HISTORY;
 		}else if(/^file/.test(this._current)){
 			result = State.CATEGORY_FILE;
+		}else if(/^layer/.test(this._current)){
+			result = State.CATEGORY_LAYER;
 		}else{
 			result = null;
 		}

@@ -84,6 +84,7 @@ export class Main {
 		this._lc.addEventListener(this._lc.EVENT_LOAD_JSON_COMPLETE, this._onLoadJsonFromLocalCompleteHandler);
 
 		this._lfwpCtrl.addEventListener(LoadFromWPController.EVENT_SELECT_THUMB, this._onLoadFromWPHandler);
+		this._lypnCtrl.addEventListener(LayerPanelController.EVENT_CHANGE_LAYERPANEL, this._onChangeLayerPanelHandler);
 		//window.addEventListener('beforeunload', this._onBeforeunloadHandler);
 
 		//ワークスペースにローカルストレージのデータを反映
@@ -257,6 +258,12 @@ export class Main {
 		//プレビューに反映
 		this._prvwCtrl.setPad(pad);
 		
+		if(this._state.currentCategory != State.CATEGORY_LAYER){
+			//レイヤーパネルに反映
+			this._lypnCtrl.setPad(pad);
+		}
+		
+
 		//ローカルストレージにデータを保存
 		this._lsc.save(ws.name, pad);
 
@@ -303,7 +310,15 @@ export class Main {
 			this._setPixcelArtData2WorkSpace(ws, pad);
 		}
 	}
-	
+	//----------LayerPanelController----------
+	private _onChangeLayerPanelHandler = (e:Event) => {
+		let pad : PixcelArtData = this._lypnCtrl.getPad();
+		if(pad != null){
+			console.log('\n[Event]', e.type);
+			let ws: Workspace = this._getActiveWorkSpace();
+			this._setPixcelArtData2WorkSpace(ws, pad);
+		}
+	}
 	//----------Window----------
 	private _onBeforeunloadHandler = (e:BeforeUnloadEvent) =>{
 		e.preventDefault();
@@ -363,8 +378,13 @@ export class Main {
 		ws.active();
 		this._activeWsId = ws.name;
 		
+		let pad:PixcelArtData = ws.getPixcelArtData();
+
 		//プレビューに反映
-		this._prvwCtrl.setPad(ws.getPixcelArtData());
+		this._prvwCtrl.setPad(pad);
+
+		//レイヤーパネルに反映
+		this._lypnCtrl.setPad(pad);
 
 		let hexColor : string = this._cp.hexColor;
 		ws.hexColor = hexColor;

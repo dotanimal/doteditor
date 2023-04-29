@@ -11,11 +11,14 @@ export class LayerPanelRow extends createjs.EventDispatcher {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	//public readonly EVENT_CLICK_HISTORY_BTN: string = "event click history btn";
+	public static readonly EVENT_MOUSEDOWN_LAYERPANELROW: string = "event mouse down layer panel row";
+	public static readonly EVENT_CHANGE_LAYERPANELROW: string = "event change layer panel row";
 	//----------private---------
 	private _target:HTMLElement;
 	private _isActive:boolean; //現在選択中の場合にTrue
 	private _isShow:boolean; //パネルに追加されていたらTrue
+
+	private _dld:DrawLayerData;
 
 	private _eye:Eye;
 	private _txt:Txt;
@@ -30,26 +33,36 @@ export class LayerPanelRow extends createjs.EventDispatcher {
 	constructor(target:HTMLElement) {
 		super();
 		this._target = target;
+		this._isShow = true;
 
 		this._eye = new Eye(this._target.querySelector(".layerPanelRowEye"));
 		this._txt = new Txt(this._target.querySelector(".layerPanelRowTxt"));
 
-		let cvs:HTMLCanvasElement = <HTMLCanvasElement>document.querySelector('#previewCanvas');
-		this._preview = new Preview(cvs.width, cvs.height, 1);
+		let cvs:HTMLCanvasElement = <HTMLCanvasElement>this._target.querySelector('.layerPanelRowCanvas');
+		this._sw = cvs.width;
+		this._sh = cvs.height;
+		this._preview = new Preview(this._sw, this._sh, 2);
 		this._stage = new createjs.Stage(cvs);
 		this._stage.addChild(this._preview);
 
+		this._target.addEventListener("mousedown", this._onMousedownHandler);
 		this._eye.addEventListener(Eye.EVENT_CHANGE_EYE, this._onChangeEyeHandler);
 		this._txt.addEventListener(Txt.EVENT_CHANGE_TXT, this._onChangeTxtHandler);
 	}
 	//=============================================
 	// event handler
 	//=============================================
+	private _onMousedownHandler = (e:Event) =>{
+		//console.log("[layer]", "click", "target", this._isActive);
+		this.dispatchEvent(new createjs.Event(LayerPanelRow.EVENT_MOUSEDOWN_LAYERPANELROW, true, true));
+	}
 	private _onChangeEyeHandler = (e:Event) =>{
-		console.log("[layer]", "change", "eye", this._eye.visible);
+		//console.log("[layer]", "change", "eye", this._eye.visible);
+		this.dispatchEvent(new createjs.Event(LayerPanelRow.EVENT_CHANGE_LAYERPANELROW, true, true));
 	}
 	private _onChangeTxtHandler = (e:Event) =>{
-		console.log("[layer]", "change", "txt", this._txt.value);
+		//console.log("[layer]", "change", "txt", this._txt.value);
+		this.dispatchEvent(new createjs.Event(LayerPanelRow.EVENT_CHANGE_LAYERPANELROW, true, true));
 	}
 	//=============================================
 	// private
@@ -58,24 +71,44 @@ export class LayerPanelRow extends createjs.EventDispatcher {
 	// public
 	//=============================================
 	public setDld = (dld:DrawLayerData):void =>{
+		this._dld = dld;
+
+		if(this._dld.isActive){
+			this.active()
+		}else{
+			this.inactive();
+		}
+
+		//テキストへの反映
+		this._txt.value = this._dld.name;
 
 		//プレビューへの反映
 		this._preview.graphics.clear();
-		this._preview.drawDld(dld, 0, 0,this._sw, this._sh, false);
+		this._preview.drawDld(this._dld, 0, 0, this._sw, this._sh, false);
 		this._stage.update();
 	}
-	//=============================================
-	// public
-	//=============================================
+
+	public getDld = ():DrawLayerData =>{
+		if(!this._dld){return null}
+		this._dld.name = this._txt.value;
+		this._dld.visible = this._eye.visible;
+		this._dld.isActive = this._isActive;
+		return this._dld
+	}
 	public show = () :void =>{
 		if(!this._isShow){
-			this._target.classList.add("hide");
+			//console.log("show");
+			this._target.classList.remove("hide");
 			this._isShow = true;
 		}
 	}
 	public hide = () :void =>{
 		if(this._isShow){
-			this._target.classList.remove("hide");
+			//console.log("hide");
+			this._target.classList.add("hide");
+			this._preview.graphics.clear();
+			this._txt.value = "";
+			this._stage.update();
 			this._isShow = false;
 		}
 	}
@@ -97,12 +130,14 @@ export class LayerPanelRow extends createjs.EventDispatcher {
 	get txt():string{
 		return this._txt.value;
 	}
+	/*
 	get visilbe():boolean{
 		return this._eye.visible;
 	}
 	get isActive(): boolean {
 		return this._isActive;
 	}
+	*/
 	get isShow():boolean{
 		return this._isShow;
 	}
@@ -157,6 +192,9 @@ class Eye extends createjs.EventDispatcher {
 	//=============================================
 	get visible(): boolean {
 		return this._visible;
+	}
+	set visible(value:boolean) {
+		this._visible = value;
 	}
 }
 class Txt extends createjs.EventDispatcher {
@@ -241,5 +279,8 @@ class Txt extends createjs.EventDispatcher {
 	//=============================================
 	get value(): string {
 		return this._span.innerText;
+	}
+	set value(v:string) {
+		this._span.innerText = v;
 	}
 }

@@ -347,7 +347,11 @@ export class Workspace extends createjs.Stage {
 			for (var j = 0; j < drawLayerDataList.length; j++) {
 				dld = drawLayerDataList[j];
 				if(dld.name == dl.name){
+					dl.visible = dld.visible
 					dl.setDrawLayerData(dld);
+					if(dld.isActive){
+						this._activeDrawLayerId=i;
+					}
 					break
 				}
 			}
@@ -365,13 +369,16 @@ export class Workspace extends createjs.Stage {
 			result.title = this._wpTitle;
 		}
 
-		let layer: DrawLayer;
-		let layerData: DrawLayerData;
+		let dl: DrawLayer;
+		let dld: DrawLayerData;
 		for (let i = 0; i < this._drawLayerList.length; i++) {
-			layer = this._drawLayerList [i];
-			layerData = layer.getDrawLayerData();
+			dl = this._drawLayerList [i];
+			dld = dl.getDrawLayerData();
 			//if(layerData){
-			result.addDrawLayerData(layerData);
+			if(i == this._activeDrawLayerId){
+				dld.isActive = true;
+			}
+			result.addDrawLayerData(dld);
 			//}
 		}
 		result.layoutInit();

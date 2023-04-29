@@ -80,6 +80,9 @@ export class PixcelArtData {
 	public getDrawLayerDataList = ():Array<DrawLayerData> => {
 		return this._drawLayerDataList;
 	}
+	public clearDrawLayerDataList = () =>{
+		this._drawLayerDataList = [];
+	}
 	public layoutInit = () => {
 		//console.log(this._dotJsonObj);
 		/*

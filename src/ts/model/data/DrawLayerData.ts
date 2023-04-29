@@ -12,6 +12,9 @@ export class DrawLayerData {
 	private _height: number;
 	private _hexColorCodeList: Array<string>;
 	private _dataList: Array<number>;
+
+	private _isActive:boolean;
+	private _visible:boolean;
 	//=============================================
 	// constructor
 	//=============================================
@@ -23,6 +26,7 @@ export class DrawLayerData {
 			this._hexColorCodeList = [];
 		}
 		this._dataList = [];
+		this._visible = true;
 	}
 	//=============================================
 	// private
@@ -95,5 +99,17 @@ export class DrawLayerData {
 	}
 	get dataList(): Array<number> {
 		return this._dataList;
+	}
+	get isActive(): boolean {
+		return this._isActive;
+	}
+	set isActive(value: boolean) {
+		this._isActive = value;
+	}
+	get visible():boolean{
+		return this._visible;
+	}
+	set visible(value:boolean){
+		this._visible = value;
 	}
 }

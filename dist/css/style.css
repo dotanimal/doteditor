@@ -12411,8 +12411,6 @@ footer button {
   text-align: center;
 }
 #editorRight #previwAccordionGroup-collapse #previewCanvas {
-  width: 260px;
-  height: 100px;
   margin: 0 auto;
 }
 #editorRight #previwAccordionGroup-collapse #previewRange {
@@ -12422,7 +12420,12 @@ footer button {
 #editorRight #layerAccordionGroup-collapse #layerPanelBody {
   padding: 5px;
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #CCC;
+}
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -12432,23 +12435,25 @@ footer button {
           flex-direction: row;
   line-height: 25px;
   padding: 5px;
+  border-left: 1px solid #CCC !important;
+  border-right: 1px solid #CCC !important;
+  border-bottom: 1px solid #CCC !important;
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow.active {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow.active {
   background-color: #F1F1F1 !important;
-  border-color: #CCC !important;
   color: #333 !important;
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow.hide {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow.hide {
   display: none;
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowCanvas {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowCanvas {
   display: block;
   width: 25px;
   height: 25px;
   background-color: #FFF;
   border: 1px solid #CCC;
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowEye::after {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowEye::after {
   display: block;
   width: 30px;
   padding-top: 1px;
@@ -12457,10 +12462,10 @@ footer button {
   content: "\f341";
   cursor: pointer;
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowEye.hide::after {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowEye.hide::after {
   content: "\f340";
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowTxt {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowTxt {
   display: block;
   width: auto;
   height: 25px;
@@ -12468,11 +12473,11 @@ footer button {
   font-size: 12px;
   cursor: text;
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowTxt > span.hide,
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowTxt > input.hide {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowTxt > span.hide,
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowTxt > input.hide {
   display: none;
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowTxt > input {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowTxt > input {
   line-height: 1.4;
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -12482,15 +12487,15 @@ footer button {
   outline: none;
   padding: 0;
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowTxt > input::-moz-selection {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowTxt > input::-moz-selection {
   color: #fff;
   background-color: #666;
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowTxt > input::selection {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowTxt > input::selection {
   color: #fff;
   background-color: #666;
 }
-#editorRight #layerAccordionGroup-collapse #layerPanelBody .layerPanelRow .layerPanelRowHandle {
+#editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowHandle {
   display: block;
   width: 20px;
   height: 15px;
