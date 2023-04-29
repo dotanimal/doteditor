@@ -12506,17 +12506,36 @@ footer button {
   background-position: 70% 50%;
   cursor: move;
 }
+#editorRight #layerAccordionGroup-collapse #layerPanelHeader #addLayerPanelRow,
 #editorRight #layerAccordionGroup-collapse #layerPanelFooter #addLayerPanelRow {
   cursor: pointer;
 }
+#editorRight #layerAccordionGroup-collapse #layerPanelHeader #addLayerPanelRow > svg,
 #editorRight #layerAccordionGroup-collapse #layerPanelFooter #addLayerPanelRow > svg {
   display: inline-block;
   -webkit-transform: scaleY(-1);
           transform: scaleY(-1);
 }
+#editorRight #layerAccordionGroup-collapse #layerPanelHeader #addLayerPanelRow.disabled,
+#editorRight #layerAccordionGroup-collapse #layerPanelFooter #addLayerPanelRow.disabled {
+  cursor: default;
+}
+#editorRight #layerAccordionGroup-collapse #layerPanelHeader #addLayerPanelRow.disabled > svg,
+#editorRight #layerAccordionGroup-collapse #layerPanelFooter #addLayerPanelRow.disabled > svg {
+  fill: #999;
+}
+#editorRight #layerAccordionGroup-collapse #layerPanelHeader #deleteLayerPanelRow,
 #editorRight #layerAccordionGroup-collapse #layerPanelFooter #deleteLayerPanelRow {
   cursor: pointer;
   display: inline-block;
+}
+#editorRight #layerAccordionGroup-collapse #layerPanelHeader #deleteLayerPanelRow.disabled,
+#editorRight #layerAccordionGroup-collapse #layerPanelFooter #deleteLayerPanelRow.disabled {
+  cursor: default;
+}
+#editorRight #layerAccordionGroup-collapse #layerPanelHeader #deleteLayerPanelRow.disabled > svg,
+#editorRight #layerAccordionGroup-collapse #layerPanelFooter #deleteLayerPanelRow.disabled > svg {
+  fill: #999;
 }
 
 #loadFromWPModal .modal-content {

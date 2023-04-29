@@ -8,6 +8,8 @@ export class State {
 	// 定数/変数
 	//=============================================
 	//----------public----------
+	public static readonly INIT: string = 'init';
+
 	public static readonly DRAW_PENCIL: string = 'draw pencil';
 	public static readonly DRAW_ERACER: string = 'draw eracer';
 
@@ -59,6 +61,7 @@ export class State {
 	// constructor
 	//=============================================
 	constructor() {
+		this.setCurrent(State.INIT);
 	}
 	//=============================================
 	// event handler

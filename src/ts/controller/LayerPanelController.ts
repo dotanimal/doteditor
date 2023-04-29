@@ -19,6 +19,9 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	private _lprList:Array<LayerPanelRow>;
 	private _pad:PixcelArtData;
 	private _activeLayerId:number;
+
+	private _addLPR:HTMLElement;
+	private _deleteLPR:HTMLElement;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -50,10 +53,57 @@ export class LayerPanelController extends createjs.EventDispatcher {
 			lpr.addEventListener(LayerPanelRow.EVENT_CHANGE_LAYERPANELROW, this._onChangeLPRHandler);
 			this._lprList.push(lpr);
 		}
+
+		this._addLPR = <HTMLElement>document.querySelector('#addLayerPanelRow');
+		this._deleteLPR = <HTMLElement>document.querySelector('#deleteLayerPanelRow');
+
+		this._addLPR.addEventListener("click", this._onClickAddLPRHandler);
+		this._deleteLPR.addEventListener("click", this._onClickDeleteLPRHandler);
+		
 	}
 	//=============================================
 	// event handler
 	//=============================================
+	private _onClickAddLPRHandler = (e:Event) =>{
+		console.log("add");
+		let lpr:LayerPanelRow;
+		for (var i = 0; i < this._lprList .length; i++) {
+			lpr = <LayerPanelRow>this._lprList[i];
+			if(!lpr.isShow){
+				let dld:DrawLayerData = new DrawLayerData(String(new Date().getTime()));
+				lpr.setDld(dld);
+				lpr.show();
+				//this._activeLayerId = i;
+				break;
+			}
+		}
+		this.stateChange();
+		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
+	}
+	private _onClickDeleteLPRHandler = (e:Event) =>{
+		console.log("delete");
+		let lpr:LayerPanelRow;
+		for (var i = 0; i < this._lprList .length; i++) {
+			lpr = <LayerPanelRow>this._lprList[i];
+			if(lpr.isActive){
+				lpr.hide();
+				break;
+			}
+		}
+
+		let rowLiList:NodeListOf<Element> = document.querySelectorAll('#layerPanelBody > ul > li');
+		let rowLi :HTMLElement;
+		for (var j =0; j<rowLiList.length; j++) {
+			rowLi = <HTMLElement>rowLiList[j];
+			if (!rowLi.className.match(/hide/)) {
+				rowLi.dispatchEvent(new Event('mousedown'));//マウスダウンを強制的に発火してアクティブを変更
+				break;
+			}
+		}
+
+		this.stateChange();
+		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
+	}
 	private _onMousedownLPRHandler = (e:Event) =>{
 		let target:LayerPanelRow = <LayerPanelRow>e.target;
 		let lpr: LayerPanelRow;
@@ -78,8 +128,8 @@ export class LayerPanelController extends createjs.EventDispatcher {
 			}
 		}
 
-
-		this._state.setCurrent(State.LAYER_CHANGE);
+		//アクティブレイヤーを変更するだけなので、Stateを変えない
+		//this._state.setCurrent(State.LAYER_CHANGE);
 		console.log('\n[LayerPanel Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_ACTIVELAYER_LAYERPANEL, true, true));
 	}
@@ -101,7 +151,8 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	// public
 	//=============================================
 	public setPad = (pad:PixcelArtData):void =>{
-		console.log("layer panel", "setPad");
+		console.log('\n[LayerPanel]', "setPad", "\n\t" + "state : " + this._state.current);
+		
 		this._pad = pad;
 		let dldList :Array<DrawLayerData> = this._pad.getDrawLayerDataList();
 		let dld:DrawLayerData;
@@ -120,10 +171,12 @@ export class LayerPanelController extends createjs.EventDispatcher {
 					break;
 				}
 			}
+			//console.log(j, isMatch);
 			if(!isMatch){
 				lpr.hide();
 			}
 		}
+		this.stateChange()
 	}
 	public getPad = ():PixcelArtData =>{
 		this._pad.clearDrawLayerDataList();
@@ -150,7 +203,26 @@ export class LayerPanelController extends createjs.EventDispatcher {
 
 		return this._pad;
 	}
-	
+	public stateChange = ():void =>{
+		let lpr:LayerPanelRow;
+		let showCount:number = 0;
+		for (var i = 0; i < this._lprList.length; i++) {
+			lpr = <LayerPanelRow>this._lprList[i];
+			if(lpr.isShow){
+				showCount++;
+			}
+		}
+		//console.log(this._lprList.length, showCount);
+
+		this._addLPR.classList.remove("disabled");
+		this._deleteLPR.classList.remove("disabled");
+		if(showCount <= 1){
+			this._deleteLPR.classList.add("disabled");
+		}
+		if(this._lprList.length <= showCount){
+			this._addLPR.classList.add("disabled");
+		}
+	}
 	//=============================================
 	// getter/setter
 	//=============================================

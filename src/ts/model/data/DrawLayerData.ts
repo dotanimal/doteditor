@@ -18,9 +18,9 @@ export class DrawLayerData {
 	//=============================================
 	// constructor
 	//=============================================
-	constructor(isBlank:boolean = false) {
-		if(isBlank){
-			this._name = "body"
+	constructor(name:string = "") {
+		if(name){
+			this._name = name;
 			this._hexColorCodeList = ["","333333"];
 		}else{
 			this._hexColorCodeList = [];

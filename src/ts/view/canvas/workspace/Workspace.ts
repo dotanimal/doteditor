@@ -298,7 +298,7 @@ export class Workspace extends createjs.Stage {
 		var pad: PixcelArtData = this.getPixcelArtData();
 		this._pixcelArtDataHistoryList.push(pad);
 		this._histroyId = this._pixcelArtDataHistoryList.length - 1;
-		console.log("history", "save", this._histroyId);
+		//console.log("history", "save", this._histroyId);
 		//TODO　ログリストとログIDの値からUNDO/REDOボタンの有効・無効を切り替えられるようにしたい
 	}
 	//=============================================

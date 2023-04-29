@@ -134,10 +134,10 @@ export class LayerPanelRow extends createjs.EventDispatcher {
 	get visilbe():boolean{
 		return this._eye.visible;
 	}
+	*/
 	get isActive(): boolean {
 		return this._isActive;
 	}
-	*/
 	get isShow():boolean{
 		return this._isShow;
 	}

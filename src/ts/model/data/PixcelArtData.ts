@@ -22,7 +22,7 @@ export class PixcelArtData {
 	constructor(isBlank:boolean = false) {
 		this._drawLayerDataList = [];
 		if(isBlank){
-			this.addDrawLayerData(new DrawLayerData(true));
+			this.addDrawLayerData(new DrawLayerData("body"));
 		}
 	}
 	//=============================================

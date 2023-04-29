@@ -103,8 +103,10 @@ export class Main {
 
 
 		//アクティブワークスペースを設定
+		this._state.setCurrent(undefined);
 		let ws:Workspace = <Workspace>this._wsList["workspace1"];
 		this._wsActiveChange(ws);
+		//this._lypnCtrl.setPad(ws.getPixcelArtData());
 		//this._prvwCtrl.setPad(ws.getPixcelArtData());
 
 		
@@ -256,6 +258,13 @@ export class Main {
 		
 		let pad : PixcelArtData = ws.getPixcelArtData();
 
+		//ローカルストレージにデータを保存
+		this._lsc.save(ws.name, pad);
+
+
+		//最初のタイミングでは以降は実行しない
+		if(this._state.current == State.INIT){return false};
+
 		//プレビューに反映
 		this._prvwCtrl.setPad(pad);
 		
@@ -263,11 +272,6 @@ export class Main {
 			//レイヤーパネルに反映
 			this._lypnCtrl.setPad(pad);
 		}
-		
-
-		//ローカルストレージにデータを保存
-		this._lsc.save(ws.name, pad);
-
 	}
 	//色の取得
 	private _onGetHexColorHandler = (e: Event) => {
@@ -381,6 +385,7 @@ export class Main {
 		}
 	} 
 	private _wsActiveChange = (ws:Workspace):void =>{
+		console.log('\n[Main]', "ws " + ws.name + " active change", "\n\t" + "state : " + this._state.current);
 		ws.active();
 		this._activeWsId = ws.name;
 		

@@ -117,6 +117,7 @@ $layer-panel-row-parts-height:25px;
 			}
 			
 		}
+		#layerPanelHeader,
 		#layerPanelFooter{
 			#addLayerPanelRow{
 				cursor:pointer;
@@ -124,10 +125,22 @@ $layer-panel-row-parts-height:25px;
 					display: inline-block;
 					transform: scaleY(-1);
 				}
+				&.disabled{
+					cursor: default;
+					> svg{
+						fill: #999;
+					}
+				}
 			}
 			#deleteLayerPanelRow{
 				cursor:pointer;
 				display: inline-block;
+				&.disabled{
+					cursor: default;
+					> svg{
+						fill: #999;
+					}
+				}
 			}
 		}
 	}
