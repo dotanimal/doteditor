@@ -214,11 +214,17 @@ export class EditBtns extends createjs.EventDispatcher {
 				false
 			);
 		}
-		if(category == State.CATEGORY_FILE){
+
+		if(
+			category == State.CATEGORY_FILE
+				||
+			category == State.CATEGORY_HISTORY
+				||
+			category == State.CATEGORY_LAYER
+				||
+			category == null
+		){
 			this._reset();
-		}else if(category == State.CATEGORY_HISTORY){
-			this._reset();
-		}else if(category == null){
 			this._btnsAble(
 				true,
 				true,

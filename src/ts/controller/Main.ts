@@ -323,6 +323,7 @@ export class Main {
 			let ws: Workspace = this._getActiveWorkSpace();
 			this._setPixcelArtData2WorkSpace(ws, pad);
 		}
+		this._changeState();
 	}
 	private _onChangeActiveLaylerLPlHandler = (e:Event) => {
 		let id:number = this._lypnCtrl.activeLayerId;
@@ -360,12 +361,7 @@ export class Main {
 		return this._wsList[this._activeWsId];
 	}
 	private _setPixcelArtData2WorkSpace = (ws:Workspace, pad: PixcelArtData) => {
-		//console.log("MainController : _setPixcelArtData2WS");
-		//タイトルの反映
-		//this._titleTxtInput.value = pad.title;
 
-		//ワークスペースにデータを反映
-		//let ws: Workspace = this._getActiveWorkSpace();
 		ws.setPixcelArtData(pad);
 		
 		//カラーパレットに色を反映
@@ -403,10 +399,12 @@ export class Main {
 		this._setupHistoryBtn(ws);
 	}
 	private _changeState = () => {
+		console.log("change state");
 		this._eb.changedState();
 		this._hb.changedState();
 		this._fdm.changedState();
 		this._cp.changedState();
+		//this._lypnCtrl.changedState();
 		
 
 		for (var key in this._wsList) {

@@ -65,7 +65,6 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	// event handler
 	//=============================================
 	private _onClickAddLPRHandler = (e:Event) =>{
-		console.log("add");
 		let lpr:LayerPanelRow;
 		for (var i = 0; i < this._lprList .length; i++) {
 			lpr = <LayerPanelRow>this._lprList[i];
@@ -77,11 +76,11 @@ export class LayerPanelController extends createjs.EventDispatcher {
 				break;
 			}
 		}
-		this.stateChange();
+		this._state.setCurrent(State.LAYER_CHANGE);
+		this.changedState();
 		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
 	}
 	private _onClickDeleteLPRHandler = (e:Event) =>{
-		console.log("delete");
 		let lpr:LayerPanelRow;
 		for (var i = 0; i < this._lprList .length; i++) {
 			lpr = <LayerPanelRow>this._lprList[i];
@@ -101,7 +100,8 @@ export class LayerPanelController extends createjs.EventDispatcher {
 			}
 		}
 
-		this.stateChange();
+		this._state.setCurrent(State.LAYER_CHANGE);
+		this.changedState();
 		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
 	}
 	private _onMousedownLPRHandler = (e:Event) =>{
@@ -176,7 +176,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 				lpr.hide();
 			}
 		}
-		this.stateChange()
+		this.changedState()
 	}
 	public getPad = ():PixcelArtData =>{
 		this._pad.clearDrawLayerDataList();
@@ -203,7 +203,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 
 		return this._pad;
 	}
-	public stateChange = ():void =>{
+	public changedState = ():void =>{
 		let lpr:LayerPanelRow;
 		let showCount:number = 0;
 		for (var i = 0; i < this._lprList.length; i++) {
