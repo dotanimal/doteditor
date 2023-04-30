@@ -350,7 +350,7 @@ export class Workspace extends createjs.Stage {
 			for (var j = 0; j < drawLayerDataList.length; j++) {
 				dld = drawLayerDataList[j];
 				if(dld.name == dl.name){
-					dl.visible = dld.visible
+					//dl.visible = dld.visible
 					dl.setDrawLayerData(dld);
 					if(dld.isActive){
 						this._activeDrawLayerId=i;

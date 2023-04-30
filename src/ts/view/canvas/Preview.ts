@@ -74,7 +74,10 @@ export class Preview extends createjs.Shape {
 		if(isBg){this._drawBg();}
 		for (let key in dldList) {
 			dld = dldList[key];
-			this._drawDld(dld, sx, sy);
+			if(dld.visible){
+				//console.log(dld.name, dld.visible)
+				this._drawDld(dld, sx, sy);
+			}
 		}
 		
 		this.updateCache();

@@ -16,6 +16,7 @@ export class DrawLayer extends Layer {
 	//----------private---------
 	private _dotsize: number;
 	private _hexColorCode : string;
+	private _dld:DrawLayerData;
 
 	//----------protected-------
 	protected _c2ld:Canvas2DrawLayerData;
@@ -99,6 +100,16 @@ export class DrawLayer extends Layer {
 	}
 	*/
 	public setDrawLayerData = (dld:DrawLayerData) => {
+		if(!dld.visible){
+			//非表示の場合はDrawLayerDataをキャッシュし、描画処理を行わない
+			this.visible = false;
+			this._dld = dld;
+			return;
+		}
+
+		this.visible = true;
+		this._dld = null;
+
 		this.graphics.clear();
 		let xCount :number = dld.width;
 		let yCount :number = dld.height;
@@ -122,12 +133,19 @@ export class DrawLayer extends Layer {
 		this.updateCache("source-over");
 	}
 	public getDrawLayerData = (): DrawLayerData => {
-		let cc: HTMLCanvasElement = <HTMLCanvasElement>this.cacheCanvas;
-		let ctx: CanvasRenderingContext2D = cc.getContext("2d");
-		this._c2ld.init(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._drawAreaLeft, this._drawAreaTop, this._drawAreaRight, this._drawAreaBottom);
-		let dld:DrawLayerData = this._c2ld.getDrawLayerData(1);
-		dld.name = this.name;
-		this._c2ld.dispose(); 
+		let dld:DrawLayerData;
+
+		if(!this.visible && this._dld){ //非表示でDrawLayerDataをキャッシュしている場合
+			dld = this._dld
+		}else{
+			let cc: HTMLCanvasElement = <HTMLCanvasElement>this.cacheCanvas;
+			let ctx: CanvasRenderingContext2D = cc.getContext("2d");
+			this._c2ld.init(ctx, this._stageWidth, this._stageHeight, this._dotSize, false, true, this._drawAreaLeft, this._drawAreaTop, this._drawAreaRight, this._drawAreaBottom);
+			dld = this._c2ld.getDrawLayerData(1);
+			dld.name = this.name;
+			this._c2ld.dispose(); 
+		}
+
 		return dld;
 	}
 	//=============================================
