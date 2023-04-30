@@ -80,6 +80,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 			}
 		}
 		this._state.setCurrent(State.LAYER_CHANGE);
+		this._updateLayerNameList();
 		this.changedState();
 		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
 	}
@@ -104,6 +105,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 		}
 
 		this._state.setCurrent(State.LAYER_CHANGE);
+		this._updateLayerNameList();
 		this.changedState();
 		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
 	}
@@ -127,6 +129,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	}
 	private _onChangeLPRHandler = (e:Event) =>{
 		this._state.setCurrent(State.LAYER_CHANGE);
+		this._updateLayerNameList();
 		console.log('\n[LayerPanel Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
 	}
@@ -147,6 +150,18 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	//=============================================
 	// private
 	//=============================================
+	private _updateLayerNameList = ():void =>{
+		let layerNameList :Array<string> = [];
+		let lpr:LayerPanelRow;
+		for(var i=0; i<this._lprList.length; i++){
+			lpr = this._lprList[i];
+			layerNameList.push(lpr.txt);
+		}
+		for(var i=0; i<this._lprList.length; i++){
+			lpr = this._lprList[i];
+			lpr.setNameList(layerNameList);
+		}		
+	}
 	private _sortLprList = ():void =>{
 		let result:Array<LayerPanelRow> = [];
 		let lpr:LayerPanelRow;
@@ -194,6 +209,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 				lpr.hide();
 			}
 		}
+		this._updateLayerNameList();
 		this.changedState()
 	}
 	public getPad = ():PixcelArtData =>{

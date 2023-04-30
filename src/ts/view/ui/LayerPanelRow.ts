@@ -127,6 +127,9 @@ export class LayerPanelRow extends createjs.EventDispatcher {
 			this._isActive = false;
 		}
 	}
+	public setNameList = (list:Array<string>) :void =>{
+		this._txt.setNameList(list);
+	}
 	//=============================================
 	// getter/setter
 	//=============================================
@@ -220,6 +223,7 @@ class Txt extends createjs.EventDispatcher {
 	private _span:HTMLElement;
 	private _input:HTMLInputElement;
 	private _isEdit:boolean;
+	private _nameList:Array<string>;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -256,12 +260,24 @@ class Txt extends createjs.EventDispatcher {
 			this._span.classList.remove("hide");
 			this._input.classList.add("hide");
 			let value :string = this._input.value;
-			if(value){
+			if(!value){
+				alert("レイヤー名を入力してください");
+			}else{
 				if(this._input.value != this._span.innerText){
-					this._span.innerText = this._input.value;
-					this.dispatchEvent(new createjs.Event(Txt.EVENT_CHANGE_TXT, true, true));
+					let isMatch :boolean = false;
+					for(var i=0;i<this._nameList.length;i++){
+						if(this._nameList[i] == value){
+							alert("このレイヤー名はすでに登録されています");
+							isMatch = true;
+						}
+					}
+					if(!isMatch){
+						this._span.innerText = this._input.value;
+						this.dispatchEvent(new createjs.Event(Txt.EVENT_CHANGE_TXT, true, true));
+					}
 				}
 			}
+
 			this._isEdit = false;
 		}
 	}
@@ -281,6 +297,9 @@ class Txt extends createjs.EventDispatcher {
 	//=============================================
 	// public
 	//=============================================
+	public setNameList = (list:Array<string>) :void =>{
+		this._nameList = list;
+	}
 	//=============================================
 	// getter/setter
 	//=============================================
