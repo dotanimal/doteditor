@@ -257,7 +257,7 @@ export class Main {
 		}
 		
 		let pad : PixcelArtData = ws.getPixcelArtData();
-
+		//console.log(pad.getJsonObj());
 		//ローカルストレージにデータを保存
 		this._lsc.save(ws.name, pad);
 
@@ -319,16 +319,17 @@ export class Main {
 	private _onChangeDataLPHandler = (e:Event) => {
 		let pad : PixcelArtData = this._lypnCtrl.getPad();
 		if(pad != null){
-			console.log('\n[Event]', e.type);
+			//console.log('\n[Event]', e.type, pad.getJsonObj());
 			let ws: Workspace = this._getActiveWorkSpace();
 			this._setPixcelArtData2WorkSpace(ws, pad);
 		}
 		this._changeState();
 	}
 	private _onChangeActiveLaylerLPlHandler = (e:Event) => {
-		let id:number = this._lypnCtrl.activeLayerId;
+		//let layerId:number = this._lypnCtrl.activeLayerId;
+		let layerName:string = this._lypnCtrl.activeLayerName;
 		let ws: Workspace = this._getActiveWorkSpace();
-		ws.setActiveLayerId(id);
+		ws.setActiveLayerName(layerName);
 	}
 	//----------Window----------
 	private _onBeforeunloadHandler = (e:BeforeUnloadEvent) =>{
@@ -399,7 +400,7 @@ export class Main {
 		this._setupHistoryBtn(ws);
 	}
 	private _changeState = () => {
-		console.log("change state");
+		//console.log("change state");
 		this._eb.changedState();
 		this._hb.changedState();
 		this._fdm.changedState();

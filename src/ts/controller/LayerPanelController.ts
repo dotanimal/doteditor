@@ -19,9 +19,11 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	private _lprList:Array<LayerPanelRow>;
 	private _pad:PixcelArtData;
 	private _activeLayerId:number;
+	private _activeLayerName:string;
 
 	private _addLPR:HTMLElement;
 	private _deleteLPR:HTMLElement;
+	private _sortable:Sortable;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -32,14 +34,16 @@ export class LayerPanelController extends createjs.EventDispatcher {
 
 		// List with handle
 		let rows : HTMLElement =  <HTMLElement>document.querySelector('#layerPanelBody > ul');
-		Sortable.create(
+		this._sortable = Sortable.create(
 			rows, 
 			{
 				handle: '.layerPanelRowHandle',
 				animation: 150,
-				onEnd :  this._onChangeSortableHandler
+				onSort: this._onSortSortableHandler,
+				onEnd : this._onChangeSortableHandler
 			}
 		);
+		this._onSortSortableHandler();
 		
 		this._lprList = [];
 
@@ -66,13 +70,12 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	//=============================================
 	private _onClickAddLPRHandler = (e:Event) =>{
 		let lpr:LayerPanelRow;
-		for (var i = 0; i < this._lprList .length; i++) {
+		for (var i = 0; i < this._lprList.length; i++) {
 			lpr = <LayerPanelRow>this._lprList[i];
 			if(!lpr.isShow){
-				let dld:DrawLayerData = new DrawLayerData(String(new Date().getTime()));
+				let dld:DrawLayerData = new DrawLayerData(String("layer" + new Date().getTime()));
 				lpr.setDld(dld);
 				lpr.show();
-				//this._activeLayerId = i;
 				break;
 			}
 		}
@@ -82,7 +85,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	}
 	private _onClickDeleteLPRHandler = (e:Event) =>{
 		let lpr:LayerPanelRow;
-		for (var i = 0; i < this._lprList .length; i++) {
+		for (var i = 0; i < this._lprList.length; i++) {
 			lpr = <LayerPanelRow>this._lprList[i];
 			if(lpr.isActive){
 				lpr.hide();
@@ -107,24 +110,13 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	private _onMousedownLPRHandler = (e:Event) =>{
 		let target:LayerPanelRow = <LayerPanelRow>e.target;
 		let lpr: LayerPanelRow;
-		for (var i = 0; i < this._lprList .length; i++) {
+		for (var i = 0; i < this._lprList.length; i++) {
 			lpr = <LayerPanelRow>this._lprList[i];
 			if(target.txt == lpr.txt){
+				this._activeLayerName = lpr.txt;
 				lpr.active();
 			}else{
 				lpr.inactive();
-			}
-		}
-		let rowSpanList:NodeListOf<Element> = document.querySelectorAll('#layerPanelBody > ul > li > .layerPanelRowTxt > span');
-		let rowSpan :HTMLElement;
-		let rowSpanTxt:string
-		for (var j = rowSpanList.length-1; 0<j; j--) {
-			rowSpan = <HTMLElement>rowSpanList[j];
-			rowSpanTxt = rowSpan.innerHTML;
-			if(target.txt == rowSpanTxt){
-				let idx:number = this._lprList.length - 1 - j;
-				this._activeLayerId = idx;
-				break;
 			}
 		}
 
@@ -143,28 +135,54 @@ export class LayerPanelController extends createjs.EventDispatcher {
 		console.log('\n[LayerPanel Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
 	}
+	//並び替えのたびに、リストタグの属性情報を書き換える
+	private _onSortSortableHandler = (e:Event = null) =>{
+		let rows : HTMLElement =  <HTMLElement>document.querySelector('#layerPanelBody > ul');
+		let items:NodeListOf<Element> = rows.querySelectorAll('li');
+		for (var i = 0; i < items.length; i++) {
+			let item:HTMLElement = <HTMLElement>items[i];
+			item.setAttribute("data-sotable-index", String(i));
+		}
+	}
 	//=============================================
 	// private
 	//=============================================
-
+	private _sortLprList = ():void =>{
+		let result:Array<LayerPanelRow> = [];
+		let lpr:LayerPanelRow;
+		let idx:number;
+		for(var i=0; i<this._lprList.length; i++){
+		//for(var i=this._lprList.length-1; 0<=i; i--){
+			lpr = this._lprList[i];
+			idx = lpr.index;
+			//result[idx] = lpr;
+			result[this._lprList.length - 1 - idx] = lpr;
+		}
+		this._lprList = result;
+	}
 	//=============================================
 	// public
 	//=============================================
 	public setPad = (pad:PixcelArtData):void =>{
 		console.log('\n[LayerPanel]', "setPad", "\n\t" + "state : " + this._state.current);
 		
+		this._sortLprList();
+
 		this._pad = pad;
 		let dldList :Array<DrawLayerData> = this._pad.getDrawLayerDataList();
 		let dld:DrawLayerData;
+
 		let lpr:LayerPanelRow;
-		for(var j=0; j<this._lprList.length;j++){
-			lpr = this._lprList[j];
+		//for(var i=this._lprList.length-1; 0<=i; i--){
+		for(var i=0; i<this._lprList.length; i++){
+			lpr = this._lprList[i];
 			let isMatch:boolean = false;
-			let idx:number = this._lprList.length - 1 - j;
-			for(var i=0; i<dldList.length;i++){
-				dld = dldList[i];
+			let idx:number = lpr.index;
+			//for(var j=dldList.length-1; 0<=j; j--){
+			for(var j=0; j<dldList.length; j++){
+				dld = dldList[j];
 				//console.log(i, j);
-				if(i == idx){
+				if(j == (this._lprList.length - 1 - idx)){
 					lpr.show();
 					lpr.setDld(dld);
 					isMatch = true;
@@ -179,25 +197,22 @@ export class LayerPanelController extends createjs.EventDispatcher {
 		this.changedState()
 	}
 	public getPad = ():PixcelArtData =>{
+		//console.log("\n[Sotable]", "toArray", "\n\t", this._sortable.toArray());
+		
+		this._sortLprList();
+
 		this._pad.clearDrawLayerDataList();
+		
 		let lpr: LayerPanelRow;
 		let dld: DrawLayerData;
-		
-		let rowSpanList:NodeListOf<Element> = document.querySelectorAll('#layerPanelBody > ul > li > .layerPanelRowTxt > span');
-		let rowSpan :HTMLElement;
-		let rowSpanTxt:string
-		for (var j = rowSpanList.length-1; 0<j; j--) {
-			rowSpan = <HTMLElement>rowSpanList[j];
-			rowSpanTxt = rowSpan.innerHTML;
-			if(rowSpanTxt){
-				for (var i = this._lprList.length-1; 0<i; i--) {
-					lpr = <LayerPanelRow>this._lprList[i];
-					if(lpr.isShow && (rowSpanTxt == lpr.txt)){
-						dld = lpr.getDld();
-						this._pad.addDrawLayerData(dld);
-						break;
-					}	
-				}
+
+		//for(var i=this._lprList.length-1; 0<=i; i--){
+		for(var i=0; i<this._lprList.length; i++){
+			lpr = this._lprList[i];
+			//console.log(lpr.index,lpr.txt)
+			if(lpr.isShow){
+				dld = lpr.getDld();
+				this._pad.addDrawLayerData(dld);
 			}
 		}
 
@@ -228,5 +243,8 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	//=============================================
 	get activeLayerId ():number{
 		return this._activeLayerId;
+	}
+	get activeLayerName():string{
+		return this._activeLayerName;
 	}
 }

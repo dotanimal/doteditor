@@ -227,8 +227,11 @@ export class Workspace extends createjs.Stage {
 			if(this._state.currentCategory == State.CATEGORY_DRAW){
 				if (this._isMouseDown) {
 					let layer: DrawLayer = this._getActiveDrawLayer();
+					//console.log(layer.name);
 					if (layer) {
 						layer.drawDot(this.mouseX,this.mouseY, this._hexColor);
+					}else{
+						throw Error("対象となるDrawLayerがない");
 					}
 				}
 			}
@@ -481,8 +484,14 @@ export class Workspace extends createjs.Stage {
 		this._selectRangeLayer.visible = true;
 		this._selectRangeLayer.setBeginEnd(bx,by,ex,ey);
 	}
-	public setActiveLayerId = (value:number):void =>{
-		this._activeDrawLayerId = value;
+	public setActiveLayerName = (value:string):void =>{
+		let dl:DrawLayer;
+		for (var i = 0; i < this._drawLayerList.length; i++) {
+			dl = this._drawLayerList[i];
+			if(dl.name == value){
+				this._activeDrawLayerId = i;
+			}
+		}
 	}
 	//=============================================
 	// getter/setter

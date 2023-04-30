@@ -130,11 +130,10 @@ export class LayerPanelRow extends createjs.EventDispatcher {
 	get txt():string{
 		return this._txt.value;
 	}
-	/*
-	get visilbe():boolean{
-		return this._eye.visible;
+	get index():number{
+		let idxStr:string = this._target.getAttribute("data-sotable-index");
+		return Number(idxStr);
 	}
-	*/
 	get isActive(): boolean {
 		return this._isActive;
 	}
