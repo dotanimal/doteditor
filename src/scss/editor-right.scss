@@ -1,4 +1,4 @@
-$layer-panel-row-parts-height:25px;
+$layer-panel-row-parts-height:31px;
 
 #editorRight{
 	//background-color: #9FF;
@@ -22,10 +22,12 @@ $layer-panel-row-parts-height:25px;
 	#previwAccordionGroup-collapse{
 		#previewCanvas{
 			margin:0 auto;
+			display: block;
 		}
 		#previewRange{
 			width:100px;
 			margin:0 auto;
+			display: block;
 		}
 	}
 
@@ -56,7 +58,7 @@ $layer-panel-row-parts-height:25px;
 					}
 					.layerPanelRowCanvas{
 						display: block;
-						width:25px;
+						width:$layer-panel-row-parts-height;
 						height:$layer-panel-row-parts-height;
 						background-color: #FFF;
 						border:1px solid #CCC;
@@ -88,13 +90,15 @@ $layer-panel-row-parts-height:25px;
 							display: none;
 						}
 						>input{
+							/**/
 							line-height: 1.4;
 							appearance: none;
 							background: transparent;
 							border:none; 
 							outline:none;
 							padding:0;
-	
+							/**/
+							width:100px;
 							&::selection {
 								color: #fff;
 								background-color: #666;

@@ -58,11 +58,19 @@ export class DrawLayerData {
 			this._x = 0;
 			this._y = 0;
 		}
+		if(obj.hidden){
+			this._visible = false;
+		}else{
+			this._visible = true;
+		}
 	}
 	public getJsonObj = (): any => {
 		let result: any = { "size": [this._width, this._height], "color": this._hexColorCodeList, "data": this._dataList };
 		if (this._x != 0 || this._y != 0) {
 			result["pos"] = [this._x, this._y];
+		}
+		if(!this._visible){
+			result["hidden"] = 1
 		}
 		return result;
 	}

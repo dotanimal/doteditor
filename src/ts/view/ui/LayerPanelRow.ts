@@ -79,8 +79,11 @@ export class LayerPanelRow extends createjs.EventDispatcher {
 			this.inactive();
 		}
 
-		//テキストへの反映
+		//Txtへの反映
 		this._txt.value = this._dld.name;
+
+		//Eyeへの反映
+		this._eye.visible = this._dld.visible;
 
 		//プレビューへの反映
 		this._preview.graphics.clear();
@@ -193,6 +196,11 @@ class Eye extends createjs.EventDispatcher {
 		return this._visible;
 	}
 	set visible(value:boolean) {
+		if(value){
+			this._target.classList.remove("hide");
+		}else{
+			this._target.classList.add("hide");
+		}
 		this._visible = value;
 	}
 }

@@ -12223,7 +12223,7 @@ textarea.form-control-lg {
 }
 
 #editor {
-  width: 1100px !important;
+  width: 1050px !important;
   height: 600px;
   margin: 10px auto 0 auto;
   display: -webkit-box;
@@ -12382,7 +12382,7 @@ textarea.form-control-lg {
   height: 500px;
 }
 #editor > #editorRight {
-  margin-left: 20px;
+  margin-left: auto;
 }
 
 footer {
@@ -12412,10 +12412,12 @@ footer button {
 }
 #editorRight #previwAccordionGroup-collapse #previewCanvas {
   margin: 0 auto;
+  display: block;
 }
 #editorRight #previwAccordionGroup-collapse #previewRange {
   width: 100px;
   margin: 0 auto;
+  display: block;
 }
 #editorRight #layerAccordionGroup-collapse #layerPanelBody {
   padding: 5px;
@@ -12433,7 +12435,7 @@ footer button {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
-  line-height: 25px;
+  line-height: 31px;
   padding: 5px;
   border-left: 1px solid #CCC !important;
   border-right: 1px solid #CCC !important;
@@ -12448,8 +12450,8 @@ footer button {
 }
 #editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowCanvas {
   display: block;
-  width: 25px;
-  height: 25px;
+  width: 31px;
+  height: 31px;
   background-color: #FFF;
   border: 1px solid #CCC;
 }
@@ -12457,7 +12459,7 @@ footer button {
   display: block;
   width: 30px;
   padding-top: 1px;
-  height: 25px;
+  height: 31px;
   font-family: "bootstrap-icons";
   content: "\f341";
   cursor: pointer;
@@ -12468,7 +12470,7 @@ footer button {
 #editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowTxt {
   display: block;
   width: auto;
-  height: 25px;
+  height: 31px;
   overflow: hidden;
   font-size: 12px;
   cursor: text;
@@ -12478,6 +12480,7 @@ footer button {
   display: none;
 }
 #editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowTxt > input {
+  /**/
   line-height: 1.4;
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -12486,6 +12489,8 @@ footer button {
   border: none;
   outline: none;
   padding: 0;
+  /**/
+  width: 100px;
 }
 #editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowTxt > input::-moz-selection {
   color: #fff;
@@ -12498,7 +12503,7 @@ footer button {
 #editorRight #layerAccordionGroup-collapse #layerPanelBody > ul .layerPanelRow .layerPanelRowHandle {
   display: block;
   width: 20px;
-  height: 15px;
+  height: 21px;
   margin-top: 5px;
   margin-left: auto;
   background-repeat: no-repeat;
