@@ -40,7 +40,7 @@ $layer-panel-row-parts-height:31px;
 				padding:0;
 				border-top:1px solid #CCC;
 
-				.layerPanelRow{
+				.layerPanelItem{
 					display: flex;
 					flex-direction: row;
 					line-height:$layer-panel-row-parts-height;
@@ -56,14 +56,14 @@ $layer-panel-row-parts-height:31px;
 					&.hide{//複数クラス
 						display: none;
 					}
-					.layerPanelRowCanvas{
+					.layerPanelItemCanvas{
 						display: block;
 						width:$layer-panel-row-parts-height;
 						height:$layer-panel-row-parts-height;
 						background-color: #FFF;
 						border:1px solid #CCC;
 					}
-					.layerPanelRowEye::after {
+					.layerPanelItemEye::after {
 						display: block;
 						width: 30px;
 						padding-top: 1px;
@@ -73,10 +73,10 @@ $layer-panel-row-parts-height:31px;
 						content: "\F341";
 						cursor:pointer;
 					}
-					.layerPanelRowEye.hide::after{
+					.layerPanelItemEye.hide::after{
 						content: "\F340";
 					}
-					.layerPanelRowTxt{
+					.layerPanelItemTxt{
 						display: block;
 						width: auto;
 						height:$layer-panel-row-parts-height;
@@ -105,7 +105,7 @@ $layer-panel-row-parts-height:31px;
 							}
 						}
 					}
-					.layerPanelRowHandle{
+					.layerPanelItemHandle{
 						display: block;
 						width: 20px;
 						height:$layer-panel-row-parts-height - 10px;
@@ -123,7 +123,7 @@ $layer-panel-row-parts-height:31px;
 		}
 		#layerPanelHeader,
 		#layerPanelFooter{
-			#addLayerPanelRow{
+			#addLayerPanelItem{
 				cursor:pointer;
 				> svg{
 					display: inline-block;
@@ -136,7 +136,7 @@ $layer-panel-row-parts-height:31px;
 					}
 				}
 			}
-			#deleteLayerPanelRow{
+			#deleteLayerPanelItem{
 				cursor:pointer;
 				display: inline-block;
 				&.disabled{

@@ -15,7 +15,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	public static readonly EVENT_CHANGE_ACTIVELAYER_LAYERPANEL: string = "event change active layer layer panel";
 	//----------private---------
 	private _state:State;
-	private _lprList:Array<LayerPanelRow>;
+	private _lpiList:Array<LayerPanelItem>;
 	private _pad:PixcelArtData;
 	private _activeLayerId:number;
 	private _activeLayerName:string;
@@ -32,33 +32,33 @@ export class LayerPanelController extends createjs.EventDispatcher {
 		this._state = state;
 
 		// List with handle
-		let rows : HTMLElement =  <HTMLElement>document.querySelector('#layerPanelBody > ul');
+		let items : HTMLElement =  <HTMLElement>document.querySelector('#layerPanelBody > ul');
 		this._sortable = Sortable.create(
-			rows, 
+			items, 
 			{
-				handle: '.layerPanelRowHandle',
-				animation: 150,
+				handle: '.layerPanelItemHandle', //
+				animation: 200, //
 				onSort: this._onSortSortableHandler,
 				onEnd : this._onChangeSortableHandler
 			}
 		);
 		this._onSortSortableHandler();
 		
-		this._lprList = [];
+		this._lpiList = [];
 
-		let rowList:NodeListOf<Element> = rows.querySelectorAll('li');
+		let itemList:NodeListOf<Element> = items.querySelectorAll('li');
 		let ele :HTMLElement;
-		let lpr: LayerPanelRow;
-		for (var i = 0; i < rowList.length; i++) {
-			ele = <HTMLElement>rowList[i];
-			lpr = new LayerPanelRow(ele);
-			lpr.addEventListener(LayerPanelRow.EVENT_MOUSEDOWN_LAYERPANELROW, this._onMousedownLPRHandler);
-			lpr.addEventListener(LayerPanelRow.EVENT_CHANGE_LAYERPANELROW, this._onChangeLPRHandler);
-			this._lprList.push(lpr);
+		let lpi: LayerPanelItem;
+		for (var i = 0; i < itemList.length; i++) {
+			ele = <HTMLElement>itemList[i];
+			lpi = new LayerPanelItem(ele);
+			lpi.addEventListener(LayerPanelItem.EVENT_MOUSEDOWN_LAYERPANELROW, this._onMousedownLPRHandler);
+			lpi.addEventListener(LayerPanelItem.EVENT_CHANGE_LAYERPANELROW, this._onChangeLPRHandler);
+			this._lpiList.push(lpi);
 		}
 
-		this._addLPR = <HTMLElement>document.querySelector('#addLayerPanelRow');
-		this._deleteLPR = <HTMLElement>document.querySelector('#deleteLayerPanelRow');
+		this._addLPR = <HTMLElement>document.querySelector('#addLayerPanelItem');
+		this._deleteLPR = <HTMLElement>document.querySelector('#deleteLayerPanelItem');
 
 		this._addLPR.addEventListener("click", this._onClickAddLPRHandler);
 		this._deleteLPR.addEventListener("click", this._onClickDeleteLPRHandler);
@@ -68,13 +68,13 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	// event handler
 	//=============================================
 	private _onClickAddLPRHandler = (e:Event) =>{
-		let lpr:LayerPanelRow;
-		for (var i = 0; i < this._lprList.length; i++) {
-			lpr = <LayerPanelRow>this._lprList[i];
-			if(!lpr.isShow){
+		let lpi:LayerPanelItem;
+		for (var i = 0; i < this._lpiList.length; i++) {
+			lpi = <LayerPanelItem>this._lpiList[i];
+			if(!lpi.isShow){
 				let dld:DrawLayerData = new DrawLayerData(String("layer" + new Date().getTime()));
-				lpr.setDld(dld);
-				lpr.show();
+				lpi.setDld(dld);
+				lpi.show();
 				break;
 			}
 		}
@@ -84,21 +84,21 @@ export class LayerPanelController extends createjs.EventDispatcher {
 		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
 	}
 	private _onClickDeleteLPRHandler = (e:Event) =>{
-		let lpr:LayerPanelRow;
-		for (var i = 0; i < this._lprList.length; i++) {
-			lpr = <LayerPanelRow>this._lprList[i];
-			if(lpr.isActive){
-				lpr.hide();
+		let lpi:LayerPanelItem;
+		for (var i = 0; i < this._lpiList.length; i++) {
+			lpi = <LayerPanelItem>this._lpiList[i];
+			if(lpi.isActive){
+				lpi.hide();
 				break;
 			}
 		}
 
-		let rowLiList:NodeListOf<Element> = document.querySelectorAll('#layerPanelBody > ul > li');
-		let rowLi :HTMLElement;
-		for (var j =0; j<rowLiList.length; j++) {
-			rowLi = <HTMLElement>rowLiList[j];
-			if (!rowLi.className.match(/hide/)) {
-				rowLi.dispatchEvent(new Event('mousedown'));//マウスダウンを強制的に発火してアクティブを変更
+		let itemList:NodeListOf<Element> = document.querySelectorAll('#layerPanelBody > ul > li');
+		let item :HTMLElement;
+		for (var j =0; j<itemList.length; j++) {
+			item = <HTMLElement>itemList[j];
+			if (!item.className.match(/hide/)) {
+				item.dispatchEvent(new Event('mousedown'));//マウスダウンを強制的に発火してアクティブを変更
 				break;
 			}
 		}
@@ -109,15 +109,15 @@ export class LayerPanelController extends createjs.EventDispatcher {
 		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
 	}
 	private _onMousedownLPRHandler = (e:Event) =>{
-		let target:LayerPanelRow = <LayerPanelRow>e.target;
-		let lpr: LayerPanelRow;
-		for (var i = 0; i < this._lprList.length; i++) {
-			lpr = <LayerPanelRow>this._lprList[i];
-			if(target.txt == lpr.txt){
-				this._activeLayerName = lpr.txt;
-				lpr.active();
+		let target:LayerPanelItem = <LayerPanelItem>e.target;
+		let lpi: LayerPanelItem;
+		for (var i = 0; i < this._lpiList.length; i++) {
+			lpi = <LayerPanelItem>this._lpiList[i];
+			if(target.txt == lpi.txt){
+				this._activeLayerName = lpi.txt;
+				lpi.active();
 			}else{
-				lpr.inactive();
+				lpi.inactive();
 			}
 		}
 
@@ -139,9 +139,10 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	}
 	//並び替えのたびに、リストタグの属性情報を書き換える
 	private _onSortSortableHandler = (e:Event = null) =>{
-		let rows : HTMLElement =  <HTMLElement>document.querySelector('#layerPanelBody > ul');
-		let items:NodeListOf<Element> = rows.querySelectorAll('li');
-		for (var i = 0; i < items.length; i++) {
+		let target :HTMLElement = <HTMLElement>document.querySelector('#layerPanelBody > ul');
+		//let target : HTMLElement = <HTMLElement>e.target;
+		let items : HTMLCollection = target.children;
+		for (let i = 0; i < items.length; i++) {
 			let item:HTMLElement = <HTMLElement>items[i];
 			item.setAttribute("data-sotable-index", String(i));
 		}
@@ -151,28 +152,28 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	//=============================================
 	private _updateLayerNameList = ():void =>{
 		let layerNameList :Array<string> = [];
-		let lpr:LayerPanelRow;
-		for(var i=0; i<this._lprList.length; i++){
-			lpr = this._lprList[i];
-			layerNameList.push(lpr.txt);
+		let lpi:LayerPanelItem;
+		for(var i=0; i<this._lpiList.length; i++){
+			lpi = this._lpiList[i];
+			layerNameList.push(lpi.txt);
 		}
-		for(var i=0; i<this._lprList.length; i++){
-			lpr = this._lprList[i];
-			lpr.setNameList(layerNameList);
+		for(var i=0; i<this._lpiList.length; i++){
+			lpi = this._lpiList[i];
+			lpi.setNameList(layerNameList);
 		}		
 	}
 	private _sortLprList = ():void =>{
-		let result:Array<LayerPanelRow> = [];
-		let lpr:LayerPanelRow;
+		let result:Array<LayerPanelItem> = [];
+		let lpi:LayerPanelItem;
 		let idx:number;
-		for(var i=0; i<this._lprList.length; i++){
-		//for(var i=this._lprList.length-1; 0<=i; i--){
-			lpr = this._lprList[i];
-			idx = lpr.index;
-			//result[idx] = lpr;
-			result[this._lprList.length - 1 - idx] = lpr;
+		for(var i=0; i<this._lpiList.length; i++){
+		//for(var i=this._lpiList.length-1; 0<=i; i--){
+			lpi = this._lpiList[i];
+			idx = lpi.index;
+			//result[idx] = lpi;
+			result[this._lpiList.length - 1 - idx] = lpi;
 		}
-		this._lprList = result;
+		this._lpiList = result;
 	}
 	//=============================================
 	// public
@@ -186,26 +187,26 @@ export class LayerPanelController extends createjs.EventDispatcher {
 		let dldList :Array<DrawLayerData> = this._pad.getDrawLayerDataList();
 		let dld:DrawLayerData;
 
-		let lpr:LayerPanelRow;
-		//for(var i=this._lprList.length-1; 0<=i; i--){
-		for(var i=0; i<this._lprList.length; i++){
-			lpr = this._lprList[i];
+		let lpi:LayerPanelItem;
+		//for(var i=this._lpiList.length-1; 0<=i; i--){
+		for(var i=0; i<this._lpiList.length; i++){
+			lpi = this._lpiList[i];
 			let isMatch:boolean = false;
-			let idx:number = lpr.index;
+			let idx:number = lpi.index;
 			//for(var j=dldList.length-1; 0<=j; j--){
 			for(var j=0; j<dldList.length; j++){
 				dld = dldList[j];
 				//console.log(i, j);
-				if(j == (this._lprList.length - 1 - idx)){
-					lpr.show();
-					lpr.setDld(dld);
+				if(j == (this._lpiList.length - 1 - idx)){
+					lpi.show();
+					lpi.setDld(dld);
 					isMatch = true;
 					break;
 				}
 			}
 			//console.log(j, isMatch);
 			if(!isMatch){
-				lpr.hide();
+				lpi.hide();
 			}
 		}
 		this._updateLayerNameList();
@@ -218,15 +219,15 @@ export class LayerPanelController extends createjs.EventDispatcher {
 
 		this._pad.clearDrawLayerDataList();
 		
-		let lpr: LayerPanelRow;
+		let lpi: LayerPanelItem;
 		let dld: DrawLayerData;
 
-		//for(var i=this._lprList.length-1; 0<=i; i--){
-		for(var i=0; i<this._lprList.length; i++){
-			lpr = this._lprList[i];
-			//console.log(lpr.index,lpr.txt)
-			if(lpr.isShow){
-				dld = lpr.getDld();
+		//for(var i=this._lpiList.length-1; 0<=i; i--){
+		for(var i=0; i<this._lpiList.length; i++){
+			lpi = this._lpiList[i];
+			//console.log(lpi.index,lpi.txt)
+			if(lpi.isShow){
+				dld = lpi.getDld();
 				this._pad.addDrawLayerData(dld);
 			}
 		}
@@ -234,22 +235,22 @@ export class LayerPanelController extends createjs.EventDispatcher {
 		return this._pad;
 	}
 	public changedState = ():void =>{
-		let lpr:LayerPanelRow;
+		let lpi:LayerPanelItem;
 		let showCount:number = 0;
-		for (var i = 0; i < this._lprList.length; i++) {
-			lpr = <LayerPanelRow>this._lprList[i];
-			if(lpr.isShow){
+		for (var i = 0; i < this._lpiList.length; i++) {
+			lpi = <LayerPanelItem>this._lpiList[i];
+			if(lpi.isShow){
 				showCount++;
 			}
 		}
-		//console.log(this._lprList.length, showCount);
+		//console.log(this._lpiList.length, showCount);
 
 		this._addLPR.classList.remove("disabled");
 		this._deleteLPR.classList.remove("disabled");
 		if(showCount <= 1){
 			this._deleteLPR.classList.add("disabled");
 		}
-		if(this._lprList.length <= showCount){
+		if(this._lpiList.length <= showCount){
 			this._addLPR.classList.add("disabled");
 		}
 	}
@@ -265,7 +266,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 }
 
 
-class LayerPanelRow extends createjs.EventDispatcher {
+class LayerPanelItem extends createjs.EventDispatcher {
 	//=============================================
 	// TODO
 	//=============================================
@@ -299,10 +300,10 @@ class LayerPanelRow extends createjs.EventDispatcher {
 		this._target = target;
 		this._isShow = true;
 
-		this._eye = new Eye(this._target.querySelector(".layerPanelRowEye"));
-		this._txt = new Txt(this._target.querySelector(".layerPanelRowTxt"));
+		this._eye = new Eye(this._target.querySelector(".layerPanelItemEye"));
+		this._txt = new Txt(this._target.querySelector(".layerPanelItemTxt"));
 
-		let cvs:HTMLCanvasElement = <HTMLCanvasElement>this._target.querySelector('.layerPanelRowCanvas');
+		let cvs:HTMLCanvasElement = <HTMLCanvasElement>this._target.querySelector('.layerPanelItemCanvas');
 		this._sw = cvs.width;
 		this._sh = cvs.height;
 		this._preview = new Preview(this._sw, this._sh, 2);
@@ -318,15 +319,15 @@ class LayerPanelRow extends createjs.EventDispatcher {
 	//=============================================
 	private _onMousedownHandler = (e:Event) =>{
 		//console.log("[layer]", "click", "target", this._isActive);
-		this.dispatchEvent(new createjs.Event(LayerPanelRow.EVENT_MOUSEDOWN_LAYERPANELROW, true, true));
+		this.dispatchEvent(new createjs.Event(LayerPanelItem.EVENT_MOUSEDOWN_LAYERPANELROW, true, true));
 	}
 	private _onChangeEyeHandler = (e:Event) =>{
 		//console.log("[layer]", "change", "eye", this._eye.visible);
-		this.dispatchEvent(new createjs.Event(LayerPanelRow.EVENT_CHANGE_LAYERPANELROW, true, true));
+		this.dispatchEvent(new createjs.Event(LayerPanelItem.EVENT_CHANGE_LAYERPANELROW, true, true));
 	}
 	private _onChangeTxtHandler = (e:Event) =>{
 		//console.log("[layer]", "change", "txt", this._txt.value);
-		this.dispatchEvent(new createjs.Event(LayerPanelRow.EVENT_CHANGE_LAYERPANELROW, true, true));
+		this.dispatchEvent(new createjs.Event(LayerPanelItem.EVENT_CHANGE_LAYERPANELROW, true, true));
 	}
 	//=============================================
 	// private
