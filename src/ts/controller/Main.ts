@@ -14,6 +14,7 @@ import Split from 'split.js';
 import { PreviewController } from "./PreviewController";
 import { KeyBindManager } from "../model/KeyBindManager";
 import { LayerPanelController } from "./LayerPanelController";
+import { DraggableWindow } from "../view/ui/DraggableWindow";
 
 export class Main {
 	//=============================================
@@ -99,8 +100,6 @@ export class Main {
 			this._setPixcelArtData2WorkSpace(ws, pad);
 		}
 
-		this._setSplit();
-
 
 		//アクティブワークスペースを設定
 		this._state.setCurrent(undefined);
@@ -109,6 +108,8 @@ export class Main {
 		//this._lypnCtrl.setPad(ws.getPixcelArtData());
 		//this._prvwCtrl.setPad(ws.getPixcelArtData());
 
+		this._splitInit();
+		this._windowInit();
 		
 		//最後に初期化が必要なもの
 		this._cp.init();
@@ -416,7 +417,7 @@ export class Main {
 		//let ws: Workspace = this._getActiveWorkSpace();
 		//ws.changedState();
 	}
-	private _setSplit =():void =>{
+	private _splitInit =():void =>{
 		let sizes:any = localStorage.getItem('dotanimal-doteditor-split-sizes'); //LocalStrage
 		if (sizes) {
 			sizes = JSON.parse(sizes);
@@ -438,6 +439,22 @@ export class Main {
 				localStorage.setItem('dotanimal-doteditor-split-sizes', JSON.stringify(sizes)) //幅を変更するたびにLocalStrageに保存
 			},
 		});
+	}
+	private _windowInit = ():void => {
+		let layer:HTMLElement = <HTMLElement>document.querySelector("#layerWindow");
+		let preview:HTMLElement = <HTMLElement>document.querySelector("#previewWindow");
+
+		let editor:HTMLElement = <HTMLElement>document.querySelector("#editor");
+		
+		let left:number = editor.offsetLeft + editor.offsetWidth - layer.offsetWidth;
+		let top:number = editor.offsetTop;
+		//let bottom:number = preview.offsetHeight + top;
+
+		let previewWin:DraggableWindow = new DraggableWindow(preview);
+		let layerWin:DraggableWindow = new DraggableWindow(layer);
+
+		previewWin.child = layerWin;
+		previewWin.setPos(left, top);
 	}
 	//=============================================
 	// public

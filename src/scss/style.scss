@@ -9,6 +9,113 @@ $color-gray:#333;
 $modal-width:800px;
 
 //--------------------------
+//汎用
+//--------------------------
+.display-none{display: none !important;}
+
+//--------------------------
+//mixin
+//--------------------------
+//ドロップシャドウ
+//https://coliss.com/articles/build-websites/operation/css/15-essential-sass-mixins-by-developerdrive.html
+@mixin box-shadow( $h: 10px , $v: 10px , $b: 0px , $s: 0px , $c: #000000 ) {
+	-webkit-box-shadow: $h $v $b $s $c;
+	-moz-box-shadow: $h $v $b $s $c;
+	box-shadow: $h $v $b $s $c;
+}
+
+//角丸
+//https://tech.kurojica.com/archives/2057/
+//全体
+@mixin border-radius($radius) {
+	-webkit-border-radius: $radius;
+	   -moz-border-radius: $radius;
+		-ms-border-radius: $radius;
+			border-radius: $radius;
+  }
+  
+//左上
+@mixin border-top-left-radius($radius) {
+-webkit-border-top-left-radius: $radius;
+	-moz-border-radius-topleft: $radius;
+		border-top-left-radius: $radius;
+}
+//右上
+@mixin border-top-right-radius($radius) {
+-webkit-border-top-right-radius: $radius;
+	-moz-border-radius-topright: $radius;
+		border-top-right-radius: $radius;
+}
+//右下
+@mixin border-bottom-right-radius($radius) {
+-webkit-border-bottom-right-radius: $radius;
+	-moz-border-radius-bottomright: $radius;
+		border-bottom-right-radius: $radius;
+}
+//左下
+@mixin border-bottom-left-radius($radius) {
+-webkit-border-bottom-left-radius: $radius;
+	-moz-border-radius-bottomleft: $radius;
+		border-bottom-left-radius: $radius;
+}
+
+
+/*水平方向のスクロールバーのデザイン*/
+@mixin horiszontal-scrollbar(){
+	&::-webkit-scrollbar {
+		overflow:hidden;
+		//width:2px;
+		background:#EEE;
+
+		&:horizontal {
+			height:2px;
+		}
+	}
+	&::-webkit-scrollbar-button {
+			display:none;
+	}
+	&::-webkit-scrollbar-piece {
+			background:#eee;
+			&:start {
+				background:#eee;
+			}
+	}
+	&::-webkit-scrollbar-thumb {
+			background:#AAA;
+	}
+	&::-webkit-scrollbar-corner {
+			background:#AAA;
+	}
+}
+/*垂直方向のスクロールバーのデザイン*/
+@mixin vertical-scrollbar(){
+	&::-webkit-scrollbar {
+		overflow:hidden;
+		//height:2px;
+		background:#EEE;
+
+		&:vertical {
+			width:2px;
+		}
+	}
+	&::-webkit-scrollbar-button {
+			display:none;
+	}
+	&::-webkit-scrollbar-piece {
+			background:#eee;
+			&:start {
+				background:#eee;
+			}
+	}
+	&::-webkit-scrollbar-thumb {
+			background:#AAA;
+	}
+	&::-webkit-scrollbar-corner {
+			background:#AAA;
+	}
+}
+
+//--------------------------
 //Bootstrap の各パーツの調整
 //--------------------------
 
@@ -105,6 +212,77 @@ $modal-width:800px;
 
 
 
+//--------------------------
+// .draggableWindow
+//--------------------------
+.draggableWindow{
+	position: fixed;
+	@include border-radius(5px);
+	border:1px solid #dee2e6;
+	background: #FFF;
+	font-size: 14px;
+
+	
+	> .draggableWindowHeader{
+		display: flex;
+		flex-direction: row;
+		padding:5px 10px;
+		line-height: 1;
+		cursor: move;
+		//background: #CFF;
+		
+		border-bottom:1px solid #dee2e6;
+		@include border-top-left-radius(5px);
+		@include border-top-right-radius(5px);
+
+		> .draggableWindowHeaderTxt{
+			display: block;
+		}
+		
+		> .draggableWindowHeaderBtn{
+			display: block;
+			margin-left:auto;
+			content: "";
+			width:14px;
+			height:14px;
+			background-size: 14px;
+			background-repeat: no-repeat;
+			background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2333333'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+			transform: scaleY(-1);
+			cursor: pointer;
+		}
+	}
+	
+	> .draggableWindowBody{
+		//height: 100px;
+		//padding:10px;
+		@include border-bottom-left-radius(5px);
+		@include border-bottom-right-radius(5px);
+	}
+
+	&.close{
+		> .draggableWindowHeader{
+			border-bottom:none;
+			> .draggableWindowHeaderBtn{
+				transform: scaleY(1);
+			}
+		}
+		> .draggableWindowBody{
+			display: none;
+		}
+	}
+
+	&.drag{
+		//@include box-shadow(0px, 2px, 8px, 0px, #CCC);
+	}
+
+
+}
+
+
+//--------------------------
+// split
+//--------------------------
 //ハンドル
 .inputRange[type="range"] {
 	-webkit-appearance: none;
@@ -136,7 +314,7 @@ $modal-width:800px;
 //--------------------------
 
 #editor{
-	width: 1050px !important;
+	width: 1100px !important;
 	height: 600px;
 	margin:10px auto 0 auto;
 	display: flex;
@@ -251,6 +429,7 @@ $modal-width:800px;
 				overflow-x: scroll;
 				
 				/*スクロールバーのデザイン*/
+				/*
 				&::-webkit-scrollbar {
 					overflow:hidden;
 					width:2px;
@@ -275,6 +454,8 @@ $modal-width:800px;
 				&::-webkit-scrollbar-corner {
 						background:#AAA;
 				}
+				*/
+				@include horiszontal-scrollbar();
 			}
 			.gutter {
 				background-color: #FFF;
@@ -310,7 +491,156 @@ footer{
 	}
 
 }
-@import "./editor-right.scss";
+//----------------------------
+// window
+//----------------------------
+#previewWindow{
+	width: 260px;
+	.draggableWindowBody{
+		//background: #FCC;
+
+		#previewCanvas{
+			margin:5px auto 0 auto;
+			display: block;
+		}
+		#previewRange{
+			width:100px;
+			margin:10px auto 10px auto;
+			display: block;
+		}
+	}
+}
+$layer-panel-row-parts-height:31px;
+#layerWindow{
+	width: 260px;
+	.draggableWindowBody{
+		padding:4px 4px 8px 0;
+
+		#layerPanelBody{
+			padding:5px;
+			//background: #CCF;
+			height: 200px;
+			overflow-y: scroll;
+
+			@include vertical-scrollbar();
+
+			> ul{
+				margin:0;
+				padding:0;
+				border-top:1px solid #CCC;
+
+				.layerPanelItem{
+					display: flex;
+					flex-direction: row;
+					line-height:$layer-panel-row-parts-height;
+					padding:5px;
+					border-left:1px solid #CCC !important;
+					border-right:1px solid #CCC !important;
+					border-bottom:1px solid #CCC !important;
+
+					&.active{//複数クラス
+						background-color: #F1F1F1 !important;
+						color:#333 !important;
+					}
+					&.hide{//複数クラス
+						display: none;
+					}
+					.layerPanelItemCanvas{
+						display: block;
+						width:$layer-panel-row-parts-height;
+						height:$layer-panel-row-parts-height;
+						background-color: #FFF;
+						border:1px solid #CCC;
+					}
+					.layerPanelItemEye::after {
+						display: block;
+						width: 30px;
+						padding-top: 1px;
+						height:$layer-panel-row-parts-height;
+						text-align: center;
+						//background-color: #FF9;
+						font-family:'bootstrap-icons';
+						content: "\F341";
+						cursor:pointer;
+					}
+					.layerPanelItemEye.hide::after{
+						content: "\F340";
+					}
+					.layerPanelItemTxt{
+						display: block;
+						width: auto;
+						height:$layer-panel-row-parts-height;
+						//background-color: #9FF;
+						overflow: hidden;
+						font-size:12px;
+						cursor:text;
+
+						>span.hide,
+						>input.hide{
+							display: none;
+						}
+						>input{
+							/**/
+							line-height: 1.4;
+							appearance: none;
+							background: transparent;
+							border:none; 
+							outline:none;
+							padding:0;
+							/**/
+							width:100px;
+							&::selection {
+								color: #fff;
+								background-color: #666;
+							}
+						}
+					}
+					.layerPanelItemHandle{
+						display: block;
+						width: 20px;
+						height:$layer-panel-row-parts-height - 10px;
+						margin-top:5px;
+						//background-color: #F99;
+						margin-left: auto;
+						background-repeat: no-repeat;
+						background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+						background-position: 70% 50%;
+						cursor:move;
+					}
+				}
+			}
+		}
+	}
+	#layerPanelHeader,
+	#layerPanelFooter{
+		text-align: center;
+		#addLayerPanelItem{
+			cursor:pointer;
+			> svg{
+				display: inline-block;
+				transform: scaleY(-1);
+			}
+			&.disabled{
+				cursor: default;
+				> svg{
+					fill: #999;
+				}
+			}
+		}
+		#deleteLayerPanelItem{
+			cursor:pointer;
+			display: inline-block;
+			&.disabled{
+				cursor: default;
+				> svg{
+					fill: #999;
+				}
+			}
+		}
+	}
+
+}
+
 //----------------------------
 // modal
 //----------------------------
@@ -397,10 +727,5 @@ footer{
 				text-align: center;
 			}
 		}
+	}
 }
-}
-
-//--------------------------
-//汎用
-//--------------------------
-.display-none{display: none !important;}
