@@ -1,7 +1,7 @@
 import { State } from "../model/State";
 import { PixcelArtData } from "../model/data/PixcelArtData";
 import { Workspace } from "../view/canvas/workspace/Workspace";
-import { ColorPalette } from "../view/ui/ColorPalette";
+//import { ColorPalette } from "../view/ui/ColorPalette";
 import { EditBtns } from "../view/ui/EditBtns";
 import { FileDropdownMenu } from "../view/ui/FileDropdownMenu";
 import { HistoryBtns } from "../view/ui/HistoryBtns";
@@ -15,7 +15,7 @@ import { PreviewController } from "./PreviewController";
 import { KeyBindManager } from "../model/KeyBindManager";
 import { LayerPanelController } from "./LayerPanelController";
 import { DraggableWindow } from "../view/ui/DraggableWindow";
-
+import { ColorpalettePanelController } from "./ColorpalettePanelController";
 export class Main {
 	//=============================================
 	// TODO
@@ -33,7 +33,7 @@ export class Main {
 	private _fdm: FileDropdownMenu;
 	private _hb: HistoryBtns;
 	private _eb: EditBtns;
-	private _cp: ColorPalette;
+	//private _cp: ColorPalette;
 
 	private _lc: LocalConnector;
 	private _lsc: LocalStorageConnector;
@@ -42,6 +42,7 @@ export class Main {
 	private _lfwpCtrl: LoadFromWPController;
 	private _prvwCtrl:PreviewController;
 	private _lypnCtrl:LayerPanelController;
+	private _cppnCtrl:ColorpalettePanelController;
 
 	private _wsList: { [key: string]: Workspace };
 	private _activeWsId: string;
@@ -59,7 +60,7 @@ export class Main {
 		this._fdm = new FileDropdownMenu(this._state);
 		this._eb = new EditBtns(this._state, km);
 		this._hb = new HistoryBtns(this._state);
-		this._cp = new ColorPalette(this._state);
+		//this._cp = new ColorPalette(this._state);
 
 		this._lc = new LocalConnector();
 		this._lsc = new LocalStorageConnector();
@@ -69,6 +70,7 @@ export class Main {
 		this._lfwpCtrl = new LoadFromWPController(this._state);
 		this._prvwCtrl = new PreviewController(this._state);
 		this._lypnCtrl = new LayerPanelController(this._state);
+		this._cppnCtrl = new ColorpalettePanelController(this._state);
 
 		this._wsList = {};
 		
@@ -80,13 +82,14 @@ export class Main {
 		this._fdm.addEventListener(this._fdm.EVENT_SELECT_MENU_FILE_DROPDOWN, this._onSelectMenuFileDropdownMenuHandler);
 		this._hb.addEventListener(this._hb.EVENT_CLICK_HISTORY_BTN, this._onClickHistoryBtnHandler);
 		this._eb.addEventListener(this._eb.EVENT_CLICK_EDIT_BTN, this._onClickEditBtnHandler);
-		this._cp.addEventListener(this._cp.EVENT_CHANGE_COLOR, this._onChangeColorPaletteHandler);
+		//this._cp.addEventListener(this._cp.EVENT_CHANGE_COLOR, this._onChangeColorPaletteHandler);
 
 		this._lc.addEventListener(this._lc.EVENT_LOAD_JSON_COMPLETE, this._onLoadJsonFromLocalCompleteHandler);
 
 		this._lfwpCtrl.addEventListener(LoadFromWPController.EVENT_SELECT_THUMB, this._onLoadFromWPHandler);
 		this._lypnCtrl.addEventListener(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, this._onChangeDataLPHandler);
 		this._lypnCtrl.addEventListener(LayerPanelController.EVENT_CHANGE_ACTIVELAYER_LAYERPANEL, this._onChangeActiveLaylerLPlHandler);
+		this._cppnCtrl.addEventListener(ColorpalettePanelController.EVENT_CHANGE_COLORPALETTE, this._onChangeColorPaletteHandler2);
 		//window.addEventListener('beforeunload', this._onBeforeunloadHandler);
 
 		//ワークスペースにローカルストレージのデータを反映
@@ -112,8 +115,10 @@ export class Main {
 		this._windowInit();
 		
 		//最後に初期化が必要なもの
-		this._cp.init();
+		//this._cp.init();
 		this._eb.init();
+
+
 	}
 	//=============================================
 	// event handler
@@ -155,8 +160,15 @@ export class Main {
 		//ws.isAbleDraw = true;
 	}
 	//----------ColorPalette----------
+	/*
 	private _onChangeColorPaletteHandler = (e: Event) => {
 		let hexColor : string = this._cp.hexColor;
+		let ws: Workspace = this._getActiveWorkSpace();
+		ws.hexColor = hexColor;
+	}
+	*/
+	private _onChangeColorPaletteHandler2 = (e: Event) => {
+		let hexColor : string = this._cppnCtrl.hexColor;
 		let ws: Workspace = this._getActiveWorkSpace();
 		ws.hexColor = hexColor;
 	}
@@ -277,7 +289,8 @@ export class Main {
 	//色の取得
 	private _onGetHexColorHandler = (e: Event) => {
 		let ws: Workspace = <Workspace>e.target;
-		this._cp.hexColor =  ws.hexColor;
+		//this._cp.hexColor =  ws.hexColor;
+		this._cppnCtrl.hexColor = ws.hexColor;
 	}
 	//ワークスペースへのマウスダウン
 	private _onWSMouseDownHandler = (e: Event) => {
@@ -368,18 +381,19 @@ export class Main {
 		
 		//カラーパレットに色を反映
 		let colorList: Array<string> = pad.getHexColorCodeList();
-		this._cp.setHexColorList(colorList);
+		//this._cp.setHexColorList(colorList);
+		this._cppnCtrl.setHexColorList(colorList);
 	}
 	private _setupHistoryBtn = (ws:Workspace):void =>{
 		if (ws.hasPrevLog) {
-			this._hb.undoBtnDisactive(false);
+			this._hb.undoBtnInactive(false);
 		} else {
-			this._hb.undoBtnDisactive(true);
+			this._hb.undoBtnInactive(true);
 		}
 		if (ws.hasNextLog) {
-			this._hb.redoBtnDisactive(false);
+			this._hb.redoBtnInactive(false);
 		} else {
-			this._hb.redoBtnDisactive(true);
+			this._hb.redoBtnInactive(true);
 		}
 	} 
 	private _wsActiveChange = (ws:Workspace):void =>{
@@ -395,7 +409,8 @@ export class Main {
 		//レイヤーパネルに反映
 		this._lypnCtrl.setPad(pad);
 
-		let hexColor : string = this._cp.hexColor;
+		//let hexColor : string = this._cp.hexColor;
+		let hexColor : string = this._cppnCtrl.hexColor;
 		ws.hexColor = hexColor;
 
 		this._setupHistoryBtn(ws);
@@ -405,7 +420,8 @@ export class Main {
 		this._eb.changedState();
 		this._hb.changedState();
 		this._fdm.changedState();
-		this._cp.changedState();
+		//this._cp.changedState();
+		this._cppnCtrl.changedState();
 		//this._lypnCtrl.changedState();
 		
 
@@ -443,6 +459,7 @@ export class Main {
 	private _windowInit = ():void => {
 		let layer:HTMLElement = <HTMLElement>document.querySelector("#layerWindow");
 		let preview:HTMLElement = <HTMLElement>document.querySelector("#previewWindow");
+		let colorpalette:HTMLElement = <HTMLElement>document.querySelector("#colorpaletteWindow");
 
 		let editor:HTMLElement = <HTMLElement>document.querySelector("#editor");
 		
@@ -452,9 +469,11 @@ export class Main {
 
 		let previewWin:DraggableWindow = new DraggableWindow(preview);
 		let layerWin:DraggableWindow = new DraggableWindow(layer);
+		let colorpaletteWin:DraggableWindow = new DraggableWindow(colorpalette);
 
-		previewWin.child = layerWin;
-		previewWin.setPos(left, top);
+		layerWin.child = previewWin;
+		colorpaletteWin.child = layerWin;
+		colorpaletteWin.setPos(left, top);
 	}
 	//=============================================
 	// public

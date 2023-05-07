@@ -31,8 +31,8 @@ export class HistoryBtns extends createjs.EventDispatcher {
 		this._redoBtn = <HTMLElement>document.querySelector('#historyBtnGrp > #redo');
 		this._redoBtn.addEventListener('click', this._onClickHandler);
 
-		this.redoBtnDisactive(true);
-		this.undoBtnDisactive(true);
+		this.redoBtnInactive(true);
+		this.undoBtnInactive(true);
 	}
 	//=============================================
 	// event handler
@@ -55,14 +55,14 @@ export class HistoryBtns extends createjs.EventDispatcher {
 	//=============================================
 	// public
 	//=============================================
-	public redoBtnDisactive = (flag: boolean) => {
+	public redoBtnInactive = (flag: boolean) => {
 		if (flag) {
 			this._redoBtn.classList.add("disabled");
 		} else {
 			this._redoBtn.classList.remove("disabled");
 		}
 	}
-	public undoBtnDisactive = (flag: boolean) => {
+	public undoBtnInactive = (flag: boolean) => {
 		if (flag) {
 			this._undoBtn.classList.add("disabled");
 		} else {

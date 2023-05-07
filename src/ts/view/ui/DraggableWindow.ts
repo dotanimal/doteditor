@@ -18,7 +18,7 @@ export class DraggableWindow extends createjs.EventDispatcher {
 	private _isOpen:boolean;
 	//private _zIndex:string;
 	private _target:HTMLElement;
-	private _head:HTMLElement;
+	private _txt:HTMLElement;
 	private _btn:HTMLElement;
 	private _relativeX:number;
 	private _relativeY:number;
@@ -41,11 +41,11 @@ export class DraggableWindow extends createjs.EventDispatcher {
 		this._manager.add(this);
 		//console.log(this._target.style.zIndex);
 
-		this._head = <HTMLElement>this._target.querySelector(".draggableWindowHeader");
+		this._txt = <HTMLElement>this._target.querySelector(".draggableWindowHeaderTxt");
 		this._btn = <HTMLElement>this._target.querySelector(".draggableWindowHeaderBtn");
 
-		this._head.addEventListener("mousedown", this._onMouseDownHandler);
-		this._head.addEventListener("touchstart", this._onTouchStartHandler);
+		this._txt.addEventListener("mousedown", this._onMouseDownHandler);
+		this._txt.addEventListener("touchstart", this._onTouchStartHandler);
 		this._btn.addEventListener("click", this._onOpenCloseHandler);
 	}
 	//=============================================
@@ -66,8 +66,8 @@ export class DraggableWindow extends createjs.EventDispatcher {
 		this._startDrag(e.clientX, e.clientY);
 
 		
-		window.addEventListener("mousemove", this._onMouseMoveHandler);
-		this._head.addEventListener("mouseup", this._onMouseUpHandler);
+		document.addEventListener("mousemove", this._onMouseMoveHandler);
+		this._txt.addEventListener("mouseup", this._onMouseUpHandler);
 	}
 	private _onMouseMoveHandler = (e:MouseEvent) =>{
 		//console.log("mouse move");
@@ -80,16 +80,16 @@ export class DraggableWindow extends createjs.EventDispatcher {
 		e.preventDefault();
 		this._endDrag(e.clientX, e.clientY);
 		
-		window.removeEventListener("mousemove", this._onMouseMoveHandler);
-		this._head.removeEventListener("mouseup", this._onMouseUpHandler);
+		document.removeEventListener("mousemove", this._onMouseMoveHandler);
+		this._txt.removeEventListener("mouseup", this._onMouseUpHandler);
 	}
 	private _onTouchStartHandler = (e:TouchEvent) =>{
 		//console.log("touch start");
 		e.preventDefault();
 		this._startDrag(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
 		
-		window.addEventListener("touchmove", this._onTouchMoveHandler);
-		this._head.addEventListener("touchend", this._onTouchEndHandler);
+		document.addEventListener("touchmove", this._onTouchMoveHandler);
+		this._txt.addEventListener("touchend", this._onTouchEndHandler);
 	}
 	private _onTouchMoveHandler = (e:TouchEvent) =>{
 		//console.log("touch move");
@@ -102,8 +102,8 @@ export class DraggableWindow extends createjs.EventDispatcher {
 		e.preventDefault();
 		this._endDrag(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
 		
-		window.removeEventListener("touchmove", this._onTouchMoveHandler);
-		this._head.removeEventListener("touchend", this._onTouchEndHandler);
+		document.removeEventListener("touchmove", this._onTouchMoveHandler);
+		this._txt.removeEventListener("touchend", this._onTouchEndHandler);
 	}
 	//=============================================
 	// private
