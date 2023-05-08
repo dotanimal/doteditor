@@ -54,18 +54,23 @@ export class Main {
 	constructor() {
 		this._state = new State();
 		
+		if(this._state.device == State.DEVICE_PC){
+			this._pcInit();
+		}else if(this._state.device == State.DEVICE_SP){
+			this._spInit();
+		}
+	}
+	private _pcInit = ():void => {
 		//キーバインドの設定
 		let km:KeyBindManager = new KeyBindManager();
 		
 		this._fdm = new FileDropdownMenu(this._state);
 		this._eb = new EditBtns(this._state, km);
 		this._hb = new HistoryBtns(this._state);
-		//this._cp = new ColorPalette(this._state);
 
 		this._lc = new LocalConnector();
 		this._lsc = new LocalStorageConnector();
 
-		//let wpc:WPConector = new WPConector(this._state);
 		this._stwpCtrl = new SaveToWPController(this._state);
 		this._lfwpCtrl = new LoadFromWPController(this._state);
 		this._prvwCtrl = new PreviewController(this._state);
@@ -73,16 +78,17 @@ export class Main {
 		this._cppnCtrl = new ColorpalettePanelController(this._state);
 
 		this._wsList = {};
-		
-		this._addWorkSpace('workspace1');
-		this._addWorkSpace('workspace2');
+
+		let dotSize:number = 16;
+		let stageMargin:number = 2;
+		this._addWorkSpace('workspace1', dotSize, stageMargin);
+		this._addWorkSpace('workspace2', dotSize, stageMargin);
 
 		this._fdm.addEventListener(this._fdm.EVENT_OPEN_FILE_DROPDOWN, this._onOpenFileDropdownMenuHandler);
 		this._fdm.addEventListener(this._fdm.EVENT_CLOSE_FILE_DROPDOWN, this._onCloseFileDropdownMenuHandler);
 		this._fdm.addEventListener(this._fdm.EVENT_SELECT_MENU_FILE_DROPDOWN, this._onSelectMenuFileDropdownMenuHandler);
 		this._hb.addEventListener(this._hb.EVENT_CLICK_HISTORY_BTN, this._onClickHistoryBtnHandler);
 		this._eb.addEventListener(this._eb.EVENT_CLICK_EDIT_BTN, this._onClickEditBtnHandler);
-		//this._cp.addEventListener(this._cp.EVENT_CHANGE_COLOR, this._onChangeColorPaletteHandler);
 
 		this._lc.addEventListener(this._lc.EVENT_LOAD_JSON_COMPLETE, this._onLoadJsonFromLocalCompleteHandler);
 
@@ -90,7 +96,6 @@ export class Main {
 		this._lypnCtrl.addEventListener(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, this._onChangeDataLPHandler);
 		this._lypnCtrl.addEventListener(LayerPanelController.EVENT_CHANGE_ACTIVELAYER_LAYERPANEL, this._onChangeActiveLaylerLPlHandler);
 		this._cppnCtrl.addEventListener(ColorpalettePanelController.EVENT_CHANGE_COLORPALETTE, this._onChangeColorPaletteHandler2);
-		//window.addEventListener('beforeunload', this._onBeforeunloadHandler);
 
 		//ワークスペースにローカルストレージのデータを反映
 		for (var key in this._wsList) {
@@ -113,12 +118,77 @@ export class Main {
 
 		this._splitInit();
 		this._windowInit();
+
+		this._spDocumentInit();
 		
 		//最後に初期化が必要なもの
 		//this._cp.init();
 		this._eb.init();
+	}
+	private _spInit = ():void => {
+		//キーバインドの設定
+		//let km:KeyBindManager = new KeyBindManager();
+		
+		//this._fdm = new FileDropdownMenu(this._state);
+		this._eb = new EditBtns(this._state);
+		this._hb = new HistoryBtns(this._state);
 
+		//this._lc = new LocalConnector();
+		this._lsc = new LocalStorageConnector();
 
+		//this._stwpCtrl = new SaveToWPController(this._state);
+		//this._lfwpCtrl = new LoadFromWPController(this._state);
+		this._prvwCtrl = new PreviewController(this._state);
+		this._lypnCtrl = new LayerPanelController(this._state);
+		//this._cppnCtrl = new ColorpalettePanelController(this._state);
+
+		this._wsList = {};
+		
+		let dotSize:number = 12;
+		let stageMargin:number = 0;
+		this._addWorkSpace('workspace1', dotSize, stageMargin);
+		this._addWorkSpace('workspace2', dotSize, stageMargin);
+
+		//this._fdm.addEventListener(this._fdm.EVENT_OPEN_FILE_DROPDOWN, this._onOpenFileDropdownMenuHandler);
+		//this._fdm.addEventListener(this._fdm.EVENT_CLOSE_FILE_DROPDOWN, this._onCloseFileDropdownMenuHandler);
+		//this._fdm.addEventListener(this._fdm.EVENT_SELECT_MENU_FILE_DROPDOWN, this._onSelectMenuFileDropdownMenuHandler);
+		this._hb.addEventListener(this._hb.EVENT_CLICK_HISTORY_BTN, this._onClickHistoryBtnHandler);
+		this._eb.addEventListener(this._eb.EVENT_CLICK_EDIT_BTN, this._onClickEditBtnHandler);
+
+		//this._lc.addEventListener(this._lc.EVENT_LOAD_JSON_COMPLETE, this._onLoadJsonFromLocalCompleteHandler);
+
+		//this._lfwpCtrl.addEventListener(LoadFromWPController.EVENT_SELECT_THUMB, this._onLoadFromWPHandler);
+		this._lypnCtrl.addEventListener(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, this._onChangeDataLPHandler);
+		this._lypnCtrl.addEventListener(LayerPanelController.EVENT_CHANGE_ACTIVELAYER_LAYERPANEL, this._onChangeActiveLaylerLPlHandler);
+		//this._cppnCtrl.addEventListener(ColorpalettePanelController.EVENT_CHANGE_COLORPALETTE, this._onChangeColorPaletteHandler2);
+
+		
+		//ワークスペースにローカルストレージのデータを反映
+		for (var key in this._wsList) {
+			let ws:Workspace = this._wsList[key];
+			let pad:PixcelArtData = this._lsc.load(ws.name);
+			if(!pad){
+				//LocalStorageがなければ空のデータを作成する
+				pad = new PixcelArtData(true);
+			}
+			this._setPixcelArtData2WorkSpace(ws, pad);
+		}
+
+		//アクティブワークスペースを設定
+		this._state.setCurrent(undefined);
+		let ws:Workspace = <Workspace>this._wsList["workspace1"];
+		this._wsActiveChange(ws);
+		//this._lypnCtrl.setPad(ws.getPixcelArtData());
+		//this._prvwCtrl.setPad(ws.getPixcelArtData());
+
+		//this._splitInit();
+		//this._windowInit();
+
+		this._spDocumentInit();
+		
+		//最後に初期化が必要なもの
+		//this._cp.init();
+		this._eb.init();
 	}
 	//=============================================
 	// event handler
@@ -279,11 +349,15 @@ export class Main {
 		if(this._state.current == State.INIT){return false};
 
 		//プレビューに反映
-		this._prvwCtrl.setPad(pad);
-		
+		if(this._prvwCtrl){//★★★★★★★★★SP設定途中の条件分岐　本来は不要
+			this._prvwCtrl.setPad(pad);
+		}
 		if(this._state.currentCategory != State.CATEGORY_LAYER){
 			//レイヤーパネルに反映
-			this._lypnCtrl.setPad(pad);
+			
+			if(this._lypnCtrl){//★★★★★★★★★SP設定途中の条件分岐　本来は不要
+				this._lypnCtrl.setPad(pad);
+			}
 		}
 	}
 	//色の取得
@@ -353,7 +427,7 @@ export class Main {
 	//=============================================
 	// private
 	//=============================================
-	private _addWorkSpace = (canvasId: string) => {
+	private _addWorkSpace = (canvasId: string, dotSize:number, stageMargin:number) => {
 		let isAdded: boolean = false;
 		for (var key in this._wsList) {
 			if (key == canvasId) {
@@ -362,7 +436,7 @@ export class Main {
 			}
 		}
 		if (!isAdded) {
-			let ws: Workspace = new Workspace(this._state, canvasId);
+			let ws: Workspace = new Workspace(this._state, canvasId, dotSize, stageMargin);
 			this._wsList[canvasId] = ws;
 			this._activeWsId = canvasId;
 			ws.addEventListener(Workspace.EVENT_CHANGE_WS, this._onWSChangeHandler);
@@ -382,7 +456,10 @@ export class Main {
 		//カラーパレットに色を反映
 		let colorList: Array<string> = pad.getHexColorCodeList();
 		//this._cp.setHexColorList(colorList);
-		this._cppnCtrl.setHexColorList(colorList);
+		if(this._cppnCtrl){//★★★★★★★★★SP設定途中の条件分岐　本来は不要
+			this._cppnCtrl.setHexColorList(colorList);
+		}
+		
 	}
 	private _setupHistoryBtn = (ws:Workspace):void =>{
 		if (ws.hasPrevLog) {
@@ -404,14 +481,20 @@ export class Main {
 		let pad:PixcelArtData = ws.getPixcelArtData();
 
 		//プレビューに反映
-		this._prvwCtrl.setPad(pad);
+		if(this._prvwCtrl){//★★★★★★★★★SP設定途中の条件分岐　本来は不要
+			this._prvwCtrl.setPad(pad);
+		}
 
 		//レイヤーパネルに反映
-		this._lypnCtrl.setPad(pad);
+		if(this._lypnCtrl){//★★★★★★★★★SP設定途中の条件分岐　本来は不要
+			this._lypnCtrl.setPad(pad);
+		}
 
 		//let hexColor : string = this._cp.hexColor;
-		let hexColor : string = this._cppnCtrl.hexColor;
-		ws.hexColor = hexColor;
+		if(this._cppnCtrl){//★★★★★★★★★SP設定途中の条件分岐　本来は不要
+			let hexColor : string = this._cppnCtrl.hexColor;
+			ws.hexColor = hexColor;
+		}
 
 		this._setupHistoryBtn(ws);
 	}
@@ -419,9 +502,14 @@ export class Main {
 		//console.log("change state");
 		this._eb.changedState();
 		this._hb.changedState();
-		this._fdm.changedState();
+		
+		if(this._fdm){//★★★★★★★★★SP設定途中の条件分岐　本来は不要
+			this._fdm.changedState();
+		}
 		//this._cp.changedState();
-		this._cppnCtrl.changedState();
+		if(this._cppnCtrl){//★★★★★★★★★SP設定途中の条件分岐　本来は不要
+			this._cppnCtrl.changedState();
+		}
 		//this._lypnCtrl.changedState();
 		
 
@@ -429,9 +517,6 @@ export class Main {
 			let ws:Workspace = this._wsList[key];
 			ws.changedState();
 		}
-
-		//let ws: Workspace = this._getActiveWorkSpace();
-		//ws.changedState();
 	}
 	private _splitInit =():void =>{
 		let sizes:any = localStorage.getItem('dotanimal-doteditor-split-sizes'); //LocalStrage
@@ -474,6 +559,26 @@ export class Main {
 		layerWin.child = previewWin;
 		colorpaletteWin.child = layerWin;
 		colorpaletteWin.setPos(left, top);
+	}
+	private _spDocumentInit = ():void=>{
+		/* ピッチインピッチアウトによる拡大縮小を禁止 */
+		document.documentElement.addEventListener('touchstart', (e:TouchEvent)=>{
+			if (e.touches.length >= 2){
+				e.preventDefault();
+			}
+		}, {
+			passive: false
+		});
+
+		/* ダブルタップによる拡大を禁止 */
+		let t:number = 0;
+		document.documentElement.addEventListener('touchend',(e:TouchEvent)=>{
+			let now:number = new Date().getTime();
+			if ((now - t) < 350){
+				e.preventDefault();
+			}
+			t = now;
+		}, false);
 	}
 	//=============================================
 	// public

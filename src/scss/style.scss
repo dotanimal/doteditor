@@ -1,5 +1,6 @@
 /* Bootstrap を読み込む */
 @import "~bootstrap/scss/bootstrap";
+//@import "/node_modules/bootstrap/scss/bootstrap.scss";
 
 //--------------------------
 //変数
@@ -317,211 +318,47 @@ $modal-width:800px;
 	}
 }
 //--------------------------
-// editor
+// historyBtnGrp
 //--------------------------
+//history
+#historyBtnGrp{
+	margin-right:10px;
 
-#editor{
-	width: 1100px !important;
-	height: 600px;
-	margin:10px auto 0 auto;
-	display: flex;
-	flex-direction: row;
-	//background-color: #FCC;
-	
-	> #editorLeft{
-		width:800px !important;
-
-		> #editorLeftTop{
-			display: flex;
-			flex-direction: row;
-			margin-bottom:10px;
-
-			#fileDropdown{
-				margin-right:30px;
-			}
-			#fileLoadInputs{
-				display:none;
-			}
-
-			button{
-				padding-top:0;
-				padding-bottom:0;
-				line-height: 1;
-				height: 31px;
-				border-color:$color-dark-gray;
-				color: $color-dark-gray;
-			}
-			button:hover,
-			button.active{
-				color:$color-white;
-			}
-			//history
-			#historyBtnGrp{
-				margin-right:10px;
-				/*
-				#undo{
-					
-				}
-				*/
-				#redo{
-					>i{
-						display: inline-block;
-						transform: scaleX(-1);
-					}
-				}
-			}
-
-			//edit
-			#drawBtnGrp{
-				margin-right:30px;
-
-				#selectRange,
-				#copy{
-					padding-left:4px;
-					padding-right:4px;
-					svg{
-						fill: #000;
-						width:22px;
-						height:22px;
-					}
-				}
-				#selectRange:hover,
-				#selectRange.active,
-				#copy:hover,
-				#copy.active{
-					svg{
-						fill: $color-white;
-					}
-				}
-			}
-
-			//color
-			/*
-			#colorPalette{
-				margin-right:10px;
-
-				>span{
-					display: inline-block;
-					font-size: 1px;
-					line-height: 1;
-					border: 0;
-					border: 1px solid $color-white;
-
-					>input{
-						margin: 2px;
-						padding: 0;
-						border: 0px !important;
-						color: $color-white;
-						background-color: $color-white;
-						width: 26px;
-						height: 26px;
-						border-color: $color-dark-gray;
-					}
-				} 
-				>span.active{
-					border: 1px solid $color-dark-gray;
-				}
-			}
-			*/
-
-
+	#redo{
+		>i{
+			display: inline-block;
+			transform: scaleX(-1);
 		}
+	}
+}
+//--------------------------
+// drawBtnGrp
+//--------------------------
+#drawBtnGrp{
+	margin-right:30px;
 
-		> #editorLeftMiddle{
-			/*background-color: #9F9;*/
-
-			display: flex;
-			flex-direction: row;
-			#workspace1Container,
-			#workspace2Container{
-				text-align: center;
-				background-color: #FFF;
-				overflow-x: scroll;
-				
-				/*スクロールバーのデザイン*/
-				/*
-				&::-webkit-scrollbar {
-					overflow:hidden;
-					width:2px;
-					background:#EEE;
-			
-					&:horizontal {
-						height:2px;
-					}
-				}
-				&::-webkit-scrollbar-button {
-						display:none;
-				}
-				&::-webkit-scrollbar-piece {
-						background:#eee;
-						&:start {
-							background:#eee;
-						}
-				}
-				&::-webkit-scrollbar-thumb {
-						background:#AAA;
-				}
-				&::-webkit-scrollbar-corner {
-						background:#AAA;
-				}
-				*/
-				@include horiszontal-scrollbar();
-			}
-			.gutter {
-				background-color: #FFF;
-				background-repeat: no-repeat;
-				background-position: 50%;
-			}
-			.gutter.gutter-horizontal {
-				background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
-			}
-			
-			canvas{
-				background: $color-white;
-				padding: 0;
-				width:500px;
-				height:500px;
-			}
+	#selectRange,
+	#copy{
+		padding-left:4px;
+		padding-right:4px;
+		svg{
+			fill: #000;
+			width:22px;
+			height:22px;
 		}
-
 	}
-	> #editorRight{
-		margin-left: auto;
+	#selectRange:hover,
+	#selectRange.active,
+	#copy:hover,
+	#copy.active{
+		svg{
+			fill: $color-white;
+		}
 	}
 }
 //--------------------------
-// footer
+// layerPanel
 //--------------------------
-footer{
-	padding:100px 0px 20px 0;
-	text-align: center;
-
-	button{
-		font-size: 12px;
-	}
-
-}
-//----------------------------
-// window
-//----------------------------
-#layerWindow,
-#previewWindow,
-#colorpaletteWindow{
-	width: 260px;
-}
-
-#previewPanel{
-	#previewCanvas{
-		margin:5px auto 0 auto;
-		display: block;
-	}
-	#previewRange{
-		width:100px;
-		margin:10px auto 10px auto;
-		display: block;
-	}
-}
-
 $layer-panel-row-parts-height:31px;
 #layerPanel{
 	padding:4px 4px 8px 0;
@@ -659,147 +496,408 @@ $layer-panel-row-parts-height:31px;
 		}
 	}
 }
+//============================ 
+// PC
+//============================ 
+html#pc{
 
-#colorpalettePanel{
-	#colorpalettePanelTop{
-		.picker_wrapper {
-			margin:auto 4px;
-			background: none !important;
-			border-style:none !important;
-			box-shadow: none !important;
-			.picker_slider{
-				height: 1px;
-			}
-			.picker_sl{
-				height: 100px;//vanilla-pickerのピッカーエリアのサイズ調整
-				&::before{
-					height: 100px !important;//vanilla-pickerのピッカーエリアのサイズ調整
-					padding-bottom:100px !important;//vanilla-pickerのピッカーエリアのサイズ調整
+	//--------------------------
+	// editor
+	//--------------------------
+	#editor{
+		width: 1100px !important;
+		height: 600px;
+		margin:10px auto 0 auto;
+		display: flex;
+		flex-direction: row;
+		//background-color: #FCC;
+		
+		> #editorLeft{
+			width:800px !important;
+
+			> #editorLeftTop{
+				display: flex;
+				flex-direction: row;
+				margin-bottom:10px;
+
+				#fileDropdown{
+					margin-right:30px;
 				}
-			}
-			.picker_sample,
-			.picker_done{
-				display: none;//不要なUIを非表示
-			}
-		}
-	}
-	#colorpalettePanelBottom{
-		#colorpaletteBoxContainer{
-			//background: #CCF;
+				#fileLoadInputs{
+					display:none;
+				}
 
-			display: flex;
-			flex-flow: wrap;
-			justify-content: space-around;
-			align-items: center;
-			gap:3px 3px;
-			padding:0 10px 10px 10px;
 
-			> span{
-				padding:1px;
-				border: 1px solid #FFF;
-				>i{
-					border:1px solid $color-lite-gray;
-					width:32px;
-					height:20px;
-					display: block;
+				//--------------------------
+				// iconBtn
+				//--------------------------
+				#historyBtnGrp,
+				#drawBtnGrp{
+					button{
+						padding-top:0;
+						padding-bottom:0;
+						line-height: 1;
+						height: 31px;
+						border-color:$color-dark-gray;
+						color: $color-dark-gray;
+					}
+					button:hover,
+					button.active{
+						color:$color-white;
+					}
+				}
+
+
+			}
+
+			> #editorLeftMiddle{
+				/*background-color: #9F9;*/
+
+				display: flex;
+				flex-direction: row;
+				#workspace1Container,
+				#workspace2Container{
+					text-align: center;
 					background-color: #FFF;
-				}
-
-	
-				&.active{
-					border: 1px solid $color-dark-gray;
-					//background-color: #F0F;
-				}
-			}
-		}
-	}
-}
-
-
-//----------------------------
-// modal
-//----------------------------
-#loadFromWPModal{
-	.modal-content{
-		height:480px;
-		//background: #FCC;
-		/*
-		>.modal-header{
-		}
-		*/
-		>.modal-body{
-			.loadingView{
-				padding-top:160px;
-			}
-			.mainView{
-				width:100%;
-				
-				.topArea{
-					padding:30px 2px 30px 3px;
+					overflow-x: scroll;
+					
+					/*スクロールバーのデザイン*/
 					/*
-					canvas{
-						background: #99F;
+					&::-webkit-scrollbar {
+						overflow:hidden;
+						width:2px;
+						background:#EEE;
+				
+						&:horizontal {
+							height:2px;
+						}
+					}
+					&::-webkit-scrollbar-button {
+							display:none;
+					}
+					&::-webkit-scrollbar-piece {
+							background:#eee;
+							&:start {
+								background:#eee;
+							}
+					}
+					&::-webkit-scrollbar-thumb {
+							background:#AAA;
+					}
+					&::-webkit-scrollbar-corner {
+							background:#AAA;
 					}
 					*/
+					@include horiszontal-scrollbar();
+				}
+				.gutter {
+					background-color: #FFF;
+					background-repeat: no-repeat;
+					background-position: 50%;
+				}
+				.gutter.gutter-horizontal {
+					background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+				}
+				
+				canvas{
+					background: $color-white;
+					padding: 0;
+					width:500px;
+					height:500px;
+				}
+			}
+
+		}
+		> #editorRight{
+			margin-left: auto;
+		}
+	}
+	//--------------------------
+	// footer
+	//--------------------------
+	footer{
+		padding:100px 0px 20px 0;
+		text-align: center;
+
+		button{
+			font-size: 12px;
+		}
+
+	}
+	//----------------------------
+	// window
+	//----------------------------
+	#layerWindow,
+	#previewWindow,
+	#colorpaletteWindow{
+		width: 260px;
+	}
+
+	#previewPanel{
+		#previewCanvas{
+			margin:5px auto 0 auto;
+			display: block;
+		}
+		#previewRange{
+			width:100px;
+			margin:10px auto 10px auto;
+			display: block;
+		}
+	}
+
+
+
+	#colorpalettePanel{
+		#colorpalettePanelTop{
+			.picker_wrapper {
+				margin:auto 4px;
+				background: none !important;
+				border-style:none !important;
+				box-shadow: none !important;
+				.picker_slider{
+					height: 1px;
+				}
+				.picker_sl{
+					height: 100px;//vanilla-pickerのピッカーエリアのサイズ調整
+					&::before{
+						height: 100px !important;//vanilla-pickerのピッカーエリアのサイズ調整
+						padding-bottom:100px !important;//vanilla-pickerのピッカーエリアのサイズ調整
+					}
+				}
+				.picker_sample,
+				.picker_done{
+					display: none;//不要なUIを非表示
+				}
+			}
+		}
+		#colorpalettePanelBottom{
+			#colorpaletteBoxContainer{
+				//background: #CCF;
+
+				display: flex;
+				flex-flow: wrap;
+				justify-content: space-around;
+				align-items: center;
+				gap:3px 3px;
+				padding:0 10px 10px 10px;
+
+				> span{
+					padding:1px;
+					border: 1px solid #FFF;
+					>i{
+						border:1px solid $color-lite-gray;
+						width:32px;
+						height:20px;
+						display: block;
+						background-color: #FFF;
+					}
+
+		
+					&.active{
+						border: 1px solid $color-dark-gray;
+						//background-color: #F0F;
+					}
+				}
+			}
+		}
+	}
+
+
+	//----------------------------
+	// modal
+	//----------------------------
+	#loadFromWPModal{
+		.modal-content{
+			height:480px;
+			//background: #FCC;
+			/*
+			>.modal-header{
+			}
+			*/
+			>.modal-body{
+				.loadingView{
+					padding-top:160px;
+				}
+				.mainView{
+					width:100%;
+					
+					.topArea{
+						padding:30px 2px 30px 3px;
+						/*
+						canvas{
+							background: #99F;
+						}
+						*/
+					}
+					.bottomArea{
+						text-align: center;
+			
+						ul#loadFromWPPagenation{
+							margin-bottom: 0;
+							padding-bottom:0;
+							
+						}
+					}
+				}
+			}
+		}
+	}
+
+	#saveToWpModal{
+		.modal-content{
+			.inputView{
+				height:350px;
+
+				h3{
+					font-weight: normal;
+					font-size:12px;
+				}
+				.topArea{
+					input{
+						width:100%;
+						border-color:$color-dark-gray;
+						color: $color-dark-gray;
+					}
+					padding-bottom:5px;
+				}
+				.middleArea{
+					canvas{
+						display: block;
+						/*background: #999;*/
+						width:400px;
+						height:200px;
+						margin:0 auto;
+					}
 				}
 				.bottomArea{
 					text-align: center;
-		
-					ul#loadFromWPPagenation{
-						margin-bottom: 0;
-						padding-bottom:0;
-						
-					}
+				}
+			}
+			.loadingView{
+				height:350px;
+				padding-top:160px;
+			}
+			.completeView{
+				height:350px;
+
+				.topArea{
+					text-align: center;
+					padding-top:130px;
+					padding-bottom:150px;
+				}
+				.bottomArea{
+					text-align: center;
 				}
 			}
 		}
 	}
+
 }
 
-#saveToWpModal{
-	.modal-content{
-		.inputView{
-			height:350px;
+//============================ 
+// SP
+//============================ 
+html#sp,
+html#sp body {
+	position: relative;
+	overflow: hidden;
+	touch-action: manipulation;
+	/* ダブルタップによるズームを抑止 */
+	font-size: 17px;
+}
 
-			h3{
-				font-weight: normal;
-				font-size:12px;
+html#sp{
+	body,
+	input,
+	textarea,
+	select {
+		/* 入力欄にフォーカスが当たっても拡大しない */
+		font-size: 17px;
+	}
+
+	//--------------------------
+	// iconBtn
+	//--------------------------
+	#editorTop,
+	#editorBottom{
+		button{
+			padding-top:0;
+			padding-bottom:0;
+			line-height: 1;
+			height: 31px;
+			border:none !important;
+			color: $color-dark-gray;
+		}
+		button:hover,
+		button.active{
+			//color:$color-white;
+			background: $color-dark-gray;
+		}
+	}
+
+	#editorTop{
+		display: block;
+		width: 100%;
+		//background: #FCC;
+	}
+	#editorMiddle{
+		display: block;
+		width: 100%;
+		//background: #CCF;
+	}
+	#editorBottom{
+		display: flex;
+		width: 100%;
+		//background: #CFF;
+		
+		#previewPanel{
+			#previewCanvas{
+				margin:0 auto 0 auto;
+				display: block;
 			}
-			.topArea{
-				input{
-					width:100%;
-					border-color:$color-dark-gray;
-					color: $color-dark-gray;
-				}
-				padding-bottom:5px;
-			}
-			.middleArea{
-				canvas{
-					display: block;
-					/*background: #999;*/
-					width:400px;
-					height:200px;
-					margin:0 auto;
-				}
-			}
-			.bottomArea{
-				text-align: center;
+			#previewRange{
+				width:80px;
+				margin:10px auto 10px auto;
+				display: block;
 			}
 		}
-		.loadingView{
-			height:350px;
-			padding-top:160px;
-		}
-		.completeView{
-			height:350px;
+	}
+	.offcanvas {
+		width: 70% !important;
 
-			.topArea{
-				text-align: center;
-				padding-top:130px;
-				padding-bottom:150px;
-			}
-			.bottomArea{
-				text-align: center;
+		&.layerOffcanvas{
+			
+			width: 80px !important;
+			//background: none  !important;
+
+			.offcanvas-body{
+				padding:5px;
+
+				#layerPanel{
+					padding:0;
+					//background: #FFF;
+
+					#layerPanelHeader{
+						padding:0;
+					}
+					#layerPanelBody{
+						overflow-y: auto !important;
+						height: auto !important;
+						padding:0;
+
+						.layerPanelItemTxt{
+							display: none !important;
+							width:0 !important;
+						}
+						.layerPanelItemHandle{
+							display: none !important;
+							width:0 !important;
+						}
+					}
+					#layerPanelFotter{
+						padding:0;
+					}
+				}
 			}
 		}
 	}

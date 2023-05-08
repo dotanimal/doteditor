@@ -57,11 +57,11 @@ export class Workspace extends createjs.Stage {
 	//=============================================
 	// constructor
 	//=============================================
-	constructor(state: State, canvasId: string) {
+	constructor(state: State, canvasId: string, dotSize:number, stageMargin:number) {
 		super(canvasId);
 		this.name = canvasId;
-		this._dotSize = 16;
-		this._stageMargin = 2;
+		this._dotSize = dotSize;
+		this._stageMargin = stageMargin;
 
 		this._state = state;
 
@@ -444,12 +444,16 @@ export class Workspace extends createjs.Stage {
 		this.update();
 	}
 	public active = ():void =>{
-		this._bgLayer.active();
-		this.update();
+		if(this._state.device == State.DEVICE_PC){
+			this._bgLayer.active();
+			this.update();
+		}
 	}
 	public inactive = ():void =>{
-		this._bgLayer.inactive();
-		this.update();
+		if(this._state.device == State.DEVICE_PC){
+			this._bgLayer.inactive();
+			this.update();
+		}
 	}
 	public getSelectRangeDLD = (isDelete:boolean):DrawLayerData =>{
 		let result : DrawLayerData;

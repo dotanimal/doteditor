@@ -49,11 +49,15 @@ export class State {
 	public static readonly CATEGORY_FILE:string = 'category file';
 	public static readonly CATEGORY_LAYER:string = 'category layer';
 
+	public static readonly DEVICE_PC:string = 'device pc';
+	public static readonly DEVICE_SP:string = 'device sp';
 	//----------private---------
 	private _currentCategory : string;
 	private _prevCategory : string;
 	private _current : string;
 	private _prev : string;
+
+	private _device:string;
 
 	//private _hexColorCode : string;
 	//----------protected-------
@@ -62,6 +66,10 @@ export class State {
 	//=============================================
 	constructor() {
 		this.setCurrent(State.INIT);
+
+		//デバイスの判定
+		let html:HTMLHtmlElement = <HTMLHtmlElement>document.querySelector("html");
+		this._device = (html.id == "sp") ? State.DEVICE_SP : State.DEVICE_PC;
 	}
 	//=============================================
 	// event handler
@@ -115,6 +123,9 @@ export class State {
 	}
 	get currentCategory(): string {
 		return this._currentCategory;
+	}
+	get device():string{
+		return this._device;
 	}
 	/*
 	get prevCategory(): string {

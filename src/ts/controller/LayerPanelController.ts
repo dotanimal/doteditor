@@ -31,12 +31,13 @@ export class LayerPanelController extends createjs.EventDispatcher {
 		super();
 		this._state = state;
 
-		// List with handle
 		let items : HTMLElement =  <HTMLElement>document.querySelector('#layerPanelBody > ul');
+
+		let handleClassSelector:string = (this._state.device == State.DEVICE_PC) ? '.layerPanelItemHandle' : '.layerPanelItemCanvas';
 		this._sortable = Sortable.create(
 			items, 
 			{
-				handle: '.layerPanelItemHandle', //
+				handle: handleClassSelector, //
 				animation: 200, //
 				onSort: this._onSortSortableHandler,
 				onEnd : this._onChangeSortableHandler
