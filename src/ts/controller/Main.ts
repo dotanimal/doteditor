@@ -126,6 +126,18 @@ export class Main {
 		this._eb.init();
 	}
 	private _spInit = ():void => {
+		/*
+		screen.orientation.lock("portrait").then(
+			// ロック成功時
+			function() {
+			  alert('ロックされました');
+			},
+			// ロック失敗時
+			function() {
+				alert('ロックできませんでした');
+			}
+		  );
+		*/
 		//キーバインドの設定
 		//let km:KeyBindManager = new KeyBindManager();
 		
@@ -579,6 +591,9 @@ export class Main {
 			}
 			t = now;
 		}, false);
+	}
+	private _spPreviewInit = ():void=>{
+
 	}
 	//=============================================
 	// public

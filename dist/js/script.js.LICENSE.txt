@@ -24,7 +24,7 @@
 
 /*! ../../model/State */
 
-/*! ../../view/canvas/Preview */
+/*! ../../view/canvas/preview/StagePreview */
 
 /*! ../State */
 
@@ -100,7 +100,9 @@
 
 /*! ../utils/within.js */
 
-/*! ../view/canvas/Preview */
+/*! ../view/canvas/preview/ShapePreview */
+
+/*! ../view/canvas/preview/StagePreview */
 
 /*! ../view/canvas/workspace/Workspace */
 
@@ -129,6 +131,8 @@
 /*! ./PreviewController */
 
 /*! ./SaveToWPController */
+
+/*! ./ShapePreview */
 
 /*! ./applyStyles.js */
 
@@ -313,10 +317,6 @@
   \**************************************/
 
 /*!***************************************!*\
-  !*** ./src/ts/view/canvas/Preview.ts ***!
-  \***************************************/
-
-/*!***************************************!*\
   !*** ./src/ts/view/ui/HistoryBtns.ts ***!
   \***************************************/
 
@@ -387,6 +387,14 @@
 /*!***************************************************!*\
   !*** ./src/ts/view/canvas/workspace/Workspace.ts ***!
   \***************************************************/
+
+/*!****************************************************!*\
+  !*** ./src/ts/view/canvas/preview/ShapePreview.ts ***!
+  \****************************************************/
+
+/*!****************************************************!*\
+  !*** ./src/ts/view/canvas/preview/StagePreview.ts ***!
+  \****************************************************/
 
 /*!*****************************************************!*\
   !*** ./src/ts/view/canvas/workspace/layer/Layer.ts ***!

@@ -32,7 +32,51 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 	<title>doteditor | dot.animal labo</title>
 
 	<!-- favicon -->
-	<link rel="icon" href="/assets/img/favicon.ico">
+	<meta name="msapplication-square70x70logo" content="/labo/doteditor/cmn/img/favicon/site-tile-70x70.png">
+	<meta name="msapplication-square150x150logo" content="/labo/doteditor/cmn/img/favicon/site-tile-150x150.png">
+	<meta name="msapplication-wide310x150logo" content="/labo/doteditor/cmn/img/favicon/site-tile-310x150.png">
+	<meta name="msapplication-square310x310logo" content="/labo/doteditor/cmn/img/favicon/site-tile-310x310.png">
+	<meta name="msapplication-TileColor" content="#0078d7">
+	<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/labo/doteditor/cmn/img/favicon/favicon.ico">
+	<link rel="icon" type="image/vnd.microsoft.icon" href="/labo/doteditor/cmn/img/favicon/favicon.ico">
+	<link rel="apple-touch-icon" sizes="57x57" href="/labo/doteditor/cmn/img/favicon/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/labo/doteditor/cmn/img/favicon/apple-touch-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/labo/doteditor/cmn/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/labo/doteditor/cmn/img/favicon/apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/labo/doteditor/cmn/img/favicon/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/labo/doteditor/cmn/img/favicon/apple-touch-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/labo/doteditor/cmn/img/favicon/apple-touch-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/labo/doteditor/cmn/img/favicon/apple-touch-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/labo/doteditor/cmn/img/favicon/apple-touch-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="36x36" href="/labo/doteditor/cmn/img/favicon/android-chrome-36x36.png">
+	<link rel="icon" type="image/png" sizes="48x48" href="/labo/doteditor/cmn/img/favicon/android-chrome-48x48.png">
+	<link rel="icon" type="image/png" sizes="72x72" href="/labo/doteditor/cmn/img/favicon/android-chrome-72x72.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/labo/doteditor/cmn/img/favicon/android-chrome-96x96.png">
+	<link rel="icon" type="image/png" sizes="128x128" href="/labo/doteditor/cmn/img/favicon/android-chrome-128x128.png">
+	<link rel="icon" type="image/png" sizes="144x144" href="/labo/doteditor/cmn/img/favicon/android-chrome-144x144.png">
+	<link rel="icon" type="image/png" sizes="152x152" href="/labo/doteditor/cmn/img/favicon/android-chrome-152x152.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="/labo/doteditor/cmn/img/favicon/android-chrome-192x192.png">
+	<link rel="icon" type="image/png" sizes="256x256" href="/labo/doteditor/cmn/img/favicon/android-chrome-256x256.png">
+	<link rel="icon" type="image/png" sizes="384x384" href="/labo/doteditor/cmn/img/favicon/android-chrome-384x384.png">
+	<link rel="icon" type="image/png" sizes="512x512" href="/labo/doteditor/cmn/img/favicon/android-chrome-512x512.png">
+	<link rel="icon" type="image/png" sizes="36x36" href="/labo/doteditor/cmn/img/favicon/icon-36x36.png">
+	<link rel="icon" type="image/png" sizes="48x48" href="/labo/doteditor/cmn/img/favicon/icon-48x48.png">
+	<link rel="icon" type="image/png" sizes="72x72" href="/labo/doteditor/cmn/img/favicon/icon-72x72.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/labo/doteditor/cmn/img/favicon/icon-96x96.png">
+	<link rel="icon" type="image/png" sizes="128x128" href="/labo/doteditor/cmn/img/favicon/icon-128x128.png">
+	<link rel="icon" type="image/png" sizes="144x144" href="/labo/doteditor/cmn/img/favicon/icon-144x144.png">
+	<link rel="icon" type="image/png" sizes="152x152" href="/labo/doteditor/cmn/img/favicon/icon-152x152.png">
+	<link rel="icon" type="image/png" sizes="160x160" href="/labo/doteditor/cmn/img/favicon/icon-160x160.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="/labo/doteditor/cmn/img/favicon/icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="196x196" href="/labo/doteditor/cmn/img/favicon/icon-196x196.png">
+	<link rel="icon" type="image/png" sizes="256x256" href="/labo/doteditor/cmn/img/favicon/icon-256x256.png">
+	<link rel="icon" type="image/png" sizes="384x384" href="/labo/doteditor/cmn/img/favicon/icon-384x384.png">
+	<link rel="icon" type="image/png" sizes="512x512" href="/labo/doteditor/cmn/img/favicon/icon-512x512.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/labo/doteditor/cmn/img/favicon/icon-16x16.png">
+	<link rel="icon" type="image/png" sizes="24x24" href="/labo/doteditor/cmn/img/favicon/icon-24x24.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/labo/doteditor/cmn/img/favicon/icon-32x32.png">
+	<link rel="manifest" href="./manifest.json">
+
 
 	<!-- createjs -->
 	<script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
@@ -402,7 +446,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 			aria-controls="ws1"
 			aria-selected="true"
 			>
-			ws1
+			<canvas id="preview1" width="31" height="31"></canvas>
 			</button>
 		</li>
 		<li class="nav-item" role="presentation">
@@ -416,7 +460,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 			aria-controls="ws2"
 			aria-selected="false"
 			>
-			ws2
+			<canvas id="preview2" width="31" height="31"></canvas>
 			</button>
 		</li>
 		</ul>

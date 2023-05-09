@@ -1,4 +1,4 @@
-import { Preview } from "../../view/canvas/Preview";
+import { StagePreview } from "../../view/canvas/preview/StagePreview";
 import { PixcelArtData } from "../data/PixcelArtData";
 
 export class LocalConnector extends createjs.EventDispatcher {
@@ -22,9 +22,9 @@ export class LocalConnector extends createjs.EventDispatcher {
 	private _loadResultPad:PixcelArtData;
 
 	//save png
-	private _stage: createjs.Stage;
-	private _preview: Preview;
-	private _bg: createjs.Shape;
+	//private _stage: createjs.Stage;
+	private _preview: StagePreview;
+	//private _bg: createjs.Shape;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -54,15 +54,16 @@ export class LocalConnector extends createjs.EventDispatcher {
 		cvs.width = 500;
 		cvs.height = 500;
 
-		this._stage = new createjs.Stage(cvs);
+		//this._stage = new createjs.Stage(cvs);
 		
-		this._bg = new createjs.Shape();
-		this._bg.graphics.beginFill('#' + "FFFFFF");
-		this._bg.graphics.drawRect(0, 0, cvs.width, cvs.height);
-		this._stage.addChild(this._bg);
+		//this._bg = new createjs.Shape();
+		//this._bg.graphics.beginFill('#' + "FFFFFF");
+		//this._bg.graphics.drawRect(0, 0, cvs.width, cvs.height);
+		//this._stage.addChild(this._bg);
 
-		this._preview = new Preview(cvs.width, cvs.height, 10);
-		this._stage.addChild(this._preview);
+		//this._preview = new ShapePreview(cvs.width, cvs.height, 10);
+		this._preview = new StagePreview(cvs, 10);
+		//this._stage.addChild(this._preview);
 	}
 	//=============================================
 	// event handler
@@ -215,11 +216,11 @@ export class LocalConnector extends createjs.EventDispatcher {
 	}
 	
 	public savePng = (pad:PixcelArtData, filename:string = "dot.png") => {
-		let cvs:HTMLCanvasElement = <HTMLCanvasElement>this._stage.canvas;
-		this._bg.visible = false;
-		this._preview.graphics.clear();
+		let cvs:HTMLCanvasElement = <HTMLCanvasElement>this._preview.canvas;
+		//this._bg.visible = false;
+		//this._preview.graphics.clear();
 		this._preview.drawPad(pad, false);
-		this._stage.update();
+		//this._stage.update();
 
 		cvs.toBlob(async (blob:Blob)=> {
 			this._saveFile(
@@ -236,16 +237,16 @@ export class LocalConnector extends createjs.EventDispatcher {
 				this._bolbSave(result, filename , this.EVENT_SAVE_SVG_COMPLETE);
 			}
 			*/
-			this._preview.graphics.clear();
-			this._stage.update();
+			this._preview.drawClear();
+			//this._stage.update();
 		},"image/png");
 	}
 	public saveJpeg = (pad:PixcelArtData, filename:string = "dot.jpg") => {
-		let cvs:HTMLCanvasElement = <HTMLCanvasElement>this._stage.canvas;
-		this._bg.visible = true;
-		this._preview.graphics.clear();
-		this._preview.drawPad(pad, false);
-		this._stage.update();
+		let cvs:HTMLCanvasElement = <HTMLCanvasElement>this._preview.canvas;
+		//this._bg.visible = true;
+		this._preview.drawClear();
+		this._preview.drawPad(pad, true);
+		//this._stage.update();
 		
 		cvs.toBlob(async (blob:Blob)=> {
 			this._saveFile(
@@ -262,8 +263,7 @@ export class LocalConnector extends createjs.EventDispatcher {
 				this._bolbSave(result, filename , this.EVENT_SAVE_SVG_COMPLETE);
 			}
 			*/
-			this._preview.graphics.clear();
-			this._stage.update();
+			this._preview.drawClear();
 		},"image/jpeg", 1);
 	}
 	//=============================================

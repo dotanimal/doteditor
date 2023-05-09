@@ -1,7 +1,7 @@
-import { DrawLayerData } from "../../model/data/DrawLayerData";
-import { PixcelArtData } from "../../model/data/PixcelArtData";
+import { DrawLayerData } from "../../../model/data/DrawLayerData";
+import { PixcelArtData } from "../../../model/data/PixcelArtData";
 
-export class Preview extends createjs.Shape {
+export class ShapePreview extends createjs.Shape {
 	//=============================================
 	// TODO
 	//=============================================
@@ -103,7 +103,7 @@ export class Preview extends createjs.Shape {
 			this.stage.update();
 		});
 		this.addEventListener("click", (e: MouseEvent) => {
-			this.dispatchEvent(new createjs.Event(Preview.EVENT_CLICK_PREVIEW, true, true));
+			this.dispatchEvent(new createjs.Event(ShapePreview.EVENT_CLICK_PREVIEW, true, true));
 		});
 	}
 	public removeMouseEvent = () :void => {

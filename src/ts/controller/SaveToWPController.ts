@@ -1,7 +1,7 @@
 import * as bootstrap from "bootstrap";
 import { WPConector } from "../model/connector/WPConnector";
 import { PixcelArtData } from "../model/data/PixcelArtData";
-import { Preview } from "../view/canvas/Preview";
+import { StagePreview } from "../view/canvas/preview/StagePreview";
 import { State } from "../model/State";
 
 export class SaveToWPController extends createjs.EventDispatcher {
@@ -27,10 +27,10 @@ export class SaveToWPController extends createjs.EventDispatcher {
 
 	private _inputView: HTMLElement;
 	private _inputTitle: HTMLInputElement;
-	private _inputPreviewCanvas: HTMLCanvasElement;
-	private _inputPreviewStage: createjs.Stage;
+	//private _inputPreviewCanvas: HTMLCanvasElement;
+	//private _inputPreviewStage: createjs.Stage;
 	private _inputPostBtn: HTMLButtonElement;
-	private _inputPreview: Preview;
+	private _inputPreview: StagePreview;
 
 	private _loadingView: HTMLElement;
 
@@ -55,8 +55,10 @@ export class SaveToWPController extends createjs.EventDispatcher {
 
 		this._inputView = <HTMLElement>document.querySelector('#saveToWpModal .inputView');
 		this._inputTitle = <HTMLInputElement>document.querySelector('#saveToWpModal .inputView .topArea input');
-		this._inputPreviewCanvas = <HTMLCanvasElement>document.querySelector('#saveToWpModal .inputView .middleArea canvas');
-		this._inputPreviewStage = new createjs.Stage(this._inputPreviewCanvas);
+		
+		let cvs : HTMLCanvasElement = <HTMLCanvasElement>document.querySelector('#saveToWpModal .inputView .middleArea canvas');
+		this._inputPreview = new StagePreview(cvs, 5);
+
 		this._inputPostBtn = <HTMLButtonElement>document.querySelector('#saveToWpModal .inputView .bottomArea button');
 
 		this._loadingView = <HTMLElement>document.querySelector('#saveToWpModal .loadingView');
@@ -122,8 +124,8 @@ export class SaveToWPController extends createjs.EventDispatcher {
 		this._completeView.classList.add("display-none");
 
 		this._titleTxtInput.value = "";
-		this._inputPreviewStage.removeAllChildren();
-		this._inputPreview = null;
+		//this._inputPreviewStage.removeAllChildren();
+		//this._inputPreview = null;
 	}
 	//=============================================
 	// public
@@ -141,11 +143,11 @@ export class SaveToWPController extends createjs.EventDispatcher {
 
 		this._titleTxtInput.value = pad.title;
 
-		this._inputPreview = new Preview(this._inputPreviewCanvas.width, this._inputPreviewCanvas.height, 5);
+		
 		this._inputPreview.drawPad(pad, false);
 
-		this._inputPreviewStage.addChild(this._inputPreview);
-		this._inputPreviewStage.update();
+		//this._inputPreviewStage.addChild(this._inputPreview);
+		//this._inputPreviewStage.update();
 
 		this._modal.show();
 	}

@@ -2,7 +2,7 @@ import * as bootstrap from "bootstrap";
 import { State } from "../model/State";
 import { WPConector } from "../model/connector/WPConnector";
 import { Pagenation } from "../view/ui/Pagenation";
-import { Preview } from "../view/canvas/Preview";
+import { ShapePreview } from "../view/canvas/preview/ShapePreview";
 import { PixcelArtData } from "../model/data/PixcelArtData";
 
 export class LoadFromWPController extends createjs.EventDispatcher {
@@ -36,7 +36,7 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 	private _loadingView: HTMLElement;
 	private _mainView: HTMLElement;
 
-	private _thumbList: Array<Preview>;
+	private _thumbList: Array<ShapePreview>;
 
 	private _pad: PixcelArtData;
 	//----------protected-------
@@ -104,7 +104,7 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 		}
 	}
 	private _onThumbClickHandler = (e: Event) => {
-		let thumb: Preview = <Preview>e.target;
+		let thumb: ShapePreview = <ShapePreview>e.target;
 
 		this._pad = thumb.pixcelArtData;
 
@@ -121,10 +121,10 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 		this._pn.reset();
 	}
 	private _removeThumbAll = () => {
-		let thumb: Preview;
+		let thumb: ShapePreview;
 		for (var i = 0; i < this._thumbList.length; i++) {
 			thumb = this._thumbList[i];
-			thumb.removeAllEventListeners(Preview.EVENT_CLICK_PREVIEW);
+			thumb.removeAllEventListeners(ShapePreview.EVENT_CLICK_PREVIEW);
 		}
 		this._stage.removeAllChildren();
 		this._stage.update();
@@ -132,7 +132,7 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 	}
 	private _addThumb = (data: any) => {
 		let pad: PixcelArtData;
-		let thumb: Preview;
+		let thumb: ShapePreview;
 
 		let canvas: HTMLCanvasElement = <HTMLCanvasElement>this._stage.canvas;
 
@@ -144,14 +144,14 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 			pad.setValue(post_data.dot_json, post_data.id, post_title);
 
 			if (yy + this._heightThumbField < canvas.height) {
-				thumb = new Preview(this._widthThumbField, this._heightThumbField, this._dotsize);
+				thumb = new ShapePreview(this._widthThumbField, this._heightThumbField, this._dotsize);
 				thumb.drawPad(pad, true);
 				thumb.addMouseEvent();
 				thumb.x = xx;
 				thumb.y = yy;
 				this._stage.addChild(thumb);
 
-				thumb.addEventListener(Preview.EVENT_CLICK_PREVIEW, this._onThumbClickHandler);
+				thumb.addEventListener(ShapePreview.EVENT_CLICK_PREVIEW, this._onThumbClickHandler);
 				this._thumbList.push(thumb);
 			}
 			xx += this._widthThumbField + this._marginThumbField;

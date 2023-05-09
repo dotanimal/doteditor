@@ -2,7 +2,7 @@ import { State } from "../model/State";
 import { PixcelArtData } from "../model/data/PixcelArtData";
 import Sortable from "sortablejs";
 import { DrawLayerData } from "../model/data/DrawLayerData";
-import { Preview } from "../view/canvas/Preview";
+import { StagePreview } from "../view/canvas/preview/StagePreview";
 export class LayerPanelController extends createjs.EventDispatcher {
 	//=============================================
 	// TODO
@@ -288,8 +288,8 @@ class LayerPanelItem extends createjs.EventDispatcher {
 
 	private _eye:Eye;
 	private _txt:Txt;
-	private _preview:Preview;
-	private _stage:createjs.Stage;
+	private _preview:StagePreview;
+	//private _stage:createjs.Stage;
 	private _sw:number;
 	private _sh:number;
 	//----------protected-------
@@ -307,9 +307,9 @@ class LayerPanelItem extends createjs.EventDispatcher {
 		let cvs:HTMLCanvasElement = <HTMLCanvasElement>this._target.querySelector('.layerPanelItemCanvas');
 		this._sw = cvs.width;
 		this._sh = cvs.height;
-		this._preview = new Preview(this._sw, this._sh, 2);
-		this._stage = new createjs.Stage(cvs);
-		this._stage.addChild(this._preview);
+		this._preview = new StagePreview(cvs, 2);
+		//this._stage = new createjs.Stage(cvs);
+		//this._stage.addChild(this._preview);
 
 		this._target.addEventListener("mousedown", this._onMousedownHandler);
 		this._eye.addEventListener(Eye.EVENT_CHANGE_EYE, this._onChangeEyeHandler);
@@ -352,9 +352,9 @@ class LayerPanelItem extends createjs.EventDispatcher {
 		this._eye.visible = this._dld.visible;
 
 		//プレビューへの反映
-		this._preview.graphics.clear();
+		//this._preview.graphics.clear();
 		this._preview.drawDld(this._dld, 0, 0, this._sw, this._sh, false);
-		this._stage.update();
+		//this._stage.update();
 	}
 
 	public getDld = ():DrawLayerData =>{
@@ -375,9 +375,8 @@ class LayerPanelItem extends createjs.EventDispatcher {
 		if(this._isShow){
 			//console.log("hide");
 			this._target.classList.add("hide");
-			this._preview.graphics.clear();
+			this._preview.drawClear();
 			this._txt.value = "";
-			this._stage.update();
 			this._isShow = false;
 		}
 	}

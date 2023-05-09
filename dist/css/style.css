@@ -12814,6 +12814,9 @@ html#sp #editorBottom #previewPanel #previewRange {
   margin: 10px auto 10px auto;
   display: block;
 }
+html#sp .nav > .nav-item > .nav-link {
+  padding: 0;
+}
 html#sp .offcanvas {
   width: 70% !important;
 }

@@ -1,6 +1,7 @@
 import { State } from "../model/State";
-import { Preview } from "../view/canvas/Preview";
+import { ShapePreview } from "../view/canvas/preview/ShapePreview";
 import { PixcelArtData } from "../model/data/PixcelArtData";
+import { StagePreview } from "../view/canvas/preview/StagePreview";
 
 export class PreviewController extends createjs.EventDispatcher {
 	//=============================================
@@ -15,7 +16,7 @@ export class PreviewController extends createjs.EventDispatcher {
 
 	private _stage: createjs.Stage;
 
-	private _preview: Preview;
+	private _preview: StagePreview;
 	private _slider:HTMLInputElement;
 
 	private _pad:PixcelArtData;
@@ -27,13 +28,9 @@ export class PreviewController extends createjs.EventDispatcher {
 		super();
 		this._state = state;
 
-		let cvs:HTMLCanvasElement = <HTMLCanvasElement>document.querySelector('#previewCanvas');
-
 		this._slider = <HTMLInputElement>document.querySelector('#previewRange');
 		
-		this._preview = new Preview(cvs.width, cvs.height, parseInt(this._slider.value));
-		this._stage = new createjs.Stage(cvs);
-		this._stage.addChild(this._preview);
+		this._preview = new StagePreview("previewCanvas", parseInt(this._slider.value));
 
 		this._slider.addEventListener('input', this._onSliderChangeHandler);
 		//this._slider.addEventListener('change', this._onSliderChangeHandler);
@@ -45,23 +42,18 @@ export class PreviewController extends createjs.EventDispatcher {
 		let dotSize:number = parseInt(this._slider.value);
 		this._preview.dotSize = dotSize;
 		
-		this._drawPreview();
+		this._preview.drawPad(this._pad, false);
 	}
 	//=============================================
 	// private
 	//=============================================
-	private _drawPreview = () :void =>{
-		this._preview.graphics.clear();
-		this._preview.drawPad(this._pad, false);
-		this._stage.update();
-	}
 	//=============================================
 	// public
 	//=============================================
 	public setPad = (pad:PixcelArtData):void =>{
 		this._pad = pad;
 
-		this._drawPreview();
+		this._preview.drawPad(this._pad, false);
 	}
 	//=============================================
 	// getter/setter
