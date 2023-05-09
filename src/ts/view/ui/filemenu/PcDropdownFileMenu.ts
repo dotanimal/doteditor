@@ -1,12 +1,11 @@
-import { State } from "../../model/State";
-export class FileDropdownMenu extends createjs.EventDispatcher {
+import { State } from "../../../model/State";
+import { FileMenu } from "./FileMenu";
+
+export class PcDropdownFileMenu extends FileMenu {
 	//=============================================
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public readonly EVENT_OPEN_FILE_DROPDOWN: string = "event open file dropdown";
-	public readonly EVENT_CLOSE_FILE_DROPDOWN: string = "event close file dropdown";
-	public readonly EVENT_SELECT_MENU_FILE_DROPDOWN: string = "event select menu file dropdown";
 	//----------private---------
 	private _fddLink:HTMLAnchorElement;
 	
@@ -14,17 +13,15 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	private _fileLoadMenuLink:HTMLAnchorElement;
 	private _fileSaveMenuLink:HTMLAnchorElement;
 
-	private _state: State;
-	private _anchorList: Array<HTMLAnchorElement>;
+	private _itemList: Array<HTMLElement>;
 
-	private _update2WpLink:HTMLAnchorElement;
+	private _update2WpBtn:HTMLAnchorElement;
 	//----------protected-------
 	//=============================================
 	// constructor
 	//=============================================
 	constructor(state : State) {
-		super();
-		this._state = state;
+		super(state);
 		//----------------------
 		// ドロップダウンメニュー
 		//----------------------
@@ -34,12 +31,12 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		//オープン
 		fdd.addEventListener("show.bs.dropdown", (e: Event) => {
 			this._state.setCurrent(State.FILE_MENU_OPEN);
-			this.dispatchEvent(new createjs.Event(this.EVENT_OPEN_FILE_DROPDOWN, true, true));
+			this.dispatchEvent(new createjs.Event(FileMenu.EVENT_OPEN_FILE_MENU, true, true));
 		});
 		//クローズ
 		fdd.addEventListener("hide.bs.dropdown", (e: Event) => {
 			//this.reset();
-			this.dispatchEvent(new createjs.Event(this.EVENT_CLOSE_FILE_DROPDOWN, true, true));
+			this.dispatchEvent(new createjs.Event(FileMenu.EVENT_CLOSE_FILE_MENU, true, true));
 		});
 		//----------------------
 		// メニュー
@@ -52,76 +49,75 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		// リンク
 		//----------------------
 		//新規作成
-		let newLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileNewMenu');
+		let newBtn:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileNewMenu');
 
 		//ローカル環境からJSONファイルを読み込む
-		let loadJsonFromLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileLoadJsonFromLocalLink');
+		let loadJsonFromLocalBtn:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileLoadJsonFromLocalBtn');
 
 		//ローカル環境にJSONファイルを保存
-		let saveJsonToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileSaveJson2LocalLink');
+		let saveJsonToLocalBtn:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileSaveJson2LocalBtn');
 
 		//ローカル環境にSVGファイルを書き出し
-		let publishSvgToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#publishSvgToLocalLink');
+		let publishSvgToLocalBtn:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#publishSvgToLocalBtn');
 		//ローカル環境にPNGファイルを書き出し
-		let publishPngToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#publishPngToLocalLink');
+		let publishPngToLocalBtn:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#publishPngToLocalBtn');
 		//ローカル環境にJPEGファイルを書き出し
-		let publishJpegToLocalLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#publishJpegToLocalLink');
+		let publishJpegToLocalBtn:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#publishJpegToLocalBtn');
 		
 
 		//WPからリストを読み込む
-		let loadListFromWpLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileLoadListFromWpLink');
+		let loadListFromWpBtn:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileLoadListFromWpBtn');
 		
 		//WPに上書き保存
-		this._update2WpLink = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileUpdate2WpLink');
+		this._update2WpBtn = <HTMLAnchorElement>document.querySelector('#fileDropdown a#fileUpdate2WpBtn');
 		
 		//WPに新規保存
-		let post2WpLink:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#filePost2WpLink');
+		let post2WpBtn:HTMLAnchorElement = <HTMLAnchorElement>document.querySelector('#fileDropdown a#filePost2WpBtn');
 		
-		this._anchorList = [
-								newLink,
-								loadJsonFromLocalLink,
-								saveJsonToLocalLink,
-								publishSvgToLocalLink,
-								publishPngToLocalLink,
-								publishJpegToLocalLink,
-								loadListFromWpLink,
-								this._update2WpLink,
-								post2WpLink
+		this._itemList = [
+								newBtn,
+								loadJsonFromLocalBtn,
+								saveJsonToLocalBtn,
+								publishSvgToLocalBtn,
+								publishPngToLocalBtn,
+								publishJpegToLocalBtn,
+								loadListFromWpBtn,
+								this._update2WpBtn,
+								post2WpBtn
 							];
-		for (let anchor of this._anchorList) {
-			anchor.addEventListener('click', this._onClickHandler);
+		for (let item of this._itemList) {
+			item.addEventListener('click', this._onClickHandler);
 		}
 	}
 	//=============================================
 	// event handler
 	//=============================================
-
 	private _onClickHandler = (e:MouseEvent) => {
 		let target:HTMLAnchorElement = <HTMLAnchorElement>e.currentTarget;
 	
 		let mode :string;
 		if(target.id == "fileNewMenu"){
 			mode = State.FILE_NEW;
-		}else if(target.id == "fileLoadJsonFromLocalLink"){
+		}else if(target.id == "fileLoadJsonFromLocalBtn"){
 			mode = State.FILE_LOAD_JSON_FROM_LOCAL;
-		}else if(target.id == "fileSaveJson2LocalLink"){
+		}else if(target.id == "fileSaveJson2LocalBtn"){
 			mode = State.FILE_SAVE_JSON_TO_LOCAL;
-		}else if(target.id == "publishSvgToLocalLink"){
+		}else if(target.id == "publishSvgToLocalBtn"){
 			mode = State.FILE_SAVE_SVG_TO_LOCAL;
-		}else if(target.id == "publishPngToLocalLink"){
+		}else if(target.id == "publishPngToLocalBtn"){
 			mode = State.FILE_SAVE_PNG_TO_LOCAL;
-		}else if(target.id == "publishJpegToLocalLink"){
+		}else if(target.id == "publishJpegToLocalBtn"){
 			mode = State.FILE_SAVE_JPEG_TO_LOCAL;
-		}else if(target.id == "fileUpdate2WpLink"){
+		}else if(target.id == "fileUpdate2WpBtn"){
 			mode = State.FILE_UPDATE_TO_WP;
-		}else if(target.id == "filePost2WpLink"){
+		}else if(target.id == "filePost2WpBtn"){
 			mode = State.FILE_POST_TO_WP;
-		}else if(target.id == "fileLoadListFromWpLink"){
+		}else if(target.id == "fileLoadListFromWpBtn"){
 			mode = State.FILE_LOAD_PAGE_SPLIT_LIST_FROM_WP;
 		}
 
 		this._state.setCurrent(mode);
-		this.dispatchEvent(new createjs.Event(this.EVENT_SELECT_MENU_FILE_DROPDOWN, true, true));
+		this.dispatchEvent(new createjs.Event(FileMenu.EVENT_SELECT_ITEM_FILE_MENU, true, true));
 		e.preventDefault();
 	}
 	//=============================================
@@ -130,19 +126,9 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 	//=============================================
 	// public
 	//=============================================
-	/*
-	public reset = () => {
-		this._saveMenu.style.display = "block";
-	}
-	public hideSaveMenu = () => {
-		this._saveMenu.style.display = "none";
-		//this._saveLink.classList.add("disabled");
-	}
-	*/
-	
-	public changedState = () =>{
+	public override changedState = () => {
 		let state :string = this._state.current;
-		let category:string = this._state.currentCategory;
+		//let category:string = this._state.currentCategory;
 		if(state == State.SELECT_RANGE){
 			this._fddLink.classList.add("disabled");
 			return false;
@@ -153,10 +139,10 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 		if(state == State.FILE_MENU_OPEN_WS_IS_NEW_DRAW){
 			//新規で作成したデータの場合
 			//上書き保存のボタンを表示しない
-			this._update2WpLink.style.display = "none";
+			this._update2WpBtn.style.display = "none";
 		}else{
 			//WordPressから読み込まれたデータの場合
-			this._update2WpLink.style.display = "block";
+			this._update2WpBtn.style.display = "block";
 		}
 		if(state == State.FILE_MENU_OPEN_WS_IS_NO_DRAW){
 			//描画がない場合は、保存・書き出しを表示しない
@@ -167,6 +153,7 @@ export class FileDropdownMenu extends createjs.EventDispatcher {
 			this._filePublishMenuLink.style.display = "block";
 		}
 	}
+	
 	//=============================================
 	// getter/setter
 	//=============================================

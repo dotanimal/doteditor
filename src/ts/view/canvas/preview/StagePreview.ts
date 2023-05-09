@@ -14,6 +14,7 @@ export class StagePreview extends createjs.Stage {
 	//----------public----------
 	//private _dotSize:number;
 	private _shp:ShapePreview;
+	private _bg:createjs.Shape;
 	//private _pad: PixcelArtData;
 	//----------protected-------
 	//=============================================
@@ -28,12 +29,17 @@ export class StagePreview extends createjs.Stage {
 			//this._dotSize = dotSize;
 	
 			cvs = <HTMLCanvasElement>document.querySelector('#' + canvas);
+			//console.log(cvs, canvas);
 		}else{
 			cvs = canvas;
 		}
 		
 		this._shp = new ShapePreview(cvs.width, cvs.height, dotSize);
-
+		this._bg = new createjs.Shape();
+		this._bg.graphics.beginFill('#' + "FFFFFF");
+		this._bg.graphics.drawRect(0, 0, cvs.width, cvs.height);
+		
+		this.addChild(this._bg);
 		this.addChild(this._shp);
 	}
 	//=============================================
@@ -59,6 +65,7 @@ export class StagePreview extends createjs.Stage {
 	public drawPad = (pad:PixcelArtData, isBg:boolean) :void =>{
 		this._shp.graphics.clear();
 		this._shp.drawPad(pad, isBg);
+		this._bg.visible = isBg;
 		this.update();
 	}
 	public drawDld = (dld:DrawLayerData, sx:number, sy:number, sw:number, sh:number, isBg:boolean) :void => {

@@ -1,6 +1,8 @@
-import { State } from "../model/State";
+import { State } from "../../model/State";
 import Picker from 'vanilla-picker';
-export class ColorpalettePanelController extends createjs.EventDispatcher {
+import * as bootstrap from "bootstrap";
+import { ColorpaletteController } from "./ColorpaletteController";
+export class SpColorpaletteController extends ColorpaletteController {
 	//=============================================
 	// TODO
 	//=============================================
@@ -8,48 +10,46 @@ export class ColorpalettePanelController extends createjs.EventDispatcher {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public static readonly EVENT_CHANGE_COLORPALETTE: string = "event change color palette panel";
 	//----------private---------
-	private _state:State;
 	
 	private _picker:Picker;
 	private _boxList:Array<Box>;
 	private _current:Box;
+	private _offcanvas:bootstrap.Offcanvas;
 	//----------protected-------
 	//=============================================
 	// constructor
 	//=============================================
 	constructor(state:State) {
-		super();
-		this._state = state;
+		super(state);
 		this._boxList = [];
 
-		let topEle:HTMLElement = <HTMLElement>document.querySelector('#colorpalettePanelTop');
-		let boxContainerEle:HTMLElement = <HTMLElement>document.querySelector('#colorpalettePanelBottom > #colorpaletteBoxContainer');
+		let pickerEle:HTMLElement = <HTMLElement>document.querySelector('#sp #colorpalettePicker');
+		let boxContainerEle:HTMLElement = <HTMLElement>document.querySelector('#sp #colorpaletteBoxContainer');
 
+		
 		this._picker = new Picker({
-			parent: topEle,
+			parent: pickerEle,
 			popup: false,
 			alpha: false,
 			editor: false,
 			onChange: this._onChangePickerHandler,
 		});
+		
 		let item:HTMLElement;
 		let box:Box;
-		for(let i:number = 0; i < 12; i++){
+		for(let i:number = 0; i < 7; i++){
 			item = <HTMLElement>document.createElement("span");
 			item.appendChild(document.createElement("i"));
 			//item.appendChild(document.createElement("span"));
 			box = new Box(<HTMLElement>boxContainerEle.appendChild(item));
-			box.addEventListener(Box.EVENT_CLICK_BOX, this._onClickBoxHandler)
+			box.addEventListener(Box.EVENT_TOUCH_START_BOX, this._onTouchStartBoxHandler);
+			box.addEventListener(Box.EVENT_DOUBLE_TOUCH_BOX, this._onDoubleTouchBoxHandler);
 			this._boxList.push(box);
 		}
-		/*
-		box = <Box>this._boxList[0];
-		box.active();
-		this._current = box;
-		this._picker.setColor("#"+box.hexColor, true);
-		*/
+
+		this._offcanvas = new bootstrap.Offcanvas(document.querySelector('#colorPickerOffcanvas'));
+		//console.log(this._offcanvas, document.querySelector('#colorPickerOffacanva'));
 	}
 	//=============================================
 	// event handler
@@ -74,20 +74,27 @@ export class ColorpalettePanelController extends createjs.EventDispatcher {
 			}
 		}
 		if(isChange){
-			this.dispatchEvent(new createjs.Event(ColorpalettePanelController.EVENT_CHANGE_COLORPALETTE, true, true));
+			this.dispatchEvent(new createjs.Event(ColorpaletteController.EVENT_CHANGE_COLORPALETTE, true, true));
 		}
 	}
-	private _onClickBoxHandler = (e:Event) =>{
+	private _onTouchStartBoxHandler = (e:Event) =>{
 		let box:Box;
 		for(box of this._boxList){
 			if(box == <Box>e.target){
 				box.active();
 				this._current = box;
-				this._picker.setColor("#"+box.hexColor, true);
+				//this._picker.setColor("#"+box.hexColor, true);
+				this.dispatchEvent(new createjs.Event(ColorpaletteController.EVENT_CHANGE_COLORPALETTE, true, true));
 			}else{
 				box.inactive();
 			}
 		}
+	}
+	private _onDoubleTouchBoxHandler = (e:Event) =>{
+		let box:Box = <Box>e.target;
+		this._current = box;
+		this._picker.setColor("#"+box.hexColor, true);
+		this._offcanvas.show();
 	}
 	//=============================================
 	// private
@@ -97,7 +104,7 @@ export class ColorpalettePanelController extends createjs.EventDispatcher {
 	// public
 	//=============================================
 
-	public setHexColorList = (arr: Array<string>) => {
+	public override setHexColorList = (arr: Array<string>) => {
 		let colorLen: number = arr.length;
 		let boxLen: number = this._boxList.length;
 		//colorLen = (pickerLen < colorLen) ? pickerLen : colorLen;
@@ -115,12 +122,12 @@ export class ColorpalettePanelController extends createjs.EventDispatcher {
 		box = <Box>this._boxList[0];
 		box.active();
 		this._current = box;
-		this._picker.setColor("#"+box.hexColor, true);
+		//this._picker.setColor("#"+box.hexColor, true);
 
 		this._onChangePickerHandler();
 	}
 	
-	public changedState = () =>{
+	public override changedState = () =>{
 		let state :string = this._state.current;
 		let category:string = this._state.currentCategory;
 
@@ -133,10 +140,10 @@ export class ColorpalettePanelController extends createjs.EventDispatcher {
 	//=============================================
 	// getter/setter
 	//=============================================
-	get hexColor(): string{
+	override get hexColor(): string{
 		return this._current.hexColor;
 	}
-	set hexColor(value: string) {
+	override set hexColor(value: string) {
 		this._current.hexColor = value;
 	}
 }
@@ -152,12 +159,15 @@ class Box extends createjs.EventDispatcher {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public static readonly EVENT_CLICK_BOX: string = "event click box";
+	public static readonly EVENT_TOUCH_START_BOX: string = "event touch start box";
+	public static readonly EVENT_DOUBLE_TOUCH_BOX: string = "event double touch box";
 
 	//----------private---------
 	private _target:HTMLElement;
 	private _inner:HTMLElement;
 	private _hexColor:string;
+	//private _timeoutId:any;
+	private _prevTime:number;
 	//----------protected-------
 	//=============================================
 	// constructor
@@ -166,15 +176,46 @@ class Box extends createjs.EventDispatcher {
 		super();
 		this._target = target;
 		this._inner = target.querySelector("i");
-		this._target.addEventListener("click", this._onClickHandler);
+		this._prevTime = 0;
+
+		//this._target.addEventListener("click", this._onClickHandler);
+		this._target.addEventListener("touchstart", this._onTouchStartHandler);
+		this._target.addEventListener("touchend", this._onTouchEndHandler);
 	}
 	//=============================================
 	// event handler
 	//=============================================
+	private _onTouchStartHandler = (e:Event)=>{
+		this.dispatchEvent(new createjs.Event(Box.EVENT_TOUCH_START_BOX, true, true));
+		/*
+		this._timeoutId = setTimeout(this._onTimeoutHandler, 200);
+		document.addEventListener("touchend", (e:Event)=>{
+			e.preventDefault();
+			clearTimeout(this._timeoutId);	
+			//console.log("touchend");
+		}, { once: true });
+		*/
+	}
+	private _onTouchEndHandler = (e:Event)=>{
+		let now:number = new Date().getTime();
+		if ((now - this._prevTime) < 350){
+			this.dispatchEvent(new createjs.Event(Box.EVENT_DOUBLE_TOUCH_BOX, true, true));
+		}
+		this._prevTime = now;
+	}
+	/*
+	private _onTimeoutHandler = () =>{
+		//console.log("timeout");
+		clearTimeout(this._timeoutId);	
+		this.dispatchEvent(new createjs.Event(Box.EVENT_LONG_TOUCH_BOX, true, true));
+	}
+	*/
+	/*
 	private _onClickHandler = (e:Event)=>{
 		//console.log("click");
 		this.dispatchEvent(new createjs.Event(Box.EVENT_CLICK_BOX, true, true));
 	}
+	*/
 	//=============================================
 	// private
 	//=============================================

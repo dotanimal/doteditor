@@ -1,10 +1,11 @@
 import * as bootstrap from "bootstrap";
-import { WPConector } from "../model/connector/WPConnector";
-import { PixcelArtData } from "../model/data/PixcelArtData";
-import { StagePreview } from "../view/canvas/preview/StagePreview";
-import { State } from "../model/State";
+import { WPConector } from "../../model/connector/WPConnector";
+import { PixcelArtData } from "../../model/data/PixcelArtData";
+import { StagePreview } from "../../view/canvas/preview/StagePreview";
+import { State } from "../../model/State";
+import { SaveToWPController } from "./SaveToWPController";
 
-export class SaveToWPController extends createjs.EventDispatcher {
+export class PcModalSaveToWPController extends SaveToWPController {
 	//=============================================
 	// TODO
 	//=============================================
@@ -14,10 +15,8 @@ export class SaveToWPController extends createjs.EventDispatcher {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public static readonly EVENT_SAVE_COMPLETE_TO_WP: string = "event save complete to wp";
+	
 	//----------private---------
-	private _state:State;
-	private _wpc: WPConector;
 	private _modal: bootstrap.Modal;
 
 	private _pad: PixcelArtData;
@@ -45,9 +44,7 @@ export class SaveToWPController extends createjs.EventDispatcher {
 	// constructor
 	//=============================================
 	constructor(state:State) {
-		super();
-		this._state = state;
-		this._wpc = new WPConector(this._state);
+		super(state);
 
 		this._modal = new bootstrap.Modal(document.getElementById('saveToWpModal'), { keyboard: true });
 
@@ -130,7 +127,7 @@ export class SaveToWPController extends createjs.EventDispatcher {
 	//=============================================
 	// public
 	//=============================================
-	public open = (pad: PixcelArtData) => {
+	public override open = (pad: PixcelArtData):void => {
 		this._reset();
 
 		this._pad = pad;
@@ -151,10 +148,10 @@ export class SaveToWPController extends createjs.EventDispatcher {
 
 		this._modal.show();
 	}
-	public close = () => {
+	public override close = ():void => {
 		this._modal.hide();
 	}
-	public getPixcelArtData = (): PixcelArtData => {
+	public override getPixcelArtData = (): PixcelArtData => {
 		return this._pad;
 	}
 	//=============================================

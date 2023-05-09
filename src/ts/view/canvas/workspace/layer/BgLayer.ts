@@ -30,7 +30,7 @@ export class BgLayer extends Layer {
 	//=============================================
 	private _drawLine = () => {
 		let color: string;
-
+		let count:number;
 		//格子柄
 		for (var yy = this._drawAreaTop; yy < this._drawAreaBottom; yy += this._dotSize / 2) {
 			for (var xx = this._drawAreaLeft; xx < this._drawAreaRight; xx += this._dotSize / 2) {
@@ -48,43 +48,55 @@ export class BgLayer extends Layer {
 		
 		//薄い線
 		color = "#dddddd";
+		count = 0;
 		for (var xx = this._drawAreaLeft; xx <= this._drawAreaRight; xx += this._dotSize) {
-			if (xx % (this._dotSize * 5) != 0) {
+			if(count % 5 != 0){
+			//if (xx % (this._dotSize * 5) != 0) {
 				this.graphics.beginStroke(color);
 				this.graphics.setStrokeStyle(1);
 				this.graphics.moveTo(xx + 0.5, this._drawAreaTop);
 				this.graphics.lineTo(xx + 0.5, this._drawAreaBottom);
 				this.graphics.endStroke();
 			}
+			count++;
 		}
+		count = 0;
 		for (var yy = this._drawAreaTop; yy <= this._drawAreaBottom; yy += this._dotSize) {
-			if (yy % (this._dotSize * 5) != 0) {
+			if(count % 5 != 0){
+			//if (yy % (this._dotSize * 5) != 0) {
 				this.graphics.beginStroke(color);
 				this.graphics.setStrokeStyle(1);
 				this.graphics.moveTo(this._drawAreaLeft, yy + 0.5);
 				this.graphics.lineTo(this._drawAreaRight, yy + 0.5);
 				this.graphics.endStroke();
 			}
+			count++;
 		}
 		//濃い線
 		color = "#bbbbbb";
+		count = 0;
 		for (var xx = this._drawAreaLeft; xx <= this._drawAreaRight; xx += this._dotSize) {
-			if (xx % (this._dotSize * 5) == 0) {
+			if(count % 5 == 0){
+			//if (xx % (this._dotSize * 5) == 0) {
 				this.graphics.beginStroke(color);
 				this.graphics.setStrokeStyle(1);
 				this.graphics.moveTo(xx + 0.5, this._drawAreaTop);
 				this.graphics.lineTo(xx + 0.5, this._drawAreaBottom);
 				this.graphics.endStroke();
 			}
+			count++;
 		}
+		count = 0;
 		for (var yy = this._drawAreaTop; yy <= this._drawAreaBottom; yy += this._dotSize) {
-			if (yy % (this._dotSize * 5) == 0) {
+			if(count % 5 == 0){
+			//if (yy % (this._dotSize * 5) == 0) {
 				this.graphics.beginStroke(color);
 				this.graphics.setStrokeStyle(1);
 				this.graphics.moveTo(this._drawAreaLeft, yy + 0.5);
 				this.graphics.lineTo(this._drawAreaRight, yy + 0.5);
 				this.graphics.endStroke();
 			}
+			count++;
 		}
 
 		//描画した順に上書き（追記）

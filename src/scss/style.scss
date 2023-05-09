@@ -8,6 +8,8 @@
 $color-white:#FFF;
 $color-lite-gray:#CCC;
 $color-dark-gray:#333;
+$color-key:#0bb4aa;
+
 $modal-width:800px;
 
 //--------------------------
@@ -359,7 +361,7 @@ $modal-width:800px;
 //--------------------------
 // layerPanel
 //--------------------------
-$layer-panel-row-parts-height:31px;
+$layer-panel-row-parts-height:33px;
 #layerPanel{
 	padding:4px 4px 8px 0;
 
@@ -396,8 +398,8 @@ $layer-panel-row-parts-height:31px;
 					display: block;
 					width:$layer-panel-row-parts-height;
 					height:$layer-panel-row-parts-height;
-					background-color: #FFF;
-					border:1px solid $color-lite-gray;
+					background-color: $color-lite-gray;
+					//border:1px solid $color-lite-gray;
 				}
 				.layerPanelItemEye::after {
 					display: block;
@@ -496,6 +498,58 @@ $layer-panel-row-parts-height:31px;
 		}
 	}
 }
+
+//--------------------------
+// colorpalettePanel
+//--------------------------
+
+#colorpalettePicker{
+	.picker_wrapper {
+		margin:auto 4px;
+		background: none !important;
+		border-style:none !important;
+		box-shadow: none !important;
+		.picker_slider{
+			height: 1px;
+		}
+		.picker_sample,
+		.picker_done{
+			display: none;//不要なUIを非表示
+		}
+	}
+}
+
+#colorpaletteBoxContainer{
+	//background: #CCF;
+
+	display: flex;
+	flex-flow: wrap;
+	justify-content: space-around;
+	align-items: center;
+	gap:3px 3px;
+	padding:0 10px 10px 10px;
+
+	> span{
+		padding:1px;
+		border: 1px solid #FFF;
+		background:none;
+		>i{
+			border:1px solid $color-lite-gray;
+			width:32px;
+			height:20px;
+			display: block;
+			background-color: #FFF;
+		}
+
+
+		&.active{
+			border: 1px solid $color-dark-gray;
+			//background-color: #F0F;
+		}
+	}
+}
+
+
 //============================ 
 // PC
 //============================ 
@@ -602,8 +656,6 @@ html#pc{
 				canvas{
 					background: $color-white;
 					padding: 0;
-					width:500px;
-					height:500px;
 				}
 			}
 
@@ -645,62 +697,16 @@ html#pc{
 		}
 	}
 
-
-
-	#colorpalettePanel{
-		#colorpalettePanelTop{
-			.picker_wrapper {
-				margin:auto 4px;
-				background: none !important;
-				border-style:none !important;
-				box-shadow: none !important;
-				.picker_slider{
-					height: 1px;
-				}
-				.picker_sl{
-					height: 100px;//vanilla-pickerのピッカーエリアのサイズ調整
-					&::before{
-						height: 100px !important;//vanilla-pickerのピッカーエリアのサイズ調整
-						padding-bottom:100px !important;//vanilla-pickerのピッカーエリアのサイズ調整
-					}
-				}
-				.picker_sample,
-				.picker_done{
-					display: none;//不要なUIを非表示
-				}
-			}
-		}
-		#colorpalettePanelBottom{
-			#colorpaletteBoxContainer{
-				//background: #CCF;
-
-				display: flex;
-				flex-flow: wrap;
-				justify-content: space-around;
-				align-items: center;
-				gap:3px 3px;
-				padding:0 10px 10px 10px;
-
-				> span{
-					padding:1px;
-					border: 1px solid #FFF;
-					>i{
-						border:1px solid $color-lite-gray;
-						width:32px;
-						height:20px;
-						display: block;
-						background-color: #FFF;
-					}
-
-		
-					&.active{
-						border: 1px solid $color-dark-gray;
-						//background-color: #F0F;
-					}
-				}
+	#colorpalettePicker{
+		.picker_sl{
+			height: 100px;//vanilla-pickerのピッカーエリアのサイズ調整
+			&::before{
+				height: 100px !important;//vanilla-pickerのピッカーエリアのサイズ調整
+				padding-bottom:100px !important;//vanilla-pickerのピッカーエリアのサイズ調整
 			}
 		}
 	}
+
 
 
 	//----------------------------
@@ -794,6 +800,14 @@ html#pc{
 
 }
 
+@keyframes fadeout {
+	0% {
+	  opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
 //============================ 
 // SP
 //============================ 
@@ -804,6 +818,8 @@ html#sp body {
 	touch-action: manipulation;
 	/* ダブルタップによるズームを抑止 */
 	font-size: 17px;
+	width:100%;
+	height:100%;
 }
 
 html#sp{
@@ -814,104 +830,421 @@ html#sp{
 		/* 入力欄にフォーカスが当たっても拡大しない */
 		font-size: 17px;
 	}
-
-	//--------------------------
-	// iconBtn
-	//--------------------------
-	#editorTop,
-	#editorBottom{
-		button{
-			padding-top:0;
-			padding-bottom:0;
-			line-height: 1;
-			height: 31px;
-			border:none !important;
-			color: $color-dark-gray;
-		}
-		button:hover,
-		button.active{
-			//color:$color-white;
-			background: $color-dark-gray;
-		}
+	
+	body{
+		background: $color-white;
 	}
-
-	#editorTop{
-		display: block;
+	
+	#cover{
 		width: 100%;
-		//background: #FCC;
-	}
-	#editorMiddle{
-		display: block;
-		width: 100%;
-		//background: #CCF;
-	}
-	#editorBottom{
-		display: flex;
-		width: 100%;
-		//background: #CFF;
+		height: 100%;
 		
-		#previewPanel{
-			#previewCanvas{
-				margin:0 auto 0 auto;
-				display: block;
-			}
-			#previewRange{
-				width:80px;
-				margin:10px auto 10px auto;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		
+		background: $color-white;
+		position: fixed;
+		top:0;
+		left:0;
+		> svg{
+			display: none;
+			width: 100px;
+			height: auto;
+		}
+		> img{
+			display: none;
+		}
+		&.opening{
+			> svg{
 				display: block;
 			}
 		}
-	}
-	//--------------------------
-	// nav
-	//--------------------------
-	.nav{
-		> .nav-item{
-			> .nav-link{
-				padding:0;
+		&.rotation{
+			> img{
+				display: block;
 			}
 		}
+		&.hide{
+			/**/
+			animation-name: fadeout;
+			animation-duration: 0.3s;
+			animation-timing-function: ease-out;
+			animation-fill-mode: forwards;
+			/**
+			display: none;
+			opacity: 0;
+			/**/
+		}
 	}
-	//--------------------------
-	// offcanvas
-	//--------------------------
-	.offcanvas {
-		width: 70% !important;
-
-		&.layerOffcanvas{
+	#editor{
+		width: 100%;
+		min-width: 375px;
+		height: 100%;
+		background: $color-dark-gray;
+		margin:0 auto;
 			
-			width: 80px !important;
-			//background: none  !important;
+		#editorHeader,
+		#editorFooter{
+			button{
+				padding-top:0;
+				padding-bottom:0;
+				line-height: 1;
+				width: 44px;
+				height: 44px;
+				border:none !important;
+				color: $color-dark-gray;
+			}
+			button:hover,
+			button.active{
+				color:$color-white;
+				background: $color-dark-gray;
+				> svg{
+					fill: $color-white;
+				}
+			}
+		}
 
-			.offcanvas-body{
-				padding:5px;
+		#editorHeader{
+			display: block;
+			width: 100%;
+			background: $color-dark-gray;
 
-				#layerPanel{
-					padding:0;
-					//background: #FFF;
+			button{
+				color: $color-key;
+			}
+			button:hover,
+			button.active{
+				color:$color-white;
+				background: $color-dark-gray;
+				> svg{
+					fill: $color-white;
+				}
+			}
 
-					#layerPanelHeader{
-						padding:0;
+		}
+		#editorBody{
+			display: block;
+			width: 100%;
+			min-width: 375px;
+			background: $color-lite-gray;
+			padding:10px 4px 12px 4px;
+			#workspaceTabContent{
+				canvas{
+					display: block;
+					margin:0 auto;
+				}
+			}
+		}
+		#editorFooter{
+			//display: flex;
+			width: 100%;
+			min-width: 375px;
+			//background: #CFF;
+			background: $color-dark-gray;
+			
+			#drawBtnGrp{
+				width: 100%;
+				margin: 0 auto;
+				display: flex;
+				justify-content:center;
+				padding-top:5px;
+
+
+				button{
+					color: $color-key;
+					> svg{
+						fill: $color-key;
 					}
-					#layerPanelBody{
-						overflow-y: auto !important;
-						height: auto !important;
-						padding:0;
+				}
+				button:hover,
+				button.active{
+					color:$color-white;
+					background: $color-dark-gray;
+					> svg{
+						fill: $color-white;
+					}
+				}
 
-						.layerPanelItemTxt{
-							display: none !important;
-							width:0 !important;
+			}
+			#colorpaletteBoxContainer{
+				width: 100%;
+				gap:2px 2px;
+				padding:5px 10px 10px 10px;
+
+				> span{
+					padding:1px;
+					border: 1px solid $color-dark-gray;
+					background:none !important;
+					>i{
+						border:none;
+						width:40px;
+						height:30px;
+						display: block;
+						background: $color-dark-gray;
+					}
+
+
+					&.active{
+						border: 1px solid $color-key;
+						//background-color: #F0F;
+					}
+				}
+			}
+		}
+		//--------------------------
+		// nav
+		//--------------------------
+		.nav{
+			//margin-left:10px;
+			border-bottom:1px solid $color-white;
+			> .nav-item{
+				margin-left:10px;
+				> .nav-link{
+					padding:3px 20px 1px 20px;
+					border-top:1px solid #EEE;
+					border-left:1px solid #EEE;
+					border-right:1px solid #EEE;
+					background:#EEE;
+					&.active{
+						border-top:1px solid $color-white;
+						border-left:1px solid $color-white;
+						border-right:1px solid $color-white;
+						background: $color-white;
+					}
+					> canvas{
+						display: block;
+					}
+				}
+			}
+		}
+		.tab-content{
+			background: #FFF;
+			padding-top:2px;
+			padding-bottom:3px;
+		}
+		//--------------------------
+		// offcanvas
+		//--------------------------
+		.offcanvas {
+			&#menuOffcanvas{
+				//background:$color-dark-gray;
+				width: 70% !important;
+				transform: translateX(0) !important;
+				left: -70%;
+				&.show{
+					@keyframes menuOffcanvasFadein {
+						0% {
+							left: -70%;
+							visibility: hidden !important;
 						}
-						.layerPanelItemHandle{
-							display: none !important;
-							width:0 !important;
+						1% {
+							left: -70%;
+							visibility: visible !important;
+							transform: translateX(0) !important;
+						}
+						100% {
+							left: 0;
+							transform: translateX(0) !important;
 						}
 					}
-					#layerPanelFotter{
+					animation-name: menuOffcanvasFadein;
+					animation-duration: 0.15s;
+					animation-timing-function: ease-out;
+					animation-fill-mode: forwards;
+				}
+				.offcanvas-body{
+					ul,li{
+						list-style: none;
+						margin:0;
 						padding:0;
+						line-height: 1;
+					}
+					span{
+						display: block;
+						//background: #FCC;
+						padding:7px 10px;
+						//border-bottom:1px solid $color-lite-gray;
+						i{
+							margin-right:10px;
+							font-size:12px;
+							vertical-align: middle ;
+						}
+						&.link{
+							position: relative;
+							&::after{
+								position: absolute;
+								top: 50%;
+								right: 0;
+								transform: translate(-50%, -50%);
+								font-family: bootstrap-icons;
+								content: '\f285';
+								font-size: 12px;
+								//z-index: -1;
+							}
+							&:active{
+								color:$color-white;
+								background:$color-key;
+								@include border-radius(5px);
+							}
+						}
+					}
+					> ul{
+						> li{
+							margin:0 0 20px 0;
+							ul{
+								margin-left:20px;
+							}
+						}
+					}
+					#fileLoadInputs{
+						display:none;
+					}
+				}
+			}
+
+			&#colorPickerOffcanvas{
+				width: 100%;
+				height:430px;
+				transform: translateY(0) !important;
+				top: -430px;
+				&.show{
+					@keyframes colorPickerOffcanvasFadein {
+						0% {
+							top: -430px;
+							visibility: hidden !important;
+						}
+						1% {
+							top: -430px;
+							visibility: visible !important;
+							transform: translateY(0) !important;
+						}
+						100% {
+							top: 0;
+							transform: translateY(0) !important;
+						}
+					}
+					animation-name: colorPickerOffcanvasFadein;
+					animation-duration: 0.2s;
+					animation-timing-function: ease-out;
+					animation-fill-mode: forwards;
+				}
+				.offcanvas-body{
+					padding-top:0;
+					.picker_wrapper.layout_default{
+						width:300px !important;
+						margin:0 auto;
+
+						.picker_sl{
+							height: 300px;//vanilla-pickerのピッカーエリアのサイズ調整
+							&::before{
+								height: 300px !important;//vanilla-pickerのピッカーエリアのサイズ調整
+								padding-bottom:300px !important;//vanilla-pickerのピッカーエリアのサイズ調整
+							}
+						}
+
+					}
+				}
+			}
+			&#layerOffcanvas{
+				width: 80px !important;
+				transform: translateX(0) !important;
+				right: -80px;
+				&.show{
+					@keyframes layerOffcanvasFadein {
+						0% {
+							right: -80px;
+							visibility: hidden !important;
+						}
+						1% {
+							right: -80px;
+							visibility: visible !important;
+							transform: translateX(0) !important;
+						}
+						100% {
+							right: 0;
+							transform: translateX(0) !important;
+						}
+					}
+					animation-name: layerOffcanvasFadein;
+					animation-duration: 0.1s;
+					animation-timing-function: ease-out;
+					animation-fill-mode: forwards;
+				}
+
+				.offcanvas-body{
+					padding:5px;
+
+					#layerPanel{
+						padding:0;
+						//background: #FFF;
+						
+						#layerPanelHeader{
+							padding:0;
+						}
+						#layerPanelBody{
+							overflow-y: auto !important;
+							height: auto !important;
+							padding:0;
+
+							.layerPanelItemTxt{
+								display: none !important;
+								width:0 !important;
+							}
+							.layerPanelItemHandle{
+								display: none !important;
+								width:0 !important;
+							}
+						}
+						#layerPanelFotter{
+							padding:0;
+						}
+					}
+				}
+			}
+			&#saveToWpOffcanvas{
+				height: 100% !important;
+				.offcanvas-body{
+					.inputView{
+						.middleArea{
+							p{
+								canvas{
+									margin:0 auto;
+									display: block;
+								}
+							}
+						}
+						.bottomArea{
+							text-align: center;
+							button{
+								margin:0 auto;
+							}
+						}
+					}
+				}
+			}
+			&#loadFromWpOffcanvas{
+				//background: #CFF;
+				height: 100% !important;
+				.mainView{
+					display: flex;
+					flex-direction: row;
+					flex-flow: wrap;
+					justify-content: space-evenly;
+					span{
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						width: 60px;
+						height: 60px;
+						margin:0 auto;
+						svg{
+							transform:matrix(2,0,0,2,0,0);
+						}
 					}
 				}
 			}
 		}
 	}
 }
+ 

@@ -1,11 +1,12 @@
 import * as bootstrap from "bootstrap";
-import { State } from "../model/State";
-import { WPConector } from "../model/connector/WPConnector";
-import { Pagenation } from "../view/ui/Pagenation";
-import { ShapePreview } from "../view/canvas/preview/ShapePreview";
-import { PixcelArtData } from "../model/data/PixcelArtData";
+import { State } from "../../model/State";
+import { WPConector } from "../../model/connector/WPConnector";
+import { Pagenation } from "../../view/ui/Pagenation";
+import { ShapePreview } from "../../view/canvas/preview/ShapePreview";
+import { PixcelArtData } from "../../model/data/PixcelArtData";
+import { LoadFromWPController } from "./LoadFromWPController";
 
-export class LoadFromWPController extends createjs.EventDispatcher {
+export class PcModalLoadFromWPController extends LoadFromWPController {
 	//=============================================
 	// TODO
 	//=============================================
@@ -16,10 +17,7 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 	// 定数/変数
 	//=============================================
 	//----------public----------
-	public static readonly EVENT_SELECT_THUMB: string = "event select thumb";
 	//----------private---------
-	private _state:State;
-	private _wpc: WPConector;
 	private _modal: bootstrap.Modal;
 
 	private _pn: Pagenation;
@@ -44,9 +42,7 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 	// constructor
 	//=============================================
 	constructor(state:State) {
-		super();
-		this._state = state;
-		this._wpc = new WPConector(this._state);
+		super(state);
 
 		this._modal = new bootstrap.Modal(document.getElementById('loadFromWPModal'), { keyboard: true });
 
@@ -169,25 +165,25 @@ export class LoadFromWPController extends createjs.EventDispatcher {
 	//=============================================
 	// public
 	//=============================================
-	public open = () => {
+	public override open = () => {
 		this._reset();
 
 		this._modal.show();
 		this._pageChange(1, this._posts_per_page);
 		//this.dispatchEvent(new createjs.Event(this.EVENT_LOAD_FROM_WP_LIST_LOAD, true, true));
 	}
-	public close = () => {
+	public override close = () => {
 		this._modal.hide();
 	}
-	/*
-	public getPixcelArtData = (): PixcelArtData => {
+	public override getPixcelArtData = ():PixcelArtData => {
 		return this._pad;
 	}
-	*/
 	//=============================================
 	// getter/setter
 	//=============================================
-	get loadResultPad(): PixcelArtData {
+	/*
+	override get pad(): PixcelArtData {
 		return this._pad;
 	}
+	*/
 }

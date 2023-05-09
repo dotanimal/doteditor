@@ -10,11 +10,13 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 ?>
 
 <!doctype html>
+	
 <?php if ($isPc) : ?>
 <html lang="ja" id="pc">
 <?php elseif($isSp) : ?>
 <html lang="ja" id="sp">
 <?php endif; ?>
+	
 <head>
 	<meta charset="utf-8">
 	
@@ -29,7 +31,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 	<meta http-equiv="Pragma" content="no-cache">
 	<meta http-equiv="Cache-Control" content="no-cache">
 	<meta http-equiv="Expires" content="0">
-	<title>doteditor | dot.animal labo</title>
+	<title>doteditor | labo | dot.animal</title>
 
 	<!-- favicon -->
 	<meta name="msapplication-square70x70logo" content="/labo/doteditor/cmn/img/favicon/site-tile-70x70.png">
@@ -94,7 +96,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 
 </head>
 <body>
-<?php if ($isPc/* || $isSp */) : ?>
+<?php if ($isPc) : ?>
 <?php /*---------------PC---------------*/ ?>
 	<div id="editor">
 		<div id="editorLeft">
@@ -109,10 +111,10 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 							<a class="dropdown-item dropdown-toggle" href="#">読み込み</a>
 							<ul class="dropdown-menu dropdown-menu-dark">
 								<li>
-									<a id="fileLoadJsonFromLocalLink" class="dropdown-item" href="#">PC</a>
+									<a id="fileLoadJsonFromLocalBtn" class="dropdown-item" href="#">PC</a>
 								</li>
 								<li>
-									<a id="fileLoadListFromWpLink" class="dropdown-item" href="#">WordPress</a>
+									<a id="fileLoadListFromWpBtn" class="dropdown-item" href="#">WordPress</a>
 								</li>
 							</ul>
 						</li>
@@ -120,16 +122,16 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 							<a class="dropdown-item dropdown-toggle" href="#">保存</a>
 							<ul class="dropdown-menu dropdown-menu-dark">
 								<li>
-									<a id="fileSaveJson2LocalLink" class="dropdown-item" href="#">PC</a>
+									<a id="fileSaveJson2LocalBtn" class="dropdown-item" href="#">PC</a>
 								</li>
 								<lii class="dropend">
 									<a class="dropdown-item dropdown-toggle" href="#">WordPress</a>
 									<ul class="dropdown-menu dropdown-menu-dark">
 										<li>
-											<a id="fileUpdate2WpLink" class="dropdown-item" href="#">上書き保存</a>
+											<a id="fileUpdate2WpBtn" class="dropdown-item" href="#">上書き保存</a>
 										</li>
 										<li>
-											<a id="filePost2WpLink" class="dropdown-item" href="#">新規保存</a>
+											<a id="filePost2WpBtn" class="dropdown-item" href="#">新規保存</a>
 										</li>
 									</ul>
 								</li>
@@ -139,13 +141,13 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 							<a class="dropdown-item dropdown-toggle" href="#">書き出し</a>
 							<ul class="dropdown-menu dropdown-menu-dark">
 								<li>
-									<a id="publishSvgToLocalLink" class="dropdown-item" href="#">SVG形式</a>
+									<a id="publishSvgToLocalBtn" class="dropdown-item" href="#">SVG形式</a>
 								</li>
 								<li>
-									<a id="publishPngToLocalLink" class="dropdown-item" href="#">PNG形式</a>
+									<a id="publishPngToLocalBtn" class="dropdown-item" href="#">PNG形式</a>
 								</li>
 								<li>
-									<a id="publishJpegToLocalLink" class="dropdown-item" href="#">JPEG形式</a>
+									<a id="publishJpegToLocalBtn" class="dropdown-item" href="#">JPEG形式</a>
 								</li>
 							</ul>
 						</li>
@@ -199,10 +201,10 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 			</div>
 			<div id="editorLeftMiddle">
 				<div id="workspace1Container">
-					<canvas id="workspace1" width="500" height="500"></canvas>
+					<canvas id="workspace1" width="490" height="490"></canvas>
 				</div>
 				<div id="workspace2Container">
-					<canvas id="workspace2" width="500" height="500"></canvas>
+					<canvas id="workspace2" width="490" height="490"></canvas>
 				</div>
 			</div>
 		</div>
@@ -234,7 +236,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 			<div id="layerPanelBody">
 				<ul class="layerPanel">
 					<li class="layerPanelItem">
-						<canvas class="layerPanelItemCanvas" width="62" height="62"></canvas>
+						<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
 						<span class="layerPanelItemEye"></span>
 						<span class="layerPanelItemTxt">
 							<span></span>
@@ -243,7 +245,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 						<span class="layerPanelItemHandle"></span>
 					</li>
 					<li class="layerPanelItem">
-						<canvas class="layerPanelItemCanvas" width="62" height="62"></canvas>
+						<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
 						<span class="layerPanelItemEye"></span>
 						<span class="layerPanelItemTxt">
 							<span></span>
@@ -252,7 +254,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 						<span class="layerPanelItemHandle"></span>
 					</li>
 					<li class="layerPanelItem">
-						<canvas class="layerPanelItemCanvas" width="62" height="62"></canvas>
+						<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
 						<span class="layerPanelItemEye"></span>
 						<span class="layerPanelItemTxt">
 							<span></span>
@@ -261,7 +263,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 						<span class="layerPanelItemHandle"></span>
 					</li>
 					<li class="layerPanelItem">
-						<canvas class="layerPanelItemCanvas" width="62" height="62"></canvas>
+						<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
 						<span class="layerPanelItemEye"></span>
 						<span class="layerPanelItemTxt">
 							<span></span>
@@ -270,7 +272,52 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 						<span class="layerPanelItemHandle"></span>
 					</li>
 					<li class="layerPanelItem">
-						<canvas class="layerPanelItemCanvas" width="62" height="62"></canvas>
+						<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
+						<span class="layerPanelItemEye"></span>
+						<span class="layerPanelItemTxt">
+							<span></span>
+							<input type="text" value="" />
+						</span>
+						<span class="layerPanelItemHandle"></span>
+					</li>
+					<li class="layerPanelItem">
+						<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
+						<span class="layerPanelItemEye"></span>
+						<span class="layerPanelItemTxt">
+							<span></span>
+							<input type="text" value="" />
+						</span>
+						<span class="layerPanelItemHandle"></span>
+					</li>
+					<li class="layerPanelItem">
+						<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
+						<span class="layerPanelItemEye"></span>
+						<span class="layerPanelItemTxt">
+							<span></span>
+							<input type="text" value="" />
+						</span>
+						<span class="layerPanelItemHandle"></span>
+					</li>
+					<li class="layerPanelItem">
+						<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
+						<span class="layerPanelItemEye"></span>
+						<span class="layerPanelItemTxt">
+							<span></span>
+							<input type="text" value="" />
+						</span>
+						<span class="layerPanelItemHandle"></span>
+					</li>
+					<li class="layerPanelItem">
+						<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
+						<span class="layerPanelItemEye"></span>
+						<span class="layerPanelItemTxt">
+							<span></span>
+							<input type="text" value="" />
+						</span>
+						<span class="layerPanelItemHandle"></span>
+					</li>
+					<li class="layerPanelItem">
+						<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
 						<span class="layerPanelItemEye"></span>
 						<span class="layerPanelItemTxt">
 							<span></span>
@@ -322,10 +369,8 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 			</span>
 		</div>
 		<div id="colorpalettePanel" class="draggableWindowBody">
-			<div id="colorpalettePanelTop"></div>
-			<div id="colorpalettePanelBottom">
-				<div id="colorpaletteBoxContainer"></div>
-			</div>
+			<div id="colorpalettePicker"></div>
+			<div id="colorpaletteBoxContainer"></div>
 		</div>
 	</div>
 	<!-- /#colorpaletteWindow -->
@@ -407,24 +452,11 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 	<!-- /#saveNewToWpModal -->
 <?php elseif($isSp) : ?>
 <?php /*---------------SP---------------*/ ?>
-<div id="editor">
-	<div id="editorTop">
-		<button id="fileMenuBtn" class="btn btn-outline-dark btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+<div id="editor" class="display-none">
+	<div id="editorHeader">
+		<button id="fileMenuBtn" class="btn btn-outline-dark btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas" aria-controls="offcanvasExample">
 			<i class="bi bi-list"></i>
 		</button>
-
-		<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-		<div class="offcanvas-header">
-			<h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-		</div>
-		<div class="offcanvas-body">
-			<div>
-			Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
-			</div>
-		</div>
-		</div>
-
 
 		<div id="historyBtnGrp" class="btn-group" role="group" aria-label="">
 			<button id="undo" type="button" class="btn btn-outline-dark btn-sm"><i class="bi bi-reply"></i></button>
@@ -432,37 +464,38 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 		</div>
 
 	</div>
-	<!--/#editorTop-->
-	<div id="editorMiddle">
+	<!--/#editorHeader-->
+	
+	<div id="editorBody">
 		<ul class="nav nav-tabs" id="workspaceTab" role="tablist">
-		<li class="nav-item" role="presentation">
-			<button
-			class="nav-link active"
-			id="ws1-tab"
-			data-bs-toggle="tab"
-			data-bs-target="#ws1"
-			type="button"
-			role="tab"
-			aria-controls="ws1"
-			aria-selected="true"
-			>
-			<canvas id="preview1" width="31" height="31"></canvas>
-			</button>
-		</li>
-		<li class="nav-item" role="presentation">
-			<button
-			class="nav-link"
-			id="ws2-tab"
-			data-bs-toggle="tab"
-			data-bs-target="#ws2"
-			type="button"
-			role="tab"
-			aria-controls="ws2"
-			aria-selected="false"
-			>
-			<canvas id="preview2" width="31" height="31"></canvas>
-			</button>
-		</li>
+			<li class="nav-item" role="presentation">
+				<button
+				class="nav-link active"
+				id="ws1-tab"
+				data-bs-toggle="tab"
+				data-bs-target="#ws1"
+				type="button"
+				role="tab"
+				aria-controls="ws1"
+				aria-selected="true"
+				>
+				<canvas id="preview1" width="31" height="31"></canvas>
+				</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button
+				class="nav-link"
+				id="ws2-tab"
+				data-bs-toggle="tab"
+				data-bs-target="#ws2"
+				type="button"
+				role="tab"
+				aria-controls="ws2"
+				aria-selected="false"
+				>
+				<canvas id="preview2" width="31" height="31"></canvas>
+				</button>
+			</li>
 		</ul>
 		<div class="tab-content" id="workspaceTabContent">
 			<div
@@ -471,7 +504,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 				role="tabpanel"
 				aria-labelledby="ws1-tab"
 			>
-				<canvas id="workspace1" width="375" height="375"></canvas>
+				<canvas id="workspace1" width="361" height="361"></canvas>
 			</div>
 			<div
 				class="tab-pane fade"
@@ -479,18 +512,14 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 				role="tabpanel"
 				aria-labelledby="ws2-tab"
 			>
-				<canvas id="workspace2" width="375" height="375"></canvas>
+				<canvas id="workspace2" width="361" height="361"></canvas>
 			</div>
 		</div>
 	</div>
-	<!--/#editorMiddle-->
+	<!--/#editorBody-->
 
-	<div id="editorBottom">
-		<div id="previewPanel">
-			<canvas id="previewCanvas" width="100" height="100"></canvas>
-			<input id="previewRange" class="inputRange" type="range" value="2" min="1" max="3" step="1">
-		</div>
-		<div id="drawBtnGrp" class="btn-group" role="group" aria-label="">
+	<div id="editorFooter">
+		<div id="drawBtnGrp" class="" role="" aria-label="">
 			<button id="pencil" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
 				<i class="bi bi-pencil"></i>
 			</button>
@@ -509,15 +538,17 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 			<button id="cut" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="button">
 				<i class="bi bi-scissors"></i>
 			</button>
-			<button id="layerPanelBtn" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+			<button id="layerPanelBtn" type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="offcanvas" data-bs-target="#layerOffcanvas" aria-controls="offcanvasRight">
 				<i class="bi bi-stack"></i>
 			</button>
 		</div>
+		<div id="colorpaletteBoxContainer">
+		</div>
 	</div>
+	<!--/#editorFooter-->
 
-	<!--/#editorBottom-->
-
-	<div class="offcanvas offcanvas-end layerOffcanvas" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+	<!--layer offcanvas-->
+	<div class="offcanvas offcanvas-end" tabindex="-1" id="layerOffcanvas" aria-labelledby="offcanvasRightLabel">
 		<div class="offcanvas-header">
 			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
@@ -528,7 +559,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 				<div id="layerPanelBody">
 					<ul class="layerPanel">
 						<li class="layerPanelItem">
-							<canvas class="layerPanelItemCanvas" width="62" height="62"></canvas>
+							<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
 							<span class="layerPanelItemEye"></span>
 							<span class="layerPanelItemTxt">
 								<span></span>
@@ -537,7 +568,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 							<span class="layerPanelItemHandle"></span>
 						</li>
 						<li class="layerPanelItem">
-							<canvas class="layerPanelItemCanvas" width="62" height="62"></canvas>
+							<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
 							<span class="layerPanelItemEye"></span>
 							<span class="layerPanelItemTxt">
 								<span></span>
@@ -546,7 +577,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 							<span class="layerPanelItemHandle"></span>
 						</li>
 						<li class="layerPanelItem">
-							<canvas class="layerPanelItemCanvas" width="62" height="62"></canvas>
+							<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
 							<span class="layerPanelItemEye"></span>
 							<span class="layerPanelItemTxt">
 								<span></span>
@@ -555,7 +586,7 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 							<span class="layerPanelItemHandle"></span>
 						</li>
 						<li class="layerPanelItem">
-							<canvas class="layerPanelItemCanvas" width="62" height="62"></canvas>
+							<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
 							<span class="layerPanelItemEye"></span>
 							<span class="layerPanelItemTxt">
 								<span></span>
@@ -564,7 +595,52 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 							<span class="layerPanelItemHandle"></span>
 						</li>
 						<li class="layerPanelItem">
-							<canvas class="layerPanelItemCanvas" width="62" height="62"></canvas>
+							<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
+							<span class="layerPanelItemEye"></span>
+							<span class="layerPanelItemTxt">
+								<span></span>
+								<input type="text" value="" />
+							</span>
+							<span class="layerPanelItemHandle"></span>
+						</li>
+						<li class="layerPanelItem">
+							<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
+							<span class="layerPanelItemEye"></span>
+							<span class="layerPanelItemTxt">
+								<span></span>
+								<input type="text" value="" />
+							</span>
+							<span class="layerPanelItemHandle"></span>
+						</li>
+						<li class="layerPanelItem">
+							<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
+							<span class="layerPanelItemEye"></span>
+							<span class="layerPanelItemTxt">
+								<span></span>
+								<input type="text" value="" />
+							</span>
+							<span class="layerPanelItemHandle"></span>
+						</li>
+						<li class="layerPanelItem">
+							<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
+							<span class="layerPanelItemEye"></span>
+							<span class="layerPanelItemTxt">
+								<span></span>
+								<input type="text" value="" />
+							</span>
+							<span class="layerPanelItemHandle"></span>
+						</li>
+						<li class="layerPanelItem">
+							<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
+							<span class="layerPanelItemEye"></span>
+							<span class="layerPanelItemTxt">
+								<span></span>
+								<input type="text" value="" />
+							</span>
+							<span class="layerPanelItemHandle"></span>
+						</li>
+						<li class="layerPanelItem">
+							<canvas class="layerPanelItemCanvas" width="33" height="33"></canvas>
 							<span class="layerPanelItemEye"></span>
 							<span class="layerPanelItemTxt">
 								<span></span>
@@ -590,6 +666,154 @@ if((strpos($ua, 'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'A
 		</div>
 	</div>
 
+	<!--menu offcanvas-->
+	<div class="offcanvas offcanvas-start" tabindex="-1" id="menuOffcanvas" aria-labelledby="bbb">
+		<div class="offcanvas-header">
+			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+			<ul id="fileMenu">
+				<li>
+					<span id="fileNewBtn" class="link">
+					<i class="bi bi-file-earmark-plus"></i>
+						新規作成
+					</span>
+				</li>
+				<li id="loadFileMenu">
+					<span>
+						<i class="bi bi-file-earmark-arrow-up"></i>
+						読み込み
+					</span>
+					<ul>
+						<li>
+							<span id="fileLoadJsonFromLocalBtn" class="link">スマホ</span>
+						</li>
+						<li>
+							<span id="fileLoadListFromWpBtn" class="link">Wordpress</span>
+						</li>
+					</ul>
+				</li>
+				<li id="saveFileMenu">
+					<span>
+						<i class="bi bi-file-earmark-arrow-down"></i>
+						保存
+					</span>
+					<ul>
+						<li>
+							<span id="fileSaveJson2LocalBtn" class="link">スマホ</span>
+						</li>
+						<li>
+							<span>Wordpress</span>
+							<ul>
+								<li>
+									<span id="filePost2WpBtn" class="link">新規保存</span>
+								</li>
+								<li>
+									<span id="fileUpdate2WpBtn" class="link">上書き保存</span>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li id="publishFileMenu">
+					<span>
+						<i class="bi bi-file-earmark-image"></i>
+						書き出し
+					</span>
+					<ul>
+						<li>
+							<span id="publishSvgToLocalBtn" class="link">SVG形式</span>
+						</li>
+						<li>
+							<span id="publishPngToLocalBtn" class="link">PNG形式</span>
+						</li>
+						<li>
+							<span id="publishJpegToLocalBtn" class="link">JPEG形式</span>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<div id="fileLoadInputs">
+				<input type="file" accept="application/json,.json" id="loadJsonFromLocalInput">
+			</div>
+		</div>
+		<div class="offcanvas-bottom">
+		</div>
+	</div>
+
+	<!--colorPicker offcanvas-->
+	<div class="offcanvas offcanvas-top" tabindex="-1" id="colorPickerOffcanvas" aria-labelledby="offcanvasTopLabel">
+		<div class="offcanvas-header">
+			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div id="colorpalettePicker" class="offcanvas-body">
+		</div>
+	</div>
+
+	<!--saveToWp offcanvas-->
+	<div class="offcanvas offcanvas-top" tabindex="-1" id="saveToWpOffcanvas" aria-labelledby="offcanvasTopLabel">
+		<div class="offcanvas-header">
+		<h2></h2>
+		<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+			<div class="inputView">
+				<div class="topArea">
+					<h3>タイトル</h3>
+					<p><input type="text" class="form-control form-control-sm"></p>
+				</div>
+				<div class="middleArea">
+					<h3>プレビュー</h3>
+					<p>
+						<canvas id="saveToWpPreviewCanvas" width="300" height="300"></canvas>
+					</p>
+				</div>
+				<div class="bottomArea">
+					<button type="button" class="btn btn-outline-dark btn-sm">投稿する</button>
+				</div>
+			</div>
+			<div class="d-flex justify-content-center loadingView">
+				<div class="spinner-border" role="status">
+					<span class="visually-hidden">Loading...</span>
+				</div>
+			</div>
+			<div class="completeView">
+				<div class="topArea completeMessage">
+					ライブラリへの新規保存が完了しました
+				</div>
+				<div class="bottomArea">
+					<button type="button" class="btn btn-outline-dark btn-sm">閉じる</button>
+				</div>
+			</div>
+		</div>
+		<div class="offcanvas-footer">
+		</div>
+	</div>
+
+	<!--loadFromWp offcanvas-->
+	<div class="offcanvas offcanvas-top" tabindex="-1" id="loadFromWpOffcanvas" aria-labelledby="offcanvasTopLabel">
+		<div class="offcanvas-header">
+			WordPressから読み込み
+			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+			<div class="d-flex justify-content-center loadingView">
+				<div class="spinner-border" role="status">
+					<span class="visually-hidden">Loading...</span>
+				</div>
+			</div>
+			<div class="mainView">
+
+			</div>
+		</div>
+		<div class="offcanvas-footer">
+		</div>
+	</div>
+
+</div>
+<div id="cover" class="opening">
+	<svg width="15" height="17" viewBox="0, 0, 15,17" xmlns="http://www.w3.org/2000/svg"><polygon points="7,0 8,0 8,1 9,1 10,1 11,1 12,1 12,2 13,2 13,3 13,4 12,4 11,4 10,4 9,4 8,4 7,4 6,4 5,4 4,4 3,4 2,4 2,3 2,2 3,2 3,1 4,1 5,1 6,1 7,1 " style="fill:#993333;" /><polygon points="1,4 2,4 3,4 3,5 2,5 2,6 2,7 1,7 1,8 1,9 1,10 2,10 2,11 3,11 3,12 2,12 2,13 2,14 1,14 1,13 1,12 1,11 0,11 0,10 0,9 0,8 0,7 0,6 1,6 1,5 " style="fill:#000000;" /><polygon points="3,4 4,4 5,4 5,5 6,5 6,6 5,6 4,6 4,7 4,8 4,9 4,10 5,10 6,10 6,11 5,11 5,12 6,12 6,13 7,13 8,13 9,13 9,12 10,12 10,11 9,11 9,10 10,10 11,10 11,9 11,8 10,8 10,7 11,7 11,6 10,6 9,6 9,5 10,5 10,4 11,4 12,4 12,5 13,5 13,6 13,7 14,7 14,8 14,9 14,10 13,10 13,11 12,11 12,12 11,12 11,13 11,14 11,15 10,15 10,16 9,16 8,16 7,16 6,16 5,16 5,15 5,14 5,13 4,13 4,12 3,12 3,11 2,11 2,10 1,10 1,9 1,8 1,7 2,7 2,6 2,5 3,5 " style="fill:#ffffff;" /><polygon points="5,4 6,4 7,4 8,4 9,4 10,4 10,5 9,5 9,6 8,6 8,7 7,7 7,6 6,6 6,5 5,5 " style="fill:#000000;" /><polygon points="12,4 13,4 14,4 14,5 14,6 15,6 15,7 15,8 15,9 15,10 15,11 14,11 14,12 13,12 13,13 12,13 12,14 11,14 11,13 11,12 12,12 12,11 13,11 13,10 14,10 14,9 14,8 14,7 13,7 13,6 13,5 12,5 " style="fill:#000000;" /><polygon points="4,6 5,6 6,6 6,7 5,7 5,8 6,8 6,9 6,10 5,10 4,10 4,9 4,8 4,7 " style="fill:#000000;" /><polygon points="6,6 7,6 7,7 8,7 8,6 9,6 9,7 9,8 9,9 9,10 8,10 7,10 6,10 6,9 6,8 5,8 5,7 6,7 " style="fill:#ffffff;" /><polygon points="9,6 10,6 11,6 11,7 10,7 10,8 11,8 11,9 11,10 10,10 9,10 9,9 9,8 9,7 " style="fill:#000000;" /><polygon points="6,10 7,10 8,10 9,10 9,11 10,11 10,12 9,12 8,12 7,12 6,12 5,12 5,11 6,11 " style="fill:#ffcc00;" /><polygon points="2,12 3,12 4,12 4,13 5,13 5,14 5,15 5,16 4,16 4,17 3,17 2,17 1,17 1,16 0,16 0,15 0,14 0,13 1,13 1,14 2,14 2,13 " style="fill:#6a3a02;" /><polygon points="3,13 3,14 4,14 4,13 " style="fill:#6a3a02;" /><polygon points="1,15 1,16 2,16 2,15 " style="fill:#6a3a02;" /><polygon points="3,15 3,16 4,16 4,15 " style="fill:#6a3a02;" /><polygon points="6,12 7,12 8,12 9,12 9,13 8,13 7,13 6,13 " style="fill:#cc9933;" /><polygon points="13,12 14,12 14,13 13,13 " style="fill:#996600;" /><polygon points="3,13 4,13 4,14 3,14 " style="fill:#0066ff;" /><polygon points="12,13 13,13 13,14 12,14 " style="fill:#996600;" /><polygon points="13,13 14,13 14,14 14,15 13,15 13,16 12,16 12,15 12,14 13,14 " style="fill:#000000;" /><polygon points="11,14 12,14 12,15 11,15 " style="fill:#996600;" /><polygon points="1,15 2,15 2,16 1,16 " style="fill:#ff3300;" /><polygon points="3,15 4,15 4,16 3,16 " style="fill:#ffff00;" /><polygon points="10,15 11,15 11,16 10,16 " style="fill:#330000;" /><polygon points="11,15 12,15 12,16 11,16 " style="fill:#ffffff;" /><polygon points="4,16 5,16 6,16 7,16 7,17 6,17 5,17 4,17 " style="fill:#ffc300;" /><polygon points="8,16 9,16 10,16 11,16 12,16 12,17 11,17 10,17 9,17 8,17 " style="fill:#ffc300;" /></svg> 
+	<img src="../cmn/img/cover_rotaition.png" width="75" height="65">
 </div>
 <?php endif; ?>
 	<script src="js/script.js?p=<?php echo time(); ?>"></script>

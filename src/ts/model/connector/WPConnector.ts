@@ -71,13 +71,29 @@ export class WPConector extends createjs.EventDispatcher {
 			this.dispatchEvent(new createjs.Event(WPConector.EVENT_COMPLETE_WPCONNECT, true, true));
 		},100);
 	}
-	//リストを取得
-	public getPageSplitList = (paged: number, posts_per_page: number) => {
+	//全リストを取得
+	public getList = (isSvg:boolean = false) => {
+		this._state.setCurrent(State.FILE_LOAD_LIST_FROM_WP);
+
+		this._xhr.open('POST', this._API_PATH);
+		this._xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		if(isSvg){
+			this._xhr.send("mode=list&svg=true");
+		}else{
+			this._xhr.send("mode=list");
+		}
+	}
+	//ページ指定でリストを取得
+	public getPageSplitList = (paged: number, posts_per_page: number, isSvg:boolean = false) => {
 		this._state.setCurrent(State.FILE_LOAD_PAGE_SPLIT_LIST_FROM_WP);
 
 		this._xhr.open('POST', this._API_PATH);
 		this._xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		this._xhr.send("mode=page-split-list" + "&paged=" + paged + "&posts_per_page=" + posts_per_page);
+		if(isSvg){
+			this._xhr.send("mode=page-split-list" + "&paged=" + paged + "&posts_per_page=" + posts_per_page + "&svg=true");
+		}else{
+			this._xhr.send("mode=page-split-list" + "&paged=" + paged + "&posts_per_page=" + posts_per_page);
+		}
 	}
 	//=============================================
 	// getter/setter

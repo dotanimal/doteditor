@@ -94,6 +94,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 			}
 		}
 
+		/*
 		let itemList:NodeListOf<Element> = document.querySelectorAll('#layerPanelBody > ul > li');
 		let item :HTMLElement;
 		for (var j =0; j<itemList.length; j++) {
@@ -103,8 +104,11 @@ export class LayerPanelController extends createjs.EventDispatcher {
 				break;
 			}
 		}
+		*/
 
+	
 		this._state.setCurrent(State.LAYER_CHANGE);
+		this._checkActiveLpr();
 		this._updateLayerNameList();
 		this.changedState();
 		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
@@ -129,6 +133,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	}
 	private _onChangeLPRHandler = (e:Event) =>{
 		this._state.setCurrent(State.LAYER_CHANGE);
+		this._checkActiveLpr();
 		this._updateLayerNameList();
 		console.log('\n[LayerPanel Event]', e.type, "\n\t" + "state : " + this._state.current);
 		this.dispatchEvent(new createjs.Event(LayerPanelController.EVENT_CHANGE_DATA_LAYERPANEL, true, true));
@@ -176,6 +181,44 @@ export class LayerPanelController extends createjs.EventDispatcher {
 		}
 		this._lpiList = result;
 	}
+	private _checkActiveLpr = ():void =>{
+		let lpi:LayerPanelItem;
+		let isChangeActive:boolean = false;
+		for (var i = 0; i < this._lpiList.length; i++) {
+			lpi = <LayerPanelItem>this._lpiList[i];
+			if(lpi.isActive && (!lpi.visible|| !lpi.isShow)){
+				isChangeActive = true;
+			}
+		}
+		//アクティブレイヤーが非表示もしくは、パネルに追加されてない場合
+		if(isChangeActive){
+			for (var i = this._lpiList.length - 1 ; 0 <= i; i--) {
+				lpi = <LayerPanelItem>this._lpiList[i];
+				if(isChangeActive){
+					if(lpi.isShow && lpi.visible){
+						this._activeLayerName = lpi.txt;
+						lpi.active();
+						isChangeActive = false;
+					}else{
+						lpi.inactive();
+					}
+				}else{
+					lpi.inactive();
+				}
+			}
+		}
+		//パネルに追加されているレイヤーがすべて非表示だった場合
+		if(isChangeActive){
+			for (var i = this._lpiList.length - 1 ; 0 <= i; i--) {
+				lpi = <LayerPanelItem>this._lpiList[i];
+				if(lpi.isShow){
+					this._activeLayerName = lpi.txt;
+					lpi.active();
+					break;
+				}
+			}
+		}
+	}
 	//=============================================
 	// public
 	//=============================================
@@ -210,6 +253,7 @@ export class LayerPanelController extends createjs.EventDispatcher {
 				lpi.hide();
 			}
 		}
+		this._checkActiveLpr();
 		this._updateLayerNameList();
 		this.changedState()
 	}
@@ -258,9 +302,11 @@ export class LayerPanelController extends createjs.EventDispatcher {
 	//=============================================
 	// getter/setter
 	//=============================================
+	/*
 	get activeLayerId ():number{
 		return this._activeLayerId;
 	}
+	*/
 	get activeLayerName():string{
 		return this._activeLayerName;
 	}
@@ -305,9 +351,9 @@ class LayerPanelItem extends createjs.EventDispatcher {
 		this._txt = new Txt(this._target.querySelector(".layerPanelItemTxt"));
 
 		let cvs:HTMLCanvasElement = <HTMLCanvasElement>this._target.querySelector('.layerPanelItemCanvas');
-		this._sw = cvs.width;
-		this._sh = cvs.height;
-		this._preview = new StagePreview(cvs, 2);
+		this._sw = cvs.width - 2;
+		this._sh = cvs.height - 2;
+		this._preview = new StagePreview(cvs, 1);
 		//this._stage = new createjs.Stage(cvs);
 		//this._stage.addChild(this._preview);
 
@@ -353,7 +399,7 @@ class LayerPanelItem extends createjs.EventDispatcher {
 
 		//プレビューへの反映
 		//this._preview.graphics.clear();
-		this._preview.drawDld(this._dld, 0, 0, this._sw, this._sh, false);
+		this._preview.drawDld(this._dld, 1, 1, this._sw, this._sh, true);
 		//this._stage.update();
 	}
 
@@ -410,6 +456,9 @@ class LayerPanelItem extends createjs.EventDispatcher {
 	}
 	get isShow():boolean{
 		return this._isShow;
+	}
+	get visible():boolean{
+		return this._eye.visible;
 	}
 }
 class Eye extends createjs.EventDispatcher {
